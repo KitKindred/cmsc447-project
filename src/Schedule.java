@@ -28,40 +28,44 @@ public class Schedule {
         return shifts;
     }
 
+    // For testing.
     public void printShifts() {
-        System.out.println(otherShifts);
+        //System.out.println(otherShifts);
+        for (Integer name: otherShifts.keySet()){
+
+            String key = name.toString();
+            String value = otherShifts.get(name).toString();
+            System.out.println(key + ": " + value);
+
+
+        }
     }
 
     /**
      Creates a HashMap of shifts that represent every shift in the date range
-     Currently does not work around year-wrap
 
-     HashMap<k, v> has the form <Unique int id, Shift>
+     HashMap<k, v> has the form <Unique int id, Shift> where the unique id is equal to the max number of shifts per day
+     (so, for three shifts on weekdays and two on weekends, three) multiplied by the day of the year added to the number
+     of the shift that day. For example, Jan 1st is day 1 of the year. Shift two on 1/1 would have an id of 1*3+1, or 4.
      */
     public void createShifts() {
-        int dayOfYear = this.start.getDayOfYear();
-        int year = this.start.getYear();
+        LocalDate d = this.start;
 
-        LocalDate d = LocalDate.ofYearDay(year, dayOfYear);
-
-        while (dayOfYear != this.end.getDayOfYear()) {
-
+        while (!(d.equals(this.end.plusDays(1)))) {
+            int id = d.getDayOfYear()*3;
             if(d.getDayOfWeek().equals(DayOfWeek.SATURDAY) || d.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                int id = d.getDayOfYear()*3;
                 otherShifts.put(id, new Shift(d, 12));
                 id++;
                 otherShifts.put(id, new Shift(d, 12));
             }
             else {
-                int id = d.getDayOfYear()*3;
                 otherShifts.put(id, new Shift(d, 8));
                 id++;
                 otherShifts.put(id, new Shift(d, 8));
                 id++;
                 otherShifts.put(id, new Shift(d, 8));
             }
-            dayOfYear++;
-            d = LocalDate.ofYearDay(year, dayOfYear);
+            d = d.plusDays(1);
         }
     }
 }
