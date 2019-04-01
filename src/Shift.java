@@ -33,4 +33,9 @@ public class Shift {
     public Profession getEmployee() {
         return this.employee;
     }
+
+    @Override
+    public String toString() {
+        return startTime + ": " + length + " hours";
+    }
 }

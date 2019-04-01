@@ -17,6 +17,8 @@ public class Profession {
         this.id = id;
         this.type = type;
         this.name = name;
+        personalShifts = new ArrayList<Shift>();
+        tor = new ArrayList<TimeOffRequest>();
     }
 
     public void addHours(int numHours) {
