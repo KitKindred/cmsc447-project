@@ -17,6 +17,8 @@ public class Profession {
         this.id = id;
         this.type = type;
         this.name = name;
+        this.active = true;
+        this.hoursWorked = 0;
         personalShifts = new ArrayList<Shift>();
         tor = new ArrayList<TimeOffRequest>();
     }
