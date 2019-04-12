@@ -49,6 +49,10 @@ public class ProgramDriver {
         return ids;
     }
 
+    public HashMap<Integer, Profession> getEmployees() {
+        return employees;
+    }
+
     public void printEmployees() {
         //System.out.println(otherShifts);
         for (Integer name: employees.keySet()){

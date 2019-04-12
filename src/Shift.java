@@ -1,20 +1,26 @@
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Shift {
     private Profession employee;
     private int length;
-    private LocalDate startTime;
+    private LocalDateTime startTime;
 
-    public Shift(LocalDate start, int length) {
+    public Shift(LocalDateTime start, int length) {
         this.length = length;
         this.startTime = start;
+    }
+
+    public Shift(Shift sh) {
+        this.length = sh.getLength();
+        this.startTime = sh.getStartTime();
+
     }
 
     public void setLength(int l) {
         this.length = l;
     }
 
-    public void setStartTime(LocalDate d) {
+    public void setStartTime(LocalDateTime d) {
         this.startTime = d;
     }
 
@@ -26,7 +32,7 @@ public class Shift {
         return this.length;
     }
 
-    public LocalDate getStartTime() {
+    public LocalDateTime getStartTime() {
         return this.startTime;
     }
 

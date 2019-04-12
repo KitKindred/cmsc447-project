@@ -36,7 +36,8 @@ public class Main {
 
         drive.printEmployees();
 
-        s.createSchedule(drive.getActiveID());
+        s.createSchedule(drive.getActiveID(), drive.getEmployees());
+        s.printShifts();
     }
 
 
