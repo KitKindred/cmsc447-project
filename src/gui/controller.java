@@ -1,5 +1,7 @@
 package gui;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,10 +11,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import sysfiles.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+
+import classinfo.*;
+import sysfiles.*;
+import java.io.*;
 
 public class controller {
 	private void print() {print("");}
@@ -61,9 +68,7 @@ public class controller {
 		
 		manageSelectEmployee.setVisible(true);
 		
-		String name = "Joey Parsley";
 		
-		manageSelectEmployee.getItems().add(name);
 		
 		manageEmployeeNameText.setText("FIRSTNAME LASTNAME");
 
@@ -85,10 +90,13 @@ public class controller {
 			
 		}
 		println();
-		
+		populate(IOFunctions.readAllEmployees());
 		//manageDateRange1.setVisible(false);
 	}
 	
+	
+	
+	/*GUI ACTION FUNCTIONS*/
 	public void generate(ActionEvent event) {
 		System.out.println("generate pressed");
 		
@@ -126,6 +134,14 @@ public class controller {
 		println("saving current employee "+name);
 		/*manageSelectEmployee.getItems().add(new Employee(ID,"name"));*/
 		/*.toString() ==>ID - Employee Name*/
+		Doctor joey=new Doctor(1,1,"Joey Parsley");
+		
+		try {
+		//IOFunctions.saveEmployeeToFile(joey);
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
 	}
 	
@@ -156,6 +172,24 @@ public class controller {
 	
 	public void stuff(ActionEvent event) {
 		System.out.println("menu pressed");
+		
+		
+	}
+	
+	
+	public void populate(HashMap<Integer, Profession> hp) {
+
+		String name = "Joey Parsley";
+		
+		for(Map.Entry<Integer, Profession>entry:hp.entrySet()) {
+			println(entry.toString());
+			println(entry.getValue().toString());
+			println(entry.getValue().getName().toString());
+			name=entry.getValue().getName();
+			println(name);
+			manageSelectEmployee.getItems().add(name);
+		}
+		
 		
 		
 	}
