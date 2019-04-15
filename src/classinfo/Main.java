@@ -8,6 +8,8 @@ import sysfiles.IOFunctions;
 import gui.guiStarter;
 public class Main {
 
+	private static HashMap <Integer,Profession> p;
+	
     public static void main(String[] args) {
         /*
     	LocalDate d = LocalDate.of(2018, 11, 2);
@@ -46,7 +48,9 @@ public class Main {
     	ProgramDriver d = new ProgramDriver();
     	
         //boolean saved=IOFunctions.saveAllEmployees(drive.getEmployees());
-        HashMap<Integer,Profession> p=IOFunctions.readAllEmployees();
+        /*HashMap<Integer,Profession> */
+    	//p=
+    	IOFunctions.readAllEmployees();
         
         //System.out.println(saved+p.toString());
         //guiStarter g=new guiStarter();
@@ -56,5 +60,6 @@ public class Main {
         
     }
 
-
+    public static HashMap<Integer,Profession> getP()
+    {return ProgramDriver.getEmployees();}
 }

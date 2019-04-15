@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import sysfiles.IOFunctions;
 import classinfo.*;
 
 public class guiStarter extends Application {
@@ -23,6 +23,12 @@ public class guiStarter extends Application {
 	        } catch(Exception e) {
 	            e.printStackTrace();
 	     }
+	 }
+	  
+	 @Override
+	 public void stop() {
+		 IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());
+		 
 	 }
 	public static void go(String[] args) {launch(args);}
 	/*
