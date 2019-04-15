@@ -11,12 +11,12 @@ public class Main {
 	private static HashMap <Integer,Profession> p;
 	
     public static void main(String[] args) {
-        /*
-    	LocalDate d = LocalDate.of(2018, 11, 2);
+
+    	LocalDate d1 = LocalDate.of(2018, 11, 2);
         LocalDate d2 = LocalDate.of(2018, 11, 9);
 
-        Schedule s = new Schedule(d, d2);
-
+        Schedule s = new Schedule(d1, d2);
+        /*
         int n = 8;
         Model model = new Model(n + "-queens problem");
         IntVar[] vars = new IntVar[n];
@@ -33,30 +33,32 @@ public class Main {
         Solution solution = model.getSolver().findSolution();
         if(solution != null){
             System.out.println(solution.toString());
-        }
+        }*/
         ProgramDriver drive = new ProgramDriver();
-        drive.addDoctor(0, "John Smith");
-        drive.addDoctor(0, "Jane Doe");
-        drive.addDoctor(0, "John Doe");
+        //drive.addDoctor(0, "John Smith");
+        //drive.addDoctor(0, "Jane Doe");
+        //drive.addDoctor(0, "Joey Dollasign");
 
-        drive.printEmployees();
 
-        s.createSchedule(drive.getActiveID(), drive.getEmployees());
-        s.printShifts();
 
-        */
+
     	ProgramDriver d = new ProgramDriver();
     	
         //boolean saved=IOFunctions.saveAllEmployees(drive.getEmployees());
         /*HashMap<Integer,Profession> */
     	//p=
     	IOFunctions.readAllEmployees();
-        
+
+        drive.printEmployees();
+
+        s.createSchedule(drive.getActiveID(), drive.getEmployees());
+        s.printShifts();
+
         //System.out.println(saved+p.toString());
         //guiStarter g=new guiStarter();
         guiStarter.go(args);
-        
-        
+
+
         
     }
 

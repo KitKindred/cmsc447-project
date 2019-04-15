@@ -1,27 +1,18 @@
 package gui;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.stage.Stage;
 import sysfiles.*;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import classinfo.*;
-import sysfiles.*;
-import java.io.*;
+import classinfo.Schedule;
 
 public class controller {
 	private void print() {print("");}
@@ -101,8 +92,17 @@ public class controller {
 	
 	//will generate schedule
 	public void generate(ActionEvent event) {
-		System.out.println("generate pressed");
-		
+		System.out.println("SCHEDULE GENERATED");
+
+		LocalDate d1 = LocalDate.of(2018, 11, 2);
+		LocalDate d2 = LocalDate.of(2018, 11, 9);
+
+		Schedule s = new Schedule(d1, d2);
+
+		//ProgramDriver drive = new ProgramDriver();
+
+		s.createSchedule(ProgramDriver.getActiveID(), ProgramDriver.getEmployees());
+		s.printShifts();
 	}
 	
 	//create a new employee and add to end of list
@@ -122,10 +122,11 @@ public class controller {
 	public void checkID(ActionEvent event) {
 		System.out.println("checkID: emp selected");
 		String name="Joey Parsley";
-		
-		name=manageSelectEmployee.getValue().toString();//some null ptr error here?????
+
+
+		name = manageSelectEmployee.getValue().toString();//some null ptr error here?????
 		int ID=ProgramDriver.getNameID().get(name);
-		
+
 		for(Node a: invisSelectEmployee) {
 			a.setVisible(true);
 			
@@ -159,7 +160,7 @@ public class controller {
 		try {
 		//IOFunctions.saveEmployeeToFile(joey);
 			println(name+" "+id);
-			joey=Main.getP().get(id);
+			joey= Main.getP().get(id);
 			joey.setName(manageEmployeeNameText.getText());
 			//joey.set
 			

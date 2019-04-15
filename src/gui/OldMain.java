@@ -5,7 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class OldMain extends Application {
 	  @Override
 	    public void start(Stage primaryStage) {
 	        try {

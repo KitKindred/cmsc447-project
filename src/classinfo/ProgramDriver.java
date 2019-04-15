@@ -63,7 +63,7 @@ public class ProgramDriver {
 	 *
 	 * @return A list of all active IDs
 	 */
-	public ArrayList<Integer> getActiveID() {
+	public static ArrayList<Integer> getActiveID() {
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (Integer ident: employees.keySet()){
 			if (employees.get(ident).getActive()) {

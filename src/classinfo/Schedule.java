@@ -9,7 +9,7 @@ import org.chocosolver.solver.*;
 public class Schedule {
     private LocalDate start;
     private LocalDate end;
-    private ArrayList<Shift> shifts;
+    //private ArrayList<Shift> shifts;
     private HashMap<Integer, Shift> otherShifts; // Not sure if list or hash is better yet
     private int weekdayShifts, weekendShifts; // Number of shifts on weekdays and weekends
 
@@ -20,10 +20,10 @@ public class Schedule {
      * @param s The first day to be scheduled
      * @param e The last day to be scheduled
      */
-    Schedule(LocalDate s, LocalDate e) {
+    public Schedule(LocalDate s, LocalDate e) {
         this.start = s;
         this.end = e;
-        shifts = new ArrayList<Shift>();
+        //shifts = new ArrayList<Shift>();
         otherShifts = new HashMap<Integer, Shift>();
         this.weekdayShifts = 3;
         this.weekendShifts = 2;
@@ -40,7 +40,7 @@ public class Schedule {
     Schedule(LocalDate s, LocalDate e, int ds, int ws) {
         this.start = s;
         this.end = e;
-        shifts = new ArrayList<Shift>();
+        //shifts = new ArrayList<Shift>();
         otherShifts = new HashMap<Integer, Shift>();
         this.weekendShifts = ws;
         this.weekdayShifts = ds;
@@ -64,14 +64,14 @@ public class Schedule {
         return this.end;
     }
 
-    /**
+    /*
      * Shift list accessor
      *
      * @return The list of shifts
      */
-    public ArrayList<Shift> getShifts() {
-        return shifts;
-    }
+    //public ArrayList<Shift> getShifts() {
+    //    return shifts;
+    //}
 
     /**
      * Method for testing. Prints out the shifts from the HashMap in no particular order
