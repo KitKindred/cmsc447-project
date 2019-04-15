@@ -196,24 +196,32 @@ System.out.println("START READING FILE");
 		
 		return p;
 	}
-	public static HashMap<Integer, Profession> readAllEmployees(){
-		HashMap<Integer, Profession> toReturn=new HashMap<Integer,Profession>();
+	public static void/*HashMap<Integer, Profession>*/ readAllEmployees(){
+		//HashMap<Integer, Profession> toReturn=new HashMap<Integer,Profession>();
 		int c=0;
 		try {
 			File f=new File(path+"count.txt");
+			if(!f.exists()) {
+				
+				out=new PrintWriter(f);
+				out.println("0");
+				out.close();
+			}
 			is=new Scanner(f);
 			c=is.nextInt();
 			is.close();
 		}catch(Exception e) {
 			System.out.println("UNABLE TO READ FROM "+path+"count.txt");
 			is.close();
-			return null;
+			return ;//null;
 		}
 
 		System.out.println(c);
 		for(int num=0;num<c;num+=1) {
 			try {
-				toReturn.put(num, readEmployeeFromFile(""+num));
+				Profession pr=readEmployeeFromFile(""+num);
+				ProgramDriver.addDoctor(pr.getType(), pr.getName(), pr.getId());
+				//toReturn.put(num, readEmployeeFromFile(""+num));
 				
 			}catch(IOException e) {
 				System.out.println("UNABLE TO READ EMPLOYEE "+num);
@@ -221,8 +229,7 @@ System.out.println("START READING FILE");
 			}
 		}
 
-
-		return toReturn;
+		//return toReturn;
 	}
 
 }
