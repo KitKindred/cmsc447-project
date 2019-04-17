@@ -35,7 +35,7 @@ public class IOFunctions {
 
 		String file;		
 
-		//path="cmsc447-project-master/src/sysfiles/profiles/";
+		//path="src/sysfiles/profiles/";
 		file = i+".employee.txt";
 
 		File f = new File(path+file);
@@ -192,32 +192,31 @@ System.out.println("START READING FILE");
 		p.setHoursWorked(hoursWorked);
 
 		
-		System.out.println("P:"+p);
+		System.out.println("Emp Data:"+p);
 		
 		return p;
 	}
 	public static void/*HashMap<Integer, Profession>*/ readAllEmployees(){
 		//HashMap<Integer, Profession> toReturn=new HashMap<Integer,Profession>();
-		int c=0;
+		int empCount=0;
 		try {
-			File f=new File(path+"count.txt");
-			if(!f.exists()) {
-				
-				out=new PrintWriter(f);
+			File file=new File(path+"count.txt");
+			if(!file.exists()) {
+				out=new PrintWriter(file);
 				out.println("0");
 				out.close();
 			}
-			is=new Scanner(f);
-			c=is.nextInt();
+			is=new Scanner(file);
+			empCount=is.nextInt();
 			is.close();
 		}catch(Exception e) {
 			System.out.println("UNABLE TO READ FROM "+path+"count.txt");
 			is.close();
-			return ;//null;
+			return;
 		}
 
-		System.out.println(c);
-		for(int num=0;num<c;num+=1) {
+		System.out.println("Employee count: " + empCount);
+		for(int num=0; num < empCount; num+=1) {
 			try {
 				Profession pr=readEmployeeFromFile(""+num);
 				ProgramDriver.addDoctor(pr.getType(), pr.getName(), pr.getId());
@@ -228,8 +227,5 @@ System.out.println("START READING FILE");
 
 			}
 		}
-
-		//return toReturn;
 	}
-
 }

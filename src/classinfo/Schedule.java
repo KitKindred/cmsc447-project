@@ -2,6 +2,7 @@ package classinfo;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
@@ -74,15 +75,19 @@ public class Schedule {
     //}
 
     /**
-     * Method for testing. Prints out the shifts from the HashMap in no particular order
+     * Method for testing. Prints out the shifts from the HashMap in sorted order.
      */
     public void printShifts() {
-        //System.out.println(otherShifts);
-        for (Integer name: otherShifts.keySet()){
+
+    	Object[] keys = otherShifts.keySet().toArray();
+    	Arrays.sort(keys);
+    	
+        for (Object name: keys){
 
             String key = name.toString();
             String value = otherShifts.get(name).toString();
             String nam = otherShifts.get(name).getEmployee().getName();
+            
             System.out.println(key + ": " + value + ": " + nam);
 
 

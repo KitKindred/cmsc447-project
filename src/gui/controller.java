@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -19,6 +20,8 @@ public class controller {
 	private void println() {println("");}
 	private void print(String s) {System.out.print(s);}
 	private void println(String s) {System.out.println(s);}
+	
+	private boolean editedWithoutSave = false; 
 	
 	//GENERATE SCHEDULE TAB SECTION VARIABLES 
 	@FXML
@@ -71,18 +74,14 @@ public class controller {
 				"Maternity"
 				);
 		
-		
 		for(Node a: invisDateRange) {
-			print("a");
 			a.setVisible(false);
 		}
-		println();
+
 		for(Node a: invisSelectEmployee) {
-			print("a");
 			a.setVisible(false);
-			
 		}
-		println();
+		
 		populate();//IOFunctions.readAllEmployees());
 		//manageDateRange1.setVisible(false);
 	}
@@ -121,15 +120,19 @@ public class controller {
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
 		System.out.println("checkID: emp selected");
-		String name="Joey Parsley";
-
-
-		name = manageSelectEmployee.getValue().toString();//some null ptr error here?????
+		String name="Example Name";
+		
+		// fix nullpointerexception, when checkID is called and there is nothing selected
+		// no idea what is actually causing the extra call though
+		if (manageSelectEmployee.getValue() == null) {
+			return;
+		}
+		
+		name = manageSelectEmployee.getValue().toString();
 		int ID=ProgramDriver.getNameID().get(name);
 
 		for(Node a: invisSelectEmployee) {
 			a.setVisible(true);
-			
 		}
 		
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
@@ -156,15 +159,15 @@ public class controller {
 		//manageSelectEmployee.Items[manageSelectEmployee.FindStringExact(name)] = newName;
 
 		
-		Profession joey;
+		Profession worker;
 		try {
-		//IOFunctions.saveEmployeeToFile(joey);
+		//IOFunctions.saveEmployeeToFile(worker);
 			println(name+" "+id);
-			joey= Main.getP().get(id);
-			joey.setName(manageEmployeeNameText.getText());
-			//joey.set
+			worker= Main.getP().get(id);
+			worker.setName(manageEmployeeNameText.getText());
+			//worker.set
 			
-			IOFunctions.saveEmployeeToFile(id, joey);
+			IOFunctions.saveEmployeeToFile(id, worker);
 			//manageSelectEmployee
 			println("testst"+manageSelectEmployee.getEditor().getText());	
 		}catch(Exception e) {
@@ -208,9 +211,9 @@ public class controller {
 	//populate the employee selection box with employees read from files 
 	public void populate() {//HashMap<Integer, Profession> hp) {
 
-		String name = "Joey Parsley";
+		String name = "Sample Employee";
 		HashMap<Integer, Profession> hp=ProgramDriver.getEmployees();
-		for(Map.Entry<Integer, Profession>entry:hp.entrySet()) {//hp.entrySet()) {
+		for(Map.Entry<Integer, Profession>entry:hp.entrySet()) {
 			println(entry.toString());
 			println(entry.getValue().toString());
 			println(entry.getValue().getName().toString());
@@ -221,5 +224,15 @@ public class controller {
 		
 		
 		
+	}
+	
+	// exits without saving, need to add in save flag check
+	public void quit(ActionEvent event) {
+		if (!editedWithoutSave) {
+			Platform.exit();
+		}
+		else {
+			println("Trying to exit without saving!");
+		}
 	}
 }

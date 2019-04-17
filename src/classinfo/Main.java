@@ -35,14 +35,11 @@ public class Main {
             System.out.println(solution.toString());
         }*/
         ProgramDriver drive = new ProgramDriver();
-        //drive.addDoctor(0, "John Smith");
-        //drive.addDoctor(0, "Jane Doe");
-        //drive.addDoctor(0, "Joey Dollasign");
 
 
 
 
-    	ProgramDriver d = new ProgramDriver();
+
     	
         //boolean saved=IOFunctions.saveAllEmployees(drive.getEmployees());
         /*HashMap<Integer,Profession> */
