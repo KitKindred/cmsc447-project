@@ -10,7 +10,7 @@ public class IOFunctions {
 	private static Scanner is;
 	private static PrintWriter out;
 
-	private static final String path = "cmsc447-project-master/src/sysfiles/profiles/";
+	private static final String path = "src/sysfiles/profiles/";
 
 	private static final boolean debug=false;
 
