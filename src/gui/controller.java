@@ -93,8 +93,8 @@ public class controller {
 	public void generate(ActionEvent event) {
 		System.out.println("SCHEDULE GENERATED");
 
-		LocalDate d1 = LocalDate.of(2018, 11, 2);
-		LocalDate d2 = LocalDate.of(2018, 11, 9);
+		LocalDate d1 = LocalDate.of(2018, 8, 2);
+		LocalDate d2 = LocalDate.of(2018, 11, 2);
 
 		Schedule s = new Schedule(d1, d2);
 

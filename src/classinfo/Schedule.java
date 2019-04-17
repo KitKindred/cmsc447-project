@@ -94,10 +94,15 @@ public class Schedule {
         }
     }
 
-    public void addToShifts(HashMap<Integer, IntVar> varMap, HashMap<Integer, Profession> docs) {
+    public void addToShifts(HashMap<Integer, IntVar> varMap, HashMap<Integer, IntVar> varMapWeekend, HashMap<Integer, Profession> docs) {
         for (Integer shift: varMap.keySet()) {
             Shift s = otherShifts.get(shift);
             s.setEmployee(docs.get(varMap.get(shift).getValue()));
+            this.otherShifts.put(shift, s);
+        }
+        for (Integer shift: varMapWeekend.keySet()) {
+            Shift s = otherShifts.get(shift);
+            s.setEmployee(docs.get(varMapWeekend.get(shift).getValue()));
             this.otherShifts.put(shift, s);
         }
     }
@@ -141,9 +146,15 @@ public class Schedule {
         Model model = new Model("Scheduler"); // Create solver
         //IntVar[] vars = new IntVar[otherShifts.size()];
         HashMap<Integer, IntVar> varMap = new HashMap<Integer, IntVar>(); // HashMap of IntVars for the solver
+        HashMap<Integer, IntVar> varMapWeekend = new HashMap<Integer, IntVar>();
         //int i = 0;
         for (Integer shift: otherShifts.keySet()) {
-            varMap.put(shift, model.intVar(shift.toString(), arrIds)); // Add an IntVar for every shift
+            if (otherShifts.get(shift).getStartTime().getDayOfWeek().equals(DayOfWeek.SATURDAY) || otherShifts.get(shift).getStartTime().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                varMapWeekend.put(shift, model.intVar(shift.toString(), arrIds)); // Add an IntVar for every weekend shift
+            }
+            else {
+                varMap.put(shift, model.intVar(shift.toString(), arrIds)); // Add an IntVar for every weekday shift
+            }
         }
         // Makes sure that a doctor doesn't work a shift that starts less than 24 hours
         // after the start of their last shift. Because of the way shifts are created, the keys on each day are
@@ -154,9 +165,12 @@ public class Schedule {
         // but that a doctor will still be able to work Monday morning after working Sunday morning.
         //
         // This is currently hardcoded to work based on three weekday shifts, but could be upgraded later.
-        for (Integer shift: varMap.keySet()) {
-            if (varMap.containsKey(shift+1)) {
+        for (Integer shift: otherShifts.keySet()) {
+            /*if (varMap.containsKey(shift+1)) {
                 model.arithm(varMap.get(shift), "!=",varMap.get(shift+1)).post();
+            }
+            else if (varMapWeekend.containsKey(shift+1)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+1)).post();
             }
             else { // If this is true, then this is a weekend evening shift
                 if (varMap.containsKey(shift+4)) { // This is a sunday evening shift. That means the first two Monday
@@ -167,11 +181,43 @@ public class Schedule {
             if (varMap.containsKey(shift+2)) { // If this is not true, then this is a weekend morning shift.
                 model.arithm(varMap.get(shift), "!=",varMap.get(shift+2)).post();
             }
+            else if (varMapWeekend.containsKey(shift+2)) {
+                model.arithm(varMap.get(shift), "!=",varMap.get(shift+2)).post();
+            }*/
+            if (varMap.containsKey(shift)) { // This is a weekday shift
+                if (varMap.containsKey(shift+1)) { // Normal weekday shift
+                    model.arithm(varMap.get(shift), "!=",varMap.get(shift+1)).post();
+                }
+                else if (varMapWeekend.containsKey(shift+1)) { // Last Friday shift
+                    model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+1)).post();
+                }
+                if (varMap.containsKey(shift+2)) { // Normal weekday shift
+                    model.arithm(varMap.get(shift), "!=",varMap.get(shift+2)).post();
+                }
+                else if (varMapWeekend.containsKey(shift+2)) { // Second to last Friday shift
+                    model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+2)).post();
+                }
+            }
+            else { // This is a weekend shift
+                if (varMapWeekend.containsKey(shift+1)) { // Weekend morning, can't work same day evening
+                    model.arithm(varMapWeekend.get(shift), "!=",varMapWeekend.get(shift+1)).post();
+                }
+                else if (varMapWeekend.containsKey(shift+2)) { // Saturday evening
+                    model.arithm(varMapWeekend.get(shift), "!=",varMapWeekend.get(shift+2)).post();
+                }
+                else if (varMap.containsKey(shift+2)) { // Sunday evening
+                    model.arithm(varMapWeekend.get(shift), "!=",varMap.get(shift+2)).post();
+                    if (varMap.containsKey(shift+3)) {
+                        model.arithm(varMapWeekend.get(shift), "!=",varMap.get(shift+3)).post();
+                    }
+                }
+
+            }
         }
         Solution solution = model.getSolver().findSolution();
         if(solution != null){
             System.out.println(solution.toString());
-            this.addToShifts(varMap, docs);
+            this.addToShifts(varMap, varMapWeekend, docs);
             //for (Integer val: varMap.keySet()) {
             //    System.out.println(varMap.get(val).getValue());
             //}
