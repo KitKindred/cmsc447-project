@@ -21,6 +21,7 @@ public class ProgramDriver {
 	 */
 	public void addDoctor(int t, String n) {
 		switch (t) {
+		
 		case 0:
 			employees.put(id, new Doctor(id, t, n));
 			break;
@@ -35,7 +36,7 @@ public class ProgramDriver {
 		}
 		empID.put(n, id);
 		id++;
-		System.out.println("add "+id);
+		System.out.println("adding as "+ id);
 	}
 
 	public static void addDoctor(int t, String n, int i) {
@@ -54,7 +55,7 @@ public class ProgramDriver {
 		}
 		empID.put(n, i);
 		id=Math.max(i+=1, id+=1);
-		System.out.println("add "+id);
+		System.out.println("adding "+ id);
 
 	}
 
@@ -79,7 +80,7 @@ public class ProgramDriver {
 	public static HashMap<String, Integer> getNameID(){return empID;}
 
 	public void printEmployees() {
-		//System.out.println(otherShifts);
+		
 		for (Integer name: employees.keySet()){
 
 			String key = name.toString();

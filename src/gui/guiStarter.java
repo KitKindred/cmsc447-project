@@ -16,7 +16,7 @@ public class guiStarter extends Application {
 	            // Read file fxml and draw interface.
 	            Parent root = FXMLLoader.load(getClass().getResource(path));
 	 
-	            primaryStage.setTitle("My Application");
+	            primaryStage.setTitle("Schedule Builder");
 	            primaryStage.setScene(new Scene(root));
 	            primaryStage.show();
 	         
@@ -27,12 +27,11 @@ public class guiStarter extends Application {
 	  
 	 @Override
 	 public void stop() {
-		 IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());
-		 
+		 IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());	 
 	 }
-	public static void go(String[] args) {launch(args);}
-	/*
-	public static void main(String[] args) {
-		launch(args);
-	}*/
+	 
+	 public static void go(String[] args) {
+		 launch(args);
+	 }
+
 }
