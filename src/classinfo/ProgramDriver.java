@@ -39,22 +39,22 @@ public class ProgramDriver {
 		System.out.println("adding as "+ id);
 	}
 
-	public static void addDoctor(int t, String n, int i) {
-		switch (t) {
+	public static void addDoctor(int type, String name, int i_d) {
+		switch (type) {
 		case 0:
-			employees.put(i, new Doctor(i, t, n));
+			employees.put(i_d, new Doctor(i_d, type, name));
 			break;
 		case 1:
-			employees.put(id, new Moonlighter(i, t, n));
+			employees.put(id, new Moonlighter(i_d, type, name));
 			break;
 		case 2:
-			employees.put(id, new Intern(i, t, n));
+			employees.put(id, new Intern(i_d, type, name));
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
-		empID.put(n, i);
-		id=Math.max(i+=1, id+=1);
+		empID.put(name, i_d);
+		id=Math.max(i_d+=1, id+=1);
 		System.out.println("adding "+ id);
 
 	}

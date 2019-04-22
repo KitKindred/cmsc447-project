@@ -12,7 +12,7 @@ public class guiStarter extends Application {
 	    public void start(Stage primaryStage) {
 	        try {
 	        	
-	        	String path="/gui/sample.fxml";
+	        	String path="/gui/scheduler.fxml";
 	            // Read file fxml and draw interface.
 	            Parent root = FXMLLoader.load(getClass().getResource(path));
 	 
