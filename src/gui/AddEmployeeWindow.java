@@ -27,16 +27,18 @@ public class AddEmployeeWindow {
 	TextField nameBox;
 
 	private static Profession emp=null;
-	private static boolean returnEmployee=true;
+	private static boolean returnEmployee;//=true;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
-
+		returnEmployee=true;
 		activeBox.getItems().addAll("Active","Inactive","Maternity");
 		professionBox.getItems().addAll("Doctor","Moonlighter","Intern");
 
 		activeBox.setValue(activeBox.getItems().get(0));
 		professionBox.setValue(professionBox.getItems().get(0));
 
+		
+		
 	}
 
 public static boolean getClose() {return returnEmployee;}

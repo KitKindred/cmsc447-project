@@ -5,6 +5,7 @@ import java.util.*;
 import classinfo.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 public class IOFunctions {
 
 	private static Scanner is;
@@ -102,10 +103,7 @@ public class IOFunctions {
 
 
 			}
-
-
 		}
-
 
 		return true;
 	}
