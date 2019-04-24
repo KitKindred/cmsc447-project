@@ -19,5 +19,9 @@ public class TimeOffRequest {
     public String getData() {
     	return this.s.getData()+";"+this.priority;
     }
-    
+    public String toString() {
+    	//System.out.println("TEST");
+    	return this.s+"\t"+this.priority;
+    	
+    }
 }

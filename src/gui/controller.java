@@ -1,20 +1,35 @@
 package gui;
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import sysfiles.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import classinfo.*;
-import classinfo.Schedule;
-
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import sysfiles.IOFunctions;
+import classinfo.*;
 public class controller {
 	private void print() {print("");}
 	private void println() {println("");}
@@ -31,7 +46,7 @@ public class controller {
 	//MANAGE EMPLOYEES TAB SECTION VARIABLES
 	
 	@FXML 
-	Button manageSaveButton;
+	Button manageSaveButton,createEmployeeButton;
 
 	@FXML
 	TextField manageEmployeeNameText;
@@ -210,7 +225,7 @@ public class controller {
 	
 	//populate the employee selection box with employees read from files 
 	public void populate() {//HashMap<Integer, Profession> hp) {
-
+		manageSelectEmployee.getItems().clear();
 		String name = "Sample Employee";
 		HashMap<Integer, Profession> hp=ProgramDriver.getEmployees();
 		for(Map.Entry<Integer, Profession>entry:hp.entrySet()) {
@@ -221,7 +236,36 @@ public class controller {
 			println(name);
 			manageSelectEmployee.getItems().add(name);
 		}
-		
+	}
+
+
+
+	public void actionLaunchEmployeeCreationWindow(ActionEvent event) {
+//		Profession newEmp=null;
+		try {
+        	
+        	String path="/gui/addEmployee.fxml";
+        	Parent root = FXMLLoader.load(getClass().getResource(path));
+        	Stage st= new Stage();
+        	Scene scene = new Scene(root);
+        
+        	st.setScene(scene);
+        	
+        	st.showAndWait();
+  
+        	if(AddEmployeeWindow.getClose())
+        		addEmployee(ProgramDriver.getEmployees().get(ProgramDriver.getID()-1));
+        	
+        	//newEmp=AddEmployeeWindow.getEmp();
+        } catch(Exception e) {
+            e.printStackTrace();
+     }
+	}
+	
+	public void addEmployee(Profession emp) {
+		println("\tid: "+emp.getId());
+		manageSelectEmployee.getItems().add(emp.getName());
+		manageSelectEmployee.getSelectionModel().select(emp.getId());
 		
 		
 	}
@@ -235,4 +279,7 @@ public class controller {
 			println("Trying to exit without saving!");
 		}
 	}
+	
+	
+	
 }
