@@ -49,7 +49,6 @@
                         <TextField fx:id="manageDateRange3" layoutX="402.0" layoutY="135.0" />
                         <Button fx:id="manageSaveButton" layoutX="479.0" layoutY="303.0" mnemonicParsing="false" onAction="#saveEmployee" text="Save Selected Employee" />
                         <Button fx:id="createEmployeeButton" layoutX="480.0" layoutY="14.0" mnemonicParsing="false" onAction="#actionLaunchEmployeeCreationWindow" text="Create a New Employee" />
-                        <Button fx:id="GetTimeOffButton" layoutX="229.0" layoutY="303.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" text="Selected Time Off Requests" />
                      </children>
                   </AnchorPane>
             </content>
