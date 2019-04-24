@@ -2,7 +2,7 @@ package classinfo;
 import java.util.ArrayList;
 
 public class Profession {
-    protected int id, type, hoursWorked;
+    protected int id, type, hoursWorked, weekendDay,weekendNight,weekDay,weekNight,weekEvening;
     protected boolean active;
     protected String name;
     protected ArrayList<Shift> personalShifts;
@@ -12,6 +12,12 @@ public class Profession {
         this.id = 0;
         this.type = 0;
         this.name = "";
+        
+        this.weekendDay=0;
+        this.weekendNight=0;
+        this.weekDay=0;
+        this.weekEvening=0;
+        this.weekNight=0;
     }
 
     protected Profession(int id, int type, String name) {

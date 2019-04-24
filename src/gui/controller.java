@@ -46,7 +46,7 @@ public class controller {
 	//MANAGE EMPLOYEES TAB SECTION VARIABLES
 	
 	@FXML 
-	Button manageSaveButton,createEmployeeButton;
+	Button manageSaveButton,createEmployeeButton,GetTimeOffButton;
 
 	@FXML
 	TextField manageEmployeeNameText;
@@ -72,6 +72,7 @@ public class controller {
 		invisSelectEmployee.add(manageEmployeeNameText);
 		invisSelectEmployee.add(manageActivityField);
 		invisSelectEmployee.add(manageSaveButton);
+		invisSelectEmployee.add(GetTimeOffButton);
 
 		invisDateRange.add(manageDateRange1);
 		invisDateRange.add(manageDateRange2);
@@ -238,7 +239,24 @@ public class controller {
 		}
 	}
 
-
+	public void actionSelectTimeOff(ActionEvent event) {
+		println("DOES THIS BUTTON WORK?");
+		try {
+			String path="/gui/TimeOffRequests.fxml";
+			Parent root = FXMLLoader.load(getClass().getResource(path));
+			Stage st = new Stage();
+			Scene scene = new Scene(root);
+			st.setScene(scene);
+			st.initModality(Modality.APPLICATION_MODAL);
+			st.setTitle(manageSelectEmployee.getSelectionModel().getSelectedItem().toString()+"'s Time Off Requests");
+			
+			System.out.println("before show");
+			
+			st.showAndWait();
+			System.out.println("after show");
+		}catch(Exception e) {System.out.println("error?"+e.toString());}
+		
+	}
 
 	public void actionLaunchEmployeeCreationWindow(ActionEvent event) {
 //		Profession newEmp=null;
@@ -251,6 +269,8 @@ public class controller {
         
         	st.setScene(scene);
         	
+        	st.initModality(Modality.APPLICATION_MODAL);
+        	st.setTitle("Create a New Employee");
         	st.showAndWait();
   
         	if(AddEmployeeWindow.getClose())
