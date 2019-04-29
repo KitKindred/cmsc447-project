@@ -43,7 +43,11 @@ public class TimeOffRequestWindow {
 	}
 
 	public void actionCloseTimeOffWindow(ActionEvent event) {
+		// write saving solution here
 		
+		System.out.println("close pressed");
+		Stage stage = (Stage) closeButton.getScene().getWindow();
+	    stage.close();
 	}
 	
 	public void actionAddRequest(ActionEvent event) {
@@ -64,10 +68,14 @@ public class TimeOffRequestWindow {
 			System.out.println("before show");
 			
 			st.showAndWait();
-			System.out.println("after show");
+			System.out.println("after show request");
 			
-			tor.add(TimeOffRequestBuilder.req);
-			RequestBox.getItems().add(TimeOffRequestBuilder.req.toString());
+			
+			if (TimeOffRequestBuilder.req != null) {
+				tor.add(TimeOffRequestBuilder.req);
+				RequestBox.getItems().add(TimeOffRequestBuilder.req.toString());
+			}
+			
 			
 		}catch(Exception e) {
 			System.out.println("ERROR SHOWING "+e.toString());

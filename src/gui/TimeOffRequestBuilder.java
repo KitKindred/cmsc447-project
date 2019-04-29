@@ -309,15 +309,29 @@ public class TimeOffRequestBuilder {
 		Shift sh=new Shift(from, to.compareTo(from));
 		
 		req= new TimeOffRequest(sh, (int)prioritySlider.getValue());
+		
+		System.out.println("save pressed");
+		Stage stage = (Stage) cancelButton.getScene().getWindow();
+	    stage.close();
 
 	}
 	public void actionCancel(ActionEvent event) {
 		req=null;
 
-		close(event);
+		System.out.println("cancel pressed");
+		Stage stage = (Stage) cancelButton.getScene().getWindow();
+	    stage.close();
+	    
+		
+		
+		
 	}
-	public void quit(ActionEvent event) {actionCancel(event);}
+	public void quit(ActionEvent event) {actionCancel(event);
+		
+	}
 	public void close(ActionEvent event) {
-
+		System.out.println("close pressed");
+		Stage stage = (Stage) cancelButton.getScene().getWindow();
+	    stage.close();
 	}
 }
