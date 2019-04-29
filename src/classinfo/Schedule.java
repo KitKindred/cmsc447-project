@@ -140,10 +140,15 @@ public class Schedule {
         }
     }
 
+    /**
+     Uses the list of active doctors to create a valid schedule, then adds the correct ids to the HashMap of shifts.
+
+     @param ids An ArrayList of the ids of active doctors
+     @param docs The HashMap containing all of the doctor information
+     */
     public void createSchedule(ArrayList<Integer> ids, HashMap<Integer, Profession> docs) {
         this.createShifts();
-        //Integer[] arrIds = new Integer[ids.size()];
-        //arrIds = ids.toArray(arrIds);
+
         int[] arrIds = ids.stream().mapToInt(i->i).toArray(); // int array of active doctors
         Model model = new Model("Scheduler"); // Create solver
         //IntVar[] vars = new IntVar[otherShifts.size()];
@@ -223,33 +228,36 @@ public class Schedule {
         IntVar[] weekVars = new IntVar[varMap.size()];
         IntVar[] weekendVars = new IntVar[varMapWeekend.size()];
 
-        Object[] keys = varMap.keySet().toArray();
-        Arrays.sort(keys);
+        Object[] keys = varMap.keySet().toArray();  // Create an array out of the keys of the hash table
+        Arrays.sort(keys);  // Sort the keys
 
-        int k = 0;
+        int k = 0;  // Counter for the array index
         for (Object name: keys){
-            weekVars[k] = varMap.get(name);
+            weekVars[k] = varMap.get(name);  // Add every IntVar from weekday hashmap to the weekday array
             k++;
         }
 
-        Object[] keys2 = varMapWeekend.keySet().toArray();
-        Arrays.sort(keys2);
+        Object[] keys2 = varMapWeekend.keySet().toArray();  // Create an array out of the keys of the hash table
+        Arrays.sort(keys2);  // Sort the keys
 
-        k = 0;
+        k = 0;  // Counter for the array index
         for (Object name: keys2){
-            weekendVars[k] = varMapWeekend.get(name);
+            weekendVars[k] = varMapWeekend.get(name);  // Add every IntVar from weekend hashmap to the weekend array
             k++;
         }
 
-        // Make sure that no doctor works more than 5 or fewer than 2 weekday shifts in the period, and no more than 4/less than 2 weekend shifts
+        // Make sure that no doctor works more than 40 or fewer than 25 weekday shifts in the period, and no more than 12/less than 7 weekend shifts
+        // globalCardinality args:  The collection of IntVars where the constraint is enforced
+        //                          The value whose cardinality is being set (in this case the doctor id)
+        //                          The range of number of times a value can appear
+        // If id = 0 (doctor 0), globalCardinality(weekVars, ...id..., ...25, 40..., false) means that doctor 0 must be
+        // assigned at least 25 and at most 40 weekday shifts in the period.
+        //
+        // The for loop assigns the weekday/weekend shift count constraints to all doctors
         for (int id: arrIds) {
-            model.globalCardinality(weekVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Week_Shifts", 20, 40)}, false).post();
-            model.globalCardinality(weekendVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Weekend_Shifts", 0, 18)}, false).post();
+            model.globalCardinality(weekVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Week_Shifts", 25, 40)}, false).post();
+            model.globalCardinality(weekendVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Weekend_Shifts", 7, 12)}, false).post();
         }
-
-        //for (int id: arrIds) {
-        //    model.globalCardinality(weekendVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Weekend_Shifts", 2, 4)}, false).post();
-        //}
 
         Solution solution = model.getSolver().findSolution();
         if(solution != null){
@@ -259,7 +267,5 @@ public class Schedule {
             //    System.out.println(varMap.get(val).getValue());
             //}
         }
-        //this.printShifts();
-
     }
 }
