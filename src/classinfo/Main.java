@@ -12,8 +12,8 @@ public class Main {
 	
     public static void main(String[] args) {
 
-    	LocalDate d1 = LocalDate.of(2018, 11, 2);
-        LocalDate d2 = LocalDate.of(2018, 11, 9);
+    	LocalDate d1 = LocalDate.of(2018, 7, 1);
+        LocalDate d2 = LocalDate.of(2018, 10, 1);
 
         Schedule s = new Schedule(d1, d2);
         /*
@@ -48,8 +48,8 @@ public class Main {
 
         drive.printEmployees();
 
-        s.createSchedule(drive.getActiveID(), drive.getEmployees());
-        s.printShifts();
+        //s.createSchedule(drive.getActiveID(), drive.getEmployees());
+        //s.printShifts();
 
         //System.out.println(saved+p.toString());
         //guiStarter g=new guiStarter();

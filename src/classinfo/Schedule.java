@@ -85,10 +85,12 @@ public class Schedule {
         for (Object name: keys){
 
             String key = name.toString();
+
             String value = otherShifts.get(name).toString();
             String nam = otherShifts.get(name).getEmployee().getName();
             
             System.out.println(key + ": " + value + ": " + nam);
+
 
 
         }
@@ -156,6 +158,7 @@ public class Schedule {
                 varMap.put(shift, model.intVar(shift.toString(), arrIds)); // Add an IntVar for every weekday shift
             }
         }
+
         // Makes sure that a doctor doesn't work a shift that starts less than 24 hours
         // after the start of their last shift. Because of the way shifts are created, the keys on each day are
         // consecutive. There are gaps on days with fewer schedules though. Ex: If there are three shifts on Friday, and
@@ -214,6 +217,40 @@ public class Schedule {
 
             }
         }
+
+
+        // Convert the shifts from a hashmap of IntVars to an array of IntVars
+        IntVar[] weekVars = new IntVar[varMap.size()];
+        IntVar[] weekendVars = new IntVar[varMapWeekend.size()];
+
+        Object[] keys = varMap.keySet().toArray();
+        Arrays.sort(keys);
+
+        int k = 0;
+        for (Object name: keys){
+            weekVars[k] = varMap.get(name);
+            k++;
+        }
+
+        Object[] keys2 = varMapWeekend.keySet().toArray();
+        Arrays.sort(keys2);
+
+        k = 0;
+        for (Object name: keys2){
+            weekendVars[k] = varMapWeekend.get(name);
+            k++;
+        }
+
+        // Make sure that no doctor works more than 5 or fewer than 2 weekday shifts in the period, and no more than 4/less than 2 weekend shifts
+        for (int id: arrIds) {
+            model.globalCardinality(weekVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Week_Shifts", 20, 40)}, false).post();
+            model.globalCardinality(weekendVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Weekend_Shifts", 0, 18)}, false).post();
+        }
+
+        //for (int id: arrIds) {
+        //    model.globalCardinality(weekendVars, new int[]{id}, new IntVar[]{model.intVar(id + "_Weekend_Shifts", 2, 4)}, false).post();
+        //}
+
         Solution solution = model.getSolver().findSolution();
         if(solution != null){
             System.out.println(solution.toString());
