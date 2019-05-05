@@ -1,6 +1,7 @@
 package classinfo;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.io.IOException;
 import java.time.LocalDate;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
@@ -44,7 +45,14 @@ public class Main {
         //boolean saved=IOFunctions.saveAllEmployees(drive.getEmployees());
         /*HashMap<Integer,Profession> */
     	//p=
-    	IOFunctions.readAllEmployees();
+        try {
+        	System.out.println("loadEmployees()");
+			IOFunctions.loadEmployees();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		//	System.out.println("readAllEmployees()");
+		//	IOFunctions.readAllEmployees();
+		}
 
         drive.printEmployees();
 

@@ -1,5 +1,7 @@
 package gui;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +17,10 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import classinfo.*;
-
+import classinfo.Schedule;
 import java.time.*;
 
-public class TimeOffRequestBuilder {
+public class TimeOffRequestModifier {
 
 	@FXML
 	Slider prioritySlider;
@@ -37,6 +39,10 @@ public class TimeOffRequestBuilder {
 	private int toMonthMax=0;
 	private int fmm;
 	private int tmm;
+	
+	
+	
+	
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
@@ -78,6 +84,15 @@ public class TimeOffRequestBuilder {
 			n.setDisable(true);
 		}
 		System.out.println("test3");
+		
+		
+		
+		
+		int sel=TimeOffRequestWindow.getSelection();
+		TimeOffRequest t=TimeOffRequestWindow.tor.get(sel);
+		
+		System.out.println(t.getData()+"");
+		
 
 	}
 	private void updateDay(ComboBox box,int days) {
@@ -293,6 +308,17 @@ public class TimeOffRequestBuilder {
 
 	}
 
+	private int convertDateToInt(LocalDateTime ldt1 , LocalDateTime ldt2){
+
+		//oh.
+		
+		System.out.println("year: "+ldt1.minusYears(ldt2.getYear()));
+		System.out.println("month: "+ldt1.minusMonths(ldt2.getMonthValue()));
+		System.out.println("days: "+ldt1.minusDays(ldt2.getDayOfMonth()));
+		
+		return -1;
+	}
+	
 	public void actionSave(ActionEvent event) {
 		int fy=Integer.parseInt(FromYear.getValue().toString());
 		int fd=Integer.parseInt(FromDay.getValue().toString());
@@ -308,7 +334,6 @@ public class TimeOffRequestBuilder {
 		
 		Shift sh=new Shift(from, (int)diff);
 	
-		
 		req= new TimeOffRequest(sh, (int)prioritySlider.getValue());
 		
 		System.out.println("save pressed");

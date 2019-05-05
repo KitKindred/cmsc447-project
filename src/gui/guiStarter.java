@@ -5,6 +5,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sysfiles.IOFunctions;
+
+import java.io.IOException;
+
 import classinfo.*;
 
 public class guiStarter extends Application {
@@ -27,7 +30,14 @@ public class guiStarter extends Application {
 	  
 	 @Override
 	 public void stop() {
-		 IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());	 
+		 try {
+			 System.out.println("saveEmployees()");
+			IOFunctions.saveEmployees();
+		} catch (IOException e) {
+			System.out.println("saveAllEmployees()");
+			IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());
+		}
+		 	 
 	 }
 	 
 	 public static void go(String[] args) {
