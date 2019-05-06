@@ -74,14 +74,11 @@ public class IOFunctions {
 	public static int loadEmployees() throws IOException{
 		File f=new File(path+"employees.txt");
 		if(!f.exists()) {
-			
 			out=new PrintWriter(f);
 			out.write("0");
 			out.write("\r\n");
 			out.close();
-			
-			throw new IOException("employees.txt does not exist!");
-			
+			System.out.println("Created employees.txt");
 		}
 		
 		
@@ -90,9 +87,24 @@ public class IOFunctions {
 		is= new Scanner(f);
 
 		String line="";
-		line=is.nextLine();
-		System.out.println(line);
-		count=Integer.parseInt(line);
+		if (is.hasNextLine()) {
+			line=is.nextLine();
+			System.out.println(line);
+			count=Integer.parseInt(line);
+		}
+		else {
+			out=new PrintWriter(f);
+			out.write("0");
+			out.write("\r\n");
+			out.close();
+
+			is= new Scanner(f);
+			is.nextLine();
+			
+			System.out.println("fixed empty file");
+		}
+		
+		
 		String ar[];
 		while(is.hasNextLine()) {
 			int id,type,worked;

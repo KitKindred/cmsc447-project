@@ -91,8 +91,6 @@ public class Schedule {
             
             System.out.println(key + ": " + value + ": " + nam);
 
-
-
         }
     }
 

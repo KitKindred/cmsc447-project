@@ -308,6 +308,10 @@ public class controller {
 	}
 
 	public void addEmployee(Profession emp) {
+		if (emp == null) {
+			System.out.println("empwindow closed without saving");
+			return;
+		}
 		println("\tid: "+emp.getId());
 		manageSelectEmployee.getItems().add(emp.getName());
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
