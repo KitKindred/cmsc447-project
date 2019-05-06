@@ -33,13 +33,23 @@ public class TimeOffRequestWindow {
 	@FXML
 	ListView RequestBox;
 
-	ArrayList<TimeOffRequest> tor;
+	static ArrayList<TimeOffRequest> tor;
 	
 	private int fromMonthMax=0;
 	private int toMonthMax=0;
 
+	static boolean changed=false;
+	private static int selected=-1;
 	public void initialize() {
 		tor=new ArrayList<TimeOffRequest>();
+		Profession p=ProgramDriver.getEmployees().get(controller.getSelectedID());
+		
+		tor.addAll(p.getTimeOffRequests());
+		
+		for(TimeOffRequest t:tor)
+			RequestBox.getItems().add(t.toString());
+		
+		selected=-1;
 	}
 
 	public void actionCloseTimeOffWindow(ActionEvent event) {
@@ -74,6 +84,7 @@ public class TimeOffRequestWindow {
 			if (TimeOffRequestBuilder.req != null) {
 				tor.add(TimeOffRequestBuilder.req);
 				RequestBox.getItems().add(TimeOffRequestBuilder.req.toString());
+				changed=true;
 			}
 			
 			
@@ -93,8 +104,59 @@ public class TimeOffRequestWindow {
 		index = RequestBox.getSelectionModel().getSelectedIndex();
 		RequestBox.getSelectionModel().clearSelection();
 		RequestBox.getItems().remove(index);
+		tor.remove(index);
+		changed=true;
 		
 	}
-	public void actionEditSelectedRequest(ActionEvent event) {}
+	public static int getSelection() {return selected;}
+	public void actionEditSelectedRequest(ActionEvent event) {
+		selected=RequestBox.getSelectionModel().getSelectedIndex();
+		
+		
+		
+		System.out.println("edit req");
+		try {
+			
+			String path="/gui/TimeOffRequestModifier.fxml";
+			//System.out.println("add path "+path);
+			//Parent root = FXMLLoader.load(getClass().getResource(path));
+			Stage st = new Stage();
+			System.out.println("add after stage");
+			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(path)));
+			System.out.println("add after scene");
+			st.setScene(scene);
+			st.initModality(Modality.APPLICATION_MODAL);
+			st.setTitle("Edit Time Off Request");
+			
+			System.out.println("before show");
+			
+			
+			st.showAndWait();
+			
+			System.out.println("after show request");
+			
+			TimeOffRequest time=TimeOffRequestModifier.req;
+			if (time != null) {
+				tor.set(selected, time);
+				
+				RequestBox.getSelectionModel().clearSelection();
+				RequestBox.getItems().remove(selected);
+				RequestBox.getItems().add(selected, TimeOffRequestModifier.req);
+				RequestBox.getSelectionModel().select(selected);
+				//RequestBox.getItems().add(TimeOffRequestModifier.req.toString());
+				
+				
+				
+				changed=true;
+			}
+			
+			
+		}catch(Exception e) {
+			System.out.println("ERROR SHOWING "+e.toString());
+		}
+		
+		
+		
+	}
 
 }

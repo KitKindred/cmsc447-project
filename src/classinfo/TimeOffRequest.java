@@ -17,7 +17,7 @@ public class TimeOffRequest {
     }
     
     public String getData() {
-    	return this.s.getData()+";"+this.priority;
+    	return this.s.getData().replace("T", " ")+";"+this.priority;
     }
     public String toString() {
     	//System.out.println("TEST");

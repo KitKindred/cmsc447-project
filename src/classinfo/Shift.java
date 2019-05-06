@@ -41,7 +41,7 @@ public class Shift {
         return this.employee;
     }
 
-    public String getData() {return startTime+","+length;}
+    public String getData() {return startTime.toString().replace("T", " ")+","+length;}
     
     @Override
     public String toString() {

@@ -57,7 +57,16 @@ public class Profession {
     public void addTimeOff(TimeOffRequest t) {
         tor.add(t);
     }
-
+    public void setTimeOff(ArrayList<TimeOffRequest> t) {
+        
+    	
+    	tor.clear();
+    	for(TimeOffRequest r:t) {
+    		this.addTimeOff(r);
+    	}
+    	
+    }
+    
     public int getId() {
         return this.id;
     }
