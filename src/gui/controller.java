@@ -165,8 +165,11 @@ public class controller {
 	/*eventually add Employee to the comboBox and not a string representation of one*///maybe
 	//as it is right now, it's ugly but it works
 	public void saveEmployee(ActionEvent event) {
+		
+	
 		String name = manageSelectEmployee.getValue().toString();
-		String newName = manageEmployeeNameText.getText();
+		String newName = manageEmployeeNameText.getText().replace("~", "");
+		
 		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
 		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
 		println("saving current employee "+name);
@@ -182,14 +185,14 @@ public class controller {
 
 		Profession worker;
 		try {
-			//IOFunctions.saveEmployeeToFile(worker);
+			
 			println(name+" "+id);
 			worker= Main.getP().get(id);
 			worker.setName(manageEmployeeNameText.getText());
 			//worker.set
 
 
-			IOFunctions.saveEmployeeToFile(id, worker);
+			IOFunctions.saveEmployees();
 			//manageSelectEmployee
 			println("testst"+manageSelectEmployee.getEditor().getText());	
 		}catch(Exception e) {
@@ -252,7 +255,6 @@ public class controller {
 
 
 	public void actionSelectTimeOff(ActionEvent event) {
-		println("DOES THIS BUTTON WORK?");
 		try {
 			String path="/gui/TimeOffRequests.fxml";
 			Parent root = FXMLLoader.load(getClass().getResource(path));
