@@ -34,8 +34,7 @@ public class guiStarter extends Application {
 			 System.out.println("saveEmployees()");
 			IOFunctions.saveEmployees();
 		} catch (IOException e) {
-			System.out.println("saveAllEmployees()");
-			IOFunctions.saveAllEmployees(ProgramDriver.getEmployees());
+			System.out.println("Error saving employees: " + e.toString());
 		}
 		 	 
 	 }

@@ -67,7 +67,7 @@ public static boolean getClose() {return returnEmployee;}
 		if(returnEmployee==false) {System.out.println("closing empwindow without saving");st.close();return;}
 		else {
 		String t=professionBox.getValue().toString();
-		String name=nameBox.getText();
+		String name=nameBox.getText().replace("~", "");
 		
 		int type=0;
 		
