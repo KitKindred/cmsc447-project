@@ -1,4 +1,4 @@
 3
-{0~Joe Schmoe~0~2~0~venmo@var.com~[]~<>~false}
-{1~Firsty Lasty~0~0~0~Twenty@2020.com~[]~<>~false}
-{2~Thirdy Fourthy~0~0~0~TwentyFirst@2121.com~[]~<>~false}
+{0~Joe Schmoess~0~0~0~venmoavarg@mail.com~[]~<>~false}
+{1~Firsty Lasty~0~1~0~Twenty@2020.com~[]~<>~false}
+{2~Thirdy Fourthy~0~2~0~TwentyFirst@2121.com~[]~<>~false}

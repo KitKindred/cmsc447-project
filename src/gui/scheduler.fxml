@@ -26,16 +26,19 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="640.0">
                      <children>
-                        <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="68.0" promptText="Employee Name" />
-                        <TextField fx:id="manageEmployeeEmail" layoutX="171.0" layoutY="68.0" promptText="Employee Email" />
+                        <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="68.0" onAction="#actionChanged" promptText="Employee Name" />
+                        <TextField fx:id="manageEmployeeEmail" layoutX="171.0" layoutY="68.0" onInputMethodTextChanged="#actionChanged" promptText="Employee Email" />
                         <Text fx:id="manageEmployeeIDField" layoutX="14.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID: -1" />
+                        <Text fx:id="manageEmployeeProfession" layoutX="89.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profession: null" wrappingWidth="120.46875" />
                         <ComboBox fx:id="manageSelectEmployee" layoutX="14.0" layoutY="14.0" onAction="#checkID" prefWidth="150.0" promptText="SELECT EMPLOYEE" />
                         <ComboBox fx:id="manageActivityField" layoutX="14.0" layoutY="135.0" onAction="#showDateRange" prefWidth="150.0" promptText="is employee active" />
-                        <TextField fx:id="manageDateRange1" layoutX="172.0" layoutY="135.0" promptText="Date Start for maternity?" />
+                        <TextField fx:id="manageDateStart" editable="false" layoutX="308.0" layoutY="135.0" onInputMethodTextChanged="#actionChanged" promptText="Date Start" />
                         <Button fx:id="manageSaveButton" layoutX="298.0" layoutY="297.0" mnemonicParsing="false" onAction="#saveEmployee" prefHeight="35.0" prefWidth="120.0" text="Save Employees" />
                         <Button fx:id="createEmployeeButton" layoutX="480.0" layoutY="14.0" mnemonicParsing="false" onAction="#actionLaunchEmployeeCreationWindow" text="Create a New Employee" />
                         <Button fx:id="GetTimeOffButton" layoutX="14.0" layoutY="201.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" text="Employee Time Off Requests" />
                         <Button fx:id="genSchedExpoButton" layoutX="443.0" layoutY="297.0" mnemonicParsing="false" onAction="#generate" prefHeight="35.0" prefWidth="180.0" text="Generate Schedule and Export" />
+                        <Button fx:id="manageDateRange1" layoutX="171.0" layoutY="135.0" mnemonicParsing="false" onAction="#actionLaunchDateRangeWindow" text="Set Inactivity Date" />
+                        
                      </children>
                   </AnchorPane>
             </content>

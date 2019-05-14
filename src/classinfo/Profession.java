@@ -1,4 +1,5 @@
 package classinfo;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Profession {
@@ -9,6 +10,8 @@ public class Profession {
     protected ArrayList<Shift> personalShifts;
     protected ArrayList<TimeOffRequest> tor;
 
+    protected LocalDateTime ldtInactive=null;
+    
     protected Profession() {
         this.id = 0;
         this.type = 0;
@@ -20,6 +23,7 @@ public class Profession {
         this.weekDay=0;
         this.weekEvening=0;
         this.weekNight=0;
+      
     }
 
     protected Profession(int id, int type, String name) {
@@ -55,6 +59,14 @@ public class Profession {
         this.active = a;
     }
 
+    public void setInactiveDate(LocalDateTime a) {
+        this.ldtInactive = a;
+    }
+    
+    public LocalDateTime getInactiveDate() {
+    	return this.ldtInactive;
+    }
+    
     public void addShift(Shift sft) {
         personalShifts.add(sft);
     }
@@ -92,8 +104,12 @@ public class Profession {
         return this.email;
     }
     public String toString() {
-    	
-    	return getId()+" "+getType()+" "+getHoursWorked()+" "+getName()+" "+getActive()+" "+personalShifts.size()+" "+tor.size();
+    	String str=getId()+" "+getType()+" "+getHoursWorked()+" "+getName()+" "+getActive()+" "+personalShifts.size()+" "+tor.size();
+    	if(ldtInactive!=null) {
+    		str+=" "+ldtInactive.toString();
+    		
+    	}
+    	return str;
     }
     
     public ArrayList<Shift> getShifts(){

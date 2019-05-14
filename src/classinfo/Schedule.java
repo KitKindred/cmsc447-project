@@ -13,8 +13,6 @@ public class Schedule {
     //private ArrayList<Shift> shifts;
     private HashMap<Integer, Shift> otherShifts; // Not sure if list or hash is better yet
     private int weekdayShifts, weekendShifts; // Number of shifts on weekdays and weekends
-    private boolean isValidSchedule = false;
-    
 
     /**
      * Constructor that takes only a start and end date.
@@ -81,24 +79,19 @@ public class Schedule {
      */
     public void printShifts() {
 
-    	if (isValidSchedule) {
-    		Object[] keys = otherShifts.keySet().toArray();
-    		Arrays.sort(keys);
+    	Object[] keys = otherShifts.keySet().toArray();
+    	Arrays.sort(keys);
     	
-        	for (Object name: keys){
+        for (Object name: keys){
 
-            	String key = name.toString();
+            String key = name.toString();
 
-            	String value = otherShifts.get(name).toString();
-            	String nam = otherShifts.get(name).getEmployee().getName();
+            String value = otherShifts.get(name).toString();
+            String nam = otherShifts.get(name).getEmployee().getName();
             
-            	System.out.println(key + ": " + value + ": " + nam);
+            System.out.println(key + ": " + value + ": " + nam);
 
-        	}
-    	}
-    	else {
-    		System.out.println("Could not print schedule!");
-    	}
+        }
     }
 
     public void addToShifts(HashMap<Integer, IntVar> varMap, HashMap<Integer, IntVar> varMapWeekend, HashMap<Integer, Profession> docs) {
@@ -268,14 +261,9 @@ public class Schedule {
         if(solution != null){
             System.out.println(solution.toString());
             this.addToShifts(varMap, varMapWeekend, docs);
-            isValidSchedule = true;
             //for (Integer val: varMap.keySet()) {
             //    System.out.println(varMap.get(val).getValue());
             //}
-        }
-        else {
-        	System.out.println("Could not generate schedule!");
-        	isValidSchedule = false;
         }
     }
 }
