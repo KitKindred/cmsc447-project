@@ -219,8 +219,9 @@ public class controller {
 			e.printStackTrace();
 			System.exit(1);
 		}		
-		
-		println(manageActivityField.getSelectionModel().getSelectedIndex()+"");
+		System.out.println(active);
+		manageActivityField.getSelectionModel().select(active);
+		//println(manageActivityField.getSelectionModel().getSelectedIndex()+"");
 		
 	}
 
