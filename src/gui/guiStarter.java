@@ -33,7 +33,7 @@ public class guiStarter extends Application {
 	 public void stop() {
 		 try {
 			// System.out.println("saveEmployees() test");
-			 boolean yes=false;
+			 boolean choice=false;
 			 System.out.println("saved? "+controller.getEditWithoutSave());
 			 if(controller.getEditWithoutSave()) {
 				 System.out.println("would you like to save");
@@ -49,11 +49,11 @@ public class guiStarter extends Application {
 						
 						st.showAndWait();
 						
-						yes=yesno.getClose();
+						choice=yesno.getClose();
 						
 					}catch(Exception e) {System.out.println("error?"+e.toString());}
 				 
-				 if(yes) {
+				 if(choice) {
 					 IOFunctions.saveEmployees();		 
 					 
 				 }
