@@ -24,25 +24,26 @@ public class AddEmployeeWindow {
 	@FXML
 	ComboBox activeBox, professionBox;
 	@FXML
-	TextField nameBox;
+	TextField nameBox,emailBox;
 
 	private static Profession emp=null;
-	private static boolean returnEmployee;//=true;
+	private static boolean returnEmployee=false;//=true;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
-		returnEmployee=true;
+		//returnEmployee=true;
 		activeBox.getItems().addAll("Active","Inactive","Maternity");
 		professionBox.getItems().addAll("Doctor","Moonlighter","Intern");
 
 		activeBox.setValue(activeBox.getItems().get(0));
 		professionBox.setValue(professionBox.getItems().get(0));
 
-		
+		emailBox.setText("");
 		
 	}
 
 public static boolean getClose() {return returnEmployee;}
 	public void actionAddEmployee(ActionEvent event) {
+		returnEmployee=true;
 		quit(event);
 
 		//actionQuit(event);
@@ -61,17 +62,25 @@ public static boolean getClose() {return returnEmployee;}
 		returnEmployee=false;
 		quit(event);
 	}
-	
 	public void quit(ActionEvent event) {
 		Stage st=(Stage)cancelButton.getScene().getWindow();
 		if(returnEmployee==false) {System.out.println("closing empwindow without saving");st.close();return;}
 		else {
-		String t=professionBox.getValue().toString();
+		String professionType=professionBox.getValue().toString();
 		String name=nameBox.getText().replace("~", "");
+		System.out.println(emailBox);
+		String email=emailBox.getText().replace("~", "");
+		
+		if(!email.contains("@")) {
+			System.out.println("error: email must contain '@'.");
+			returnEmployee=false;
+			st.close();
+			return;
+		}
 		
 		int type=0;
 		
-		switch(t) {
+		switch(professionType) {
 		case "Doctor":
 			type=0;
 			break;
@@ -87,7 +96,12 @@ public static boolean getClose() {return returnEmployee;}
 		
 		}
 		
-		ProgramDriver.addDoctor(type, name,ProgramDriver.getID());
+		ProgramDriver.addDoctor(type, name,ProgramDriver.getID(),email);
+		int sel=activeBox.getSelectionModel().getSelectedIndex();
+		System.out.println("selected active window: "+sel);
+		ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1).setActive(sel);
+		
+		
 		//emp=getEmployeeWhenClose();
 		System.out.println("closing "+name);//+emp.getName());
 
@@ -95,60 +109,4 @@ public static boolean getClose() {return returnEmployee;}
 		//actionQuit(event);
 		}
 	}
-/*
-	public Profession getEmployeeWhenClose() {
-		Profession p = new Doctor(ProgramDriver.getID(),0,"name name");
-		p.setName(nameBox.getText());
-
-		Object o=professionBox.getValue();
-		if(o==null) {System.out.println("professionbox uninitialized?");}
-		else {
-			System.out.println("professionBox.getValue().toString(): "+professionBox.getValue().toString());
-
-
-			switch(o.toString()) {
-			case "Doctor":
-				p.setType(0);
-				break;
-			case "Moonlighter":
-				p.setType(1);
-				break;
-			case "Intern":
-				p.setType(2);
-				break;
-			default:
-				System.out.println("ERROR UNSELECTED PROFESSION");
-				break;
-			}
-		}
-
-		o=activeBox.getValue();
-		if(o==null) {
-			System.out.println("activebox uninitialized?");
-		}
-		else {
-			switch(o.toString()) {
-			case "Active":
-				p.setActive(true);
-				break;
-			case "Inactive":
-				p.setActive(false);
-				break;
-			case "Maternity":
-				p.setActive(false);
-				break;
-			default:
-				System.out.println("ERROR UNSELECTED ACTIVITY");
-				break;
-			}
-		}
-		return p;
-		
-		
-	}
-	public static Profession getEmp() {
-		Profession e=emp;
-		emp=null;
-		return e;
-	}*/
 }

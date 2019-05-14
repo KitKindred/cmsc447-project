@@ -13,10 +13,11 @@
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
             <Button fx:id="addButton" layoutX="533.0" layoutY="361.0" mnemonicParsing="false" onAction="#actionAddEmployee" text="Add Employee" />
-            <TextField fx:id="nameBox" layoutX="61.0" layoutY="55.0" onAction="#actionEnterName" text="Enter Name" />
+            <TextField fx:id="nameBox" layoutX="61.0" layoutY="55.0" onAction="#actionEnterName" promptText="Enter Name" />
             <ComboBox fx:id="professionBox" layoutX="61.0" layoutY="93.0" onAction="#actionSelectProfession" prefWidth="150.0" promptText="Choose Profession" />
             <ComboBox fx:id="activeBox" layoutX="57.0" layoutY="152.0" onAction="#actionSelectActivity" prefHeight="25.0" prefWidth="157.0" promptText="Choose Active Status" />
             <Button fx:id="cancelButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#actionCancel" text="Cancel" />
+            <TextField fx:id="emailBox" layoutX="235.0" layoutY="55.0" promptText="Enter Email Address" />
       </children>
     </AnchorPane>
   </children>

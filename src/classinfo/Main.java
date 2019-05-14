@@ -10,7 +10,7 @@ import gui.guiStarter;
 public class Main {
 
 	private static HashMap <Integer,Profession> p;
-	
+	static int id=0;
     public static void main(String[] args) {
 
     	LocalDate d1 = LocalDate.of(2018, 7, 1);
@@ -59,11 +59,7 @@ public class Main {
         //s.createSchedule(drive.getActiveID(), drive.getEmployees());
         //s.printShifts();
 
-        //System.out.println(saved+p.toString());
-        //guiStarter g=new guiStarter();
         guiStarter.go(args);
-
-
         
     }
 

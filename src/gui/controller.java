@@ -36,7 +36,7 @@ public class controller {
 	private void print(String s) {System.out.print(s);}
 	private void println(String s) {System.out.println(s);}
 
-	private boolean editedWithoutSave = false; 
+	private static boolean editedWithoutSave = false; 
 
 	//GENERATE SCHEDULE TAB SECTION VARIABLES 
 	@FXML
@@ -49,23 +49,14 @@ public class controller {
 	Button manageSaveButton,createEmployeeButton,GetTimeOffButton;
 
 	@FXML
-	TextField manageEmployeeNameText;
+	TextField manageEmployeeNameText,manageDateRange1,manageEmployeeEmail;
+	@FXML
+	ComboBox manageActivityField, manageSelectEmployee;
 
 	@FXML
-	ComboBox manageActivityField;
-
-	@FXML
-	ComboBox manageSelectEmployee;
+	Text manageEmployeeIDField;
 
 	static int currentID;
-
-	@FXML
-	Text manageEmployeeIDField,manageDateRange2;
-
-	@FXML
-	TextField manageDateRange1,manageDateRange3;
-
-
 	private ArrayList<Node> invisSelectEmployee, invisDateRange;
 
 	@FXML
@@ -75,30 +66,35 @@ public class controller {
 
 		invisSelectEmployee.add(manageEmployeeIDField);
 		invisSelectEmployee.add(manageEmployeeNameText);
+		invisSelectEmployee.add(manageEmployeeEmail);
 		invisSelectEmployee.add(manageActivityField);
 		invisSelectEmployee.add(manageSaveButton);
 		invisSelectEmployee.add(GetTimeOffButton);
-
+		
+		
 		invisDateRange.add(manageDateRange1);
-		invisDateRange.add(manageDateRange2);
-		invisDateRange.add(manageDateRange3);
+		//invisDateRange.add(manageDateRange2);
+		//invisDateRange.add(manageDateRange3);
 
 		manageSelectEmployee.setVisible(true);
 
 
 
 		manageEmployeeNameText.setText("FIRSTNAME LASTNAME");
-
+		manageEmployeeEmail.setText("");
+		
 		manageActivityField.getItems().addAll(
 				"Active",
 				"Inactive",
 				"Maternity"
 				);
 
+		
 		for(Node a: invisDateRange) {
 			a.setVisible(false);
 		}
 
+		
 		for(Node a: invisSelectEmployee) {
 			a.setVisible(false);
 		}
@@ -121,10 +117,15 @@ public class controller {
 
 		//ProgramDriver drive = new ProgramDriver();
 
+		if(ProgramDriver.getEmployees().size()==0) {
+			System.out.println("No employees to schedule for!");
+			return;
+		}
+		
 		s.createSchedule(ProgramDriver.getActiveID(), ProgramDriver.getEmployees());
 		s.printShifts();
 	}
-
+/*
 	//create a new employee and add to end of list
 	public void makeNewEmployee() {
 		println("new employee");
@@ -136,39 +137,57 @@ public class controller {
 		//will return a created doctor to add to the map and stuff
 		//ProgramDriver.addDoctor(, , i);
 
-	}
+	}*/
 
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
-		System.out.println("checkID: emp selected");
+		System.out.println("checkID: emp selected: ");
 		String name="Example Name";
-
+		String email="Example Email";
+		int active = 0;
 		// fix nullpointerexception, when checkID is called and there is nothing selected
 		// no idea what is actually causing the extra call though
 		if (manageSelectEmployee.getValue() == null) {
 			return;
 		}
 
+		
+		//int ID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
+		
 		name = manageSelectEmployee.getValue().toString();
+		
 		int ID=ProgramDriver.getNameID().get(name);
 		currentID=ID;
+		//println("\n\n\tcurrentID: "+currentID);
+		Profession emp=ProgramDriver.getEmployees().get(currentID);
+		name=emp.getName();
+		active=emp.getActive();
+		email=emp.getEmail();
+		System.out.println(name+" "+active+"\n");
 		for(Node a: invisSelectEmployee) {
 			a.setVisible(true);
 		}
 
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
 		manageEmployeeIDField.setText("ID: "+ID);//setText to be whatever the employee's id is
-		manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
+		//println("\temp activity: "+active);
+		manageActivityField.getSelectionModel().select(active);
+		
+		manageEmployeeEmail.setText(email);
+		//manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
 
 	}
 
 	/*eventually add Employee to the comboBox and not a string representation of one*///maybe
 	//as it is right now, it's ugly but it works
 	public void saveEmployee(ActionEvent event) {
-		
 	
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText().replace("~", "");
+		
+		String email = manageEmployeeEmail.getText().replace(" ","");
+		
+		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 		
 		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
 		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
@@ -180,8 +199,7 @@ public class controller {
 		manageSelectEmployee.setValue(newName);
 		manageSelectEmployee.getItems().add(id, newName);
 		manageSelectEmployee.getSelectionModel().select(id);
-		//manageSelectEmployee.Items[manageSelectEmployee.FindStringExact(name)] = newName;
-
+		
 
 		Profession worker;
 		try {
@@ -189,16 +207,21 @@ public class controller {
 			println(name+" "+id);
 			worker= Main.getP().get(id);
 			worker.setName(manageEmployeeNameText.getText());
-			//worker.set
+			worker.setEmail(email);
+			worker.setActive(active);
 
 
 			IOFunctions.saveEmployees();
-			//manageSelectEmployee
-			println("testst"+manageSelectEmployee.getEditor().getText());	
+			editedWithoutSave=false;
+
+				
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}		
+		
+		println(manageActivityField.getSelectionModel().getSelectedIndex()+"");
+		
 	}
 
 	//currently unused?
@@ -274,12 +297,8 @@ public class controller {
 
 				ProgramDriver.getEmployees().get(manageSelectEmployee.getSelectionModel().getSelectedIndex()).setTimeOff(TimeOffRequestWindow.tor);
 
-				//for(TimeOffRequest t: TimeOffRequestWindow.tor) {
-
-
+				editedWithoutSave=true;
 				TimeOffRequestWindow.changed=false;
-				//((Profession)manageSelectEmployee.getSelectionModel().getSelectedItem()).addTimeOff(t);
-				//}
 			}
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
 
@@ -300,8 +319,10 @@ public class controller {
 			st.setTitle("Create a New Employee");
 			st.showAndWait();
 
-			if(AddEmployeeWindow.getClose())
+			if(AddEmployeeWindow.getClose()) {
 				addEmployee(ProgramDriver.getEmployees().get(ProgramDriver.getID()-1));
+				editedWithoutSave=true;	
+			}
 
 			//newEmp=AddEmployeeWindow.getEmp();
 		} catch(Exception e) {
@@ -314,23 +335,28 @@ public class controller {
 			System.out.println("empwindow closed without saving");
 			return;
 		}
-		println("\tid: "+emp.getId());
+		println("\tid: "+emp.getId()+" "+emp.getActive());
 		manageSelectEmployee.getItems().add(emp.getName());
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
-
-
+		manageEmployeeEmail.setText(emp.getEmail());
+		manageActivityField.getSelectionModel().select(emp.getActive());;
+		
 	}
 
 	// exits without saving, need to add in save flag check
 	public void quit(ActionEvent event) {
+		println("quit pressed");
 		if (!editedWithoutSave) {
 			Platform.exit();
 		}
 		else {
+			println("would you like to save?");
 			println("Trying to exit without saving!");
 		}
 	}
 
-
+	public static boolean getEditWithoutSave() {
+		return editedWithoutSave;
+	}
 
 }

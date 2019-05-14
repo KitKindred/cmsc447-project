@@ -18,38 +18,24 @@
             <MenuItem fx:id="quit" mnemonicParsing="false" onAction="#quit" text="Quit" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Documentation" />
-          </items>
-        </Menu>
       </menus>
     </MenuBar>
       <TabPane tabClosingPolicy="UNAVAILABLE">
         <tabs>
-            <Tab text="Generate Schedule">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="342.0" prefWidth="640.0">
-                     <children>
-                        <Button fx:id="genSchedExpoButton" layoutX="447.0" layoutY="293.0" mnemonicParsing="false" onAction="#generate" prefHeight="35.0" prefWidth="179.0" text="Generate Schedule and Export" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
           <Tab text="Manage Employee">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="640.0">
                      <children>
-                        <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="68.0" />
+                        <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="68.0" promptText="Employee Name" />
+                        <TextField fx:id="manageEmployeeEmail" layoutX="171.0" layoutY="68.0" promptText="Employee Email" />
                         <Text fx:id="manageEmployeeIDField" layoutX="14.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID: -1" />
                         <ComboBox fx:id="manageSelectEmployee" layoutX="14.0" layoutY="14.0" onAction="#checkID" prefWidth="150.0" promptText="SELECT EMPLOYEE" />
                         <ComboBox fx:id="manageActivityField" layoutX="14.0" layoutY="135.0" onAction="#showDateRange" prefWidth="150.0" promptText="is employee active" />
-                        <TextField fx:id="manageDateRange1" layoutX="164.0" layoutY="135.0" />
-                        <Text fx:id="manageDateRange2" layoutX="331.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="through" />
-                        <TextField fx:id="manageDateRange3" layoutX="402.0" layoutY="135.0" />
-                        <Button fx:id="manageSaveButton" layoutX="479.0" layoutY="303.0" mnemonicParsing="false" onAction="#saveEmployee" text="Save Selected Employee" />
+                        <TextField fx:id="manageDateRange1" layoutX="172.0" layoutY="135.0" promptText="Date Start for maternity?" />
+                        <Button fx:id="manageSaveButton" layoutX="298.0" layoutY="297.0" mnemonicParsing="false" onAction="#saveEmployee" prefHeight="35.0" prefWidth="120.0" text="Save Employees" />
                         <Button fx:id="createEmployeeButton" layoutX="480.0" layoutY="14.0" mnemonicParsing="false" onAction="#actionLaunchEmployeeCreationWindow" text="Create a New Employee" />
-                        <Button fx:id="GetTimeOffButton" layoutX="229.0" layoutY="303.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" text="Selected Time Off Requests" />
+                        <Button fx:id="GetTimeOffButton" layoutX="14.0" layoutY="201.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" text="Employee Time Off Requests" />
+                        <Button fx:id="genSchedExpoButton" layoutX="443.0" layoutY="297.0" mnemonicParsing="false" onAction="#generate" prefHeight="35.0" prefWidth="180.0" text="Generate Schedule and Export" />
                      </children>
                   </AnchorPane>
             </content>

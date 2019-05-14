@@ -3,6 +3,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sysfiles.IOFunctions;
 
@@ -31,8 +32,36 @@ public class guiStarter extends Application {
 	 @Override
 	 public void stop() {
 		 try {
-			 System.out.println("saveEmployees()");
-			IOFunctions.saveEmployees();
+			// System.out.println("saveEmployees() test");
+			 boolean yes=false;
+			 System.out.println("saved? "+controller.getEditWithoutSave());
+			 if(controller.getEditWithoutSave()) {
+				 System.out.println("would you like to save");
+				 
+				 try {
+						String path="/gui/yesno.fxml";
+						Parent root = FXMLLoader.load(getClass().getResource(path));
+						Stage st = new Stage();
+						Scene scene = new Scene(root);
+						st.setScene(scene);
+						st.initModality(Modality.APPLICATION_MODAL);
+						st.setTitle("Unsaved Changes!");
+						
+						st.showAndWait();
+						
+						yes=yesno.getClose();
+						
+					}catch(Exception e) {System.out.println("error?"+e.toString());}
+				 
+				 if(yes) {
+					 IOFunctions.saveEmployees();		 
+					 
+				 }
+				 else {
+					 System.out.println("choice: not saving");
+				 }
+				 
+			 }			
 		} catch (IOException e) {
 			System.out.println("Error saving employees: " + e.toString());
 		}

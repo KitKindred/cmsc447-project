@@ -59,6 +59,32 @@ public class ProgramDriver {
 
 	}
 
+	public static void addDoctor(int type, String name, int i_d, String em) {
+		switch (type) {
+		case 0:
+			Doctor doc=new Doctor(i_d,type,name);
+			doc.setEmail(em);
+			employees.put(i_d, doc);
+			break;
+		case 1:
+			Moonlighter moon=new Moonlighter(i_d,type,name);
+			moon.setEmail(em);
+			employees.put(id, moon);
+			break;
+		case 2:
+			Intern in=new Intern(i_d, type, name);
+			in.setEmail(em);
+			employees.put(id, in);
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		empID.put(name, i_d);
+		id=Math.max(i_d+=1, id+=1);
+		System.out.println("adding "+ id);
+
+	}
+	
 	/**
 	 * Gets the IDs of all of the currently active employees
 	 *
@@ -67,7 +93,7 @@ public class ProgramDriver {
 	public static ArrayList<Integer> getActiveID() {
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (Integer ident: employees.keySet()){
-			if (employees.get(ident).getActive()) {
+			if (employees.get(ident).getActive()==0) {
 				ids.add(ident);
 			}
 		}

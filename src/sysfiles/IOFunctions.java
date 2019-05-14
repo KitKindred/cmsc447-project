@@ -30,14 +30,16 @@ public class IOFunctions {
 		System.out.println("e.size:"+e.size());
 		System.out.println(""+e.values());
 		for(Profession p: e.values()) {
-			System.out.println(" "+p.getId());
+			System.out.print(" "+p.getId());
 			storeLine+="{";
 
 			storeLine+=p.getId()+"~";
 			storeLine+=p.getName()+"~";
 			storeLine+=p.getType()+"~";
 			storeLine+=p.getActive()+"~";
-			storeLine+=p.getHoursWorked()+"~[";
+			storeLine+=p.getHoursWorked()+"~";
+			storeLine+=p.getEmail()+"~[";
+			
 			for(Shift s:p.getShifts()) {
 				storeLine.concat(s.getData()+"`");//return "startTime(local date time),length";
 			}
@@ -57,7 +59,7 @@ public class IOFunctions {
 
 			storeLine+=("}\r\n");
 
-			System.out.println(storeLine);
+			System.out.print(storeLine);
 			out.write(storeLine);
 			i+=1;
 			storeLine="";
@@ -104,13 +106,12 @@ public class IOFunctions {
 			System.out.println("fixed empty file");
 		}
 		
-		
 		String ar[];
 		while(is.hasNextLine()) {
 			int id = -1,type = -1, worked;
-			boolean active = false, attend;
+			int active = -1, attend;
 			String name = "";
-
+			String email="";
 			line=is.nextLine();
 			line=line.substring(1, line.length()-1);/*{id~name~type~active~worked~[SHIFTS]~<TORS>~ATTEND}*/
 			System.out.println(line);
@@ -124,28 +125,34 @@ public class IOFunctions {
 				id=Integer.parseInt(ar[0]);
 				name=ar[1];
 				type=Integer.parseInt(ar[2]);
-				active=Boolean.parseBoolean(ar[3]);		
+				active=Integer.parseInt(ar[3]);		
+				worked=Integer.parseInt(ar[4]);
+				email=ar[5];
+				
+				System.out.println("\n\tloading: "+id+name+type+active+worked+email);
+				
 			}
 			catch (Exception e) {
 				System.out.println("Error parsing saved employee file: " + e.toString());
 				
 			}
-			ProgramDriver.addDoctor(type, name, id);
+			ProgramDriver.addDoctor(type, name, id,email);
 
 			Profession p=ProgramDriver.getEmployees().get(id);
-
-			System.out.println(""+ar[5]);
-			String shifts=ar[5];
+			p.setActive(active);
+			System.out.println("pemail: "+p.getEmail());
+			System.out.println(""+ar[6]);
+			String shifts=ar[6];
 			if(shifts.length()>2) {
-				for(String l:ar[5].split("`")) {
+				for(String l:ar[6].split("`")) {
 					Shift sh=getsh(l);
 					p.addShift(sh);			
 
 				}
 			}
 
-			System.out.println(""+ar[6]);
-			String reqs=ar[6].substring(1, ar[6].length()-1);
+			System.out.println(""+ar[7]);
+			String reqs=ar[7].substring(1, ar[7].length()-1);
 			if(reqs.length()>0) {
 				for(String l:reqs.split("`")) {
 					System.out.println("line "+l);
@@ -153,7 +160,7 @@ public class IOFunctions {
 					p.addTimeOff(tor);
 				}
 			}
-			if(ar.length>7) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[7]));}
+			if(ar.length>8) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
 
 		}
 		if(is!=null)
