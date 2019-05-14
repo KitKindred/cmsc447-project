@@ -192,7 +192,7 @@ public class dateStart {
 	}
 	public void actionCancel(ActionEvent event) {
 		req=null;
-
+		saveDate=false;
 		System.out.println("cancel pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
 	    stage.close();

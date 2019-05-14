@@ -69,7 +69,7 @@ public class controller {
 	private ArrayList<Node> invisSelectEmployee, invisDateRange;
 
 	private boolean clicked=false;
-
+	private int oldindex=-1;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		invisSelectEmployee = new ArrayList<Node>();
@@ -115,22 +115,48 @@ public class controller {
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				editedWithoutSave=true;
-				System.out.println("employee name changed");
+				if(newValue.indexOf('~')!=-1) {
+					manageEmployeeNameText.setText(manageEmployeeNameText.getText().replace("~",""));
+					return;
+				}
+				//editedWithoutSave=true;
+				
+				//System.out.println("employee name changed");
 			}
 		});
+		manageEmployeeNameText.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
+				if(newPropertyValue){
+					String old=ProgramDriver.getEmployees().get(currentID).getName();
+					String name=manageEmployeeNameText.getText();
+					ProgramDriver.getEmployees().get(currentID).setName(name);
+					ProgramDriver.getNameID().remove(old);
+					ProgramDriver.getNameID().put(name, currentID);
+					editedWithoutSave=true;
+				}
+			}
+		});
+		
 		manageEmployeeEmail.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				editedWithoutSave=true;
-				System.out.println("employee email changed");
+				if(newValue.indexOf("~")!=-1) {
+					manageEmployeeEmail.setText(manageEmployeeEmail.getText());//.replace("~",""));
+					manageEmployeeEmail.setText(manageEmployeeEmail.getText().replace("~",""));
+					return;
+				}
+				//editedWithoutSave=true;
 			}
 		});
-
-		manageDateStart.textProperty().addListener(new ChangeListener<String>() {
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				editedWithoutSave=true;
-				System.out.println("inactivity date start changed");
+		manageEmployeeEmail.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean o, Boolean n) {
+				if(n) {
+					String mail=manageEmployeeEmail.getText();
+					ProgramDriver.getEmployees().get(currentID).setEmail(mail);
+					editedWithoutSave=true;
+				}
 			}
+			
+			
 		});
 	}
 
@@ -157,12 +183,12 @@ public class controller {
 			st.showAndWait();
 
 			if(dateStart.saveDate) {
-
+				if(dateStart.req!=null) {
 				editedWithoutSave=true;
 				ldtInactive=dateStart.req;
 
 				manageDateStart.setText(ldtInactive.toString());
-				ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);
+				ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);}
 			}
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
 
@@ -172,7 +198,7 @@ public class controller {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Unsaved Changes to Employee");
 		alert.setHeaderText("Unsaved Changes to Employee");
-		alert.setContentText("Would you like to save changes to "+ProgramDriver.getEmployees().get(currentID).getName());
+		alert.setContentText("Would you like to save changes to your Employees?");// to "+ProgramDriver.getEmployees().get(currentID).getName());
 
 		alert.initModality(Modality.APPLICATION_MODAL);
 
@@ -217,39 +243,8 @@ public class controller {
 		s.printShifts();
 	}
 
-	public void currentEmpSave(MouseEvent event) {
-		//if(clicked)clicked=false;
-		//else clicked=true;
-
-
-		System.out.println("in currentEmpSave");
-		if(editedWithoutSave) {
-			System.out.println("edw/osave");
-			if(changeBox()) {
-				saveEmployee(new ActionEvent());
-				editedWithoutSave=false;
-				System.out.println("finished saved\n~~~~~~~~~~~~~~~~~~~~~~~\n");
-			}	
-			else {
-				//checkID(new ActionEvent(manageSelectEmployee,manageSelectEmployee));				
-			}
-		}
-		else {			
-			System.out.println("gets stuck here for first click after confirmation gui");
-			//checkID(new ActionEvent(manageSelectEmployee,manageSelectEmployee));
-		}
-		//manageSelectEmployee.getSelectionModel().clearAndSelect(manageSelectEmployee.getSelectionModel().getSelectedIndex());
-	}
-
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
-		//System.out.println(""+event.getSource()+" "+event.getTarget());
-
-		/*if(editedWithoutSave) {
-			if(changeBox()) {
-				saveEmployee(event);
-			}	
-		}*/
 
 		System.out.println("checkID: emp selected: ");
 		String name="Example Name";
@@ -265,10 +260,12 @@ public class controller {
 
 		name = manageSelectEmployee.getValue().toString();
 
-		int ID=ProgramDriver.getNameID().get(name);
-		currentID=ID;
-		//println("\n\n\tcurrentID: "+currentID);
+		//int ID=ProgramDriver.getNameID().get(name);
+		currentID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
+		//currentID=ID;
+		println("\n\n\tcurrentID: "+currentID);
 		Profession emp=ProgramDriver.getEmployees().get(currentID);
+		System.out.println(""+emp.getName());
 		name=emp.getName();
 		active=emp.getActive();
 		email=emp.getEmail();
@@ -278,7 +275,7 @@ public class controller {
 		}
 
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
-		manageEmployeeIDField.setText("ID: "+ID);//setText to be whatever the employee's id is
+		manageEmployeeIDField.setText("ID: "+currentID);//setText to be whatever the employee's id is
 		manageEmployeeProfession.setText("Profession: "+getProf(emp.getType()));
 		//println("\temp activity: "+active);
 		manageActivityField.getSelectionModel().select(active);
@@ -286,10 +283,12 @@ public class controller {
 		manageEmployeeEmail.setText(email);
 
 		manageDateRange1.setText("Set "+getAct(emp.getActive())+" Date");
-		manageDateStart.setText(emp.getInactiveDate().toString());
+		if(emp.getActive()==2)
+			manageDateStart.setText(emp.getInactiveDate().toString());
 
 		//manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
-		editedWithoutSave=false;
+		//editedWithoutSave=false;
+		oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
 	}
 
 	private String getAct(int act) {
@@ -315,11 +314,7 @@ public class controller {
 			return "Intern";
 		default: 
 			return null;
-
-
 		}
-
-
 	}
 
 	/*eventually add Employee to the comboBox and not a string representation of one*///maybe
@@ -327,7 +322,7 @@ public class controller {
 	public void saveEmployee(ActionEvent event) {
 
 		String name = manageSelectEmployee.getValue().toString();
-		String newName = manageEmployeeNameText.getText().replace("~", "");
+		String newName = manageEmployeeNameText.getText();//.replace("~", "");
 
 		String email = manageEmployeeEmail.getText().replace(" ","").replace("~", "");
 		if(!email.contains("@")) {
@@ -343,20 +338,29 @@ public class controller {
 
 		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 
-		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
+		int id=currentID;
+//		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
 		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
 		println("saving current employee "+name);
 
-		Profession worker;
+		Profession worker=ProgramDriver.getEmployees().get(currentID);
 		try {
 
 			println(name+" "+id);
-			worker= Main.getP().get(id);
+			//worker= Main.getP().get(id);
+			
 			worker.setName(manageEmployeeNameText.getText());
 			worker.setEmail(email);
-			worker.setActive(active);
-
-
+			//worker.setActive(active);
+			
+			/*maternity leave check*/
+			
+			if(active==2) {
+				if(worker.getInactiveDate()==null) {
+					throw new Exception(worker.getName()+"'s Maternity Leave has no Associated Start Date!");
+				}
+			}
+			
 			IOFunctions.saveEmployees();
 			editedWithoutSave=false;
 
@@ -371,7 +375,8 @@ public class controller {
 		//to properly update the combobox text selection
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().remove(id);
-		manageSelectEmployee.setValue(newName);
+
+//		manageSelectEmployee.setValue(newName);
 		manageSelectEmployee.getItems().add(id, newName);
 		manageSelectEmployee.getSelectionModel().select(id);
 	}
@@ -390,17 +395,47 @@ public class controller {
 		String op = manageActivityField.getValue().toString();
 		println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
+		int index=manageActivityField.getSelectionModel().getSelectedIndex();
+		ProgramDriver.getEmployees().get(currentID).setActive(manageActivityField.getSelectionModel().getSelectedIndex());
 		switch(op) {
 		case "Active":
+		case "Inactive":
 			for(Node a: invisDateRange) {
 				a.setVisible(false);
-			}break;
+			}
+			ProgramDriver.getEmployees().get(currentID).setActive(index);
+			ProgramDriver.getEmployees().get(currentID).setInactiveDate(null);
+			break;
 		default:
 			for(Node a: invisDateRange) {
 				a.setVisible(true);
-			}break;		
-		}		
+			}
+			System.out.println("maternity check");
 
+			if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {
+				System.out.println("inactive date nonexist");
+				
+				actionLaunchDateRangeWindow(new ActionEvent(manageDateRange1,manageDateRange1));
+				System.out.println(oldindex);
+				if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {/*canceled box*/
+				if(oldindex!=-1) {
+					try {
+					manageActivityField.getSelectionModel().clearAndSelect(oldindex);
+					}catch(IndexOutOfBoundsException e) {
+						System.out.println("oldindex: "+oldindex+" "+manageActivityField.getSelectionModel().getSelectedIndex());
+					}
+					
+					ProgramDriver.getEmployees().get(currentID).setActive(oldindex);
+				}
+				}
+			}
+			break;		
+		}
+		if(index!=oldindex) {
+			editedWithoutSave=true;
+		}
+		oldindex=index; 
+		System.out.println(oldindex);
 	}
 
 	//unused
@@ -457,12 +492,6 @@ public class controller {
 	}
 
 	public void actionLaunchEmployeeCreationWindow(ActionEvent event) {
-		//		Profession newEmp=null;
-		if(editedWithoutSave) {
-			if(changeBox()) {
-				saveEmployee(event);
-			}	
-		}
 
 		try {
 
@@ -478,8 +507,10 @@ public class controller {
 			st.showAndWait();
 
 			if(AddEmployeeWindow.getClose()) {
+				System.out.println("want saving emp window?");
 				addEmployee(ProgramDriver.getEmployees().get(ProgramDriver.getID()-1));
 				editedWithoutSave=true;	
+				
 			}
 
 			//newEmp=AddEmployeeWindow.getEmp();
@@ -495,11 +526,15 @@ public class controller {
 		}
 		println("\tid: "+emp.getId()+" "+emp.getActive());
 		manageSelectEmployee.getItems().add(emp.getName());
+		
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
+		
 		manageEmployeeEmail.setText(emp.getEmail());
 		manageActivityField.getSelectionModel().select(emp.getActive());;
-		manageDateRange1.setText("Set "+getProf(emp.getType())+" Date");
-		manageDateStart.setText(emp.getInactiveDate().toString());
+		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
+		if(emp.getActive()==2) {
+			manageDateStart.setText(emp.getInactiveDate().toString());
+		}
 	}
 
 	// exits without saving, need to add in save flag check
@@ -508,13 +543,15 @@ public class controller {
 		if(editedWithoutSave) {
 			if(changeBox()) {
 				saveEmployee(event);
+				Platform.exit();
 			}
 			else {
+				editedWithoutSave=false;
 				Platform.exit();
 			}
 		}
 		else {
-			Platform.exit();
+			/*editedWithoutSave=false; is false*/
 		}
 
 

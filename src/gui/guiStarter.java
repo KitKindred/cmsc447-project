@@ -31,12 +31,17 @@ public class guiStarter extends Application {
 	  
 	 @Override
 	 public void stop() {
-/*
 		 if(controller.getEditWithoutSave()){
 			 if(controller.changeBox()) {
+				 try {
+					IOFunctions.saveEmployees();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				 
 			 }
-		 }*/
+		 }
 		 System.out.println("stopping");
 	 }
 	 

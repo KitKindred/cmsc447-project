@@ -88,20 +88,26 @@ public class AddEmployeeWindow {
 	
 public static boolean getClose() {return returnEmployee;}
 	public void actionAddEmployee(ActionEvent event) {
+		System.out.println("save employee?");
 		returnEmployee=true;
 		quit(event);
-
-		//actionQuit(event);
 	}
 	public void actionEnterName(ActionEvent event) {}
 	public void actionSelectProfession(ActionEvent event) {}
+	
+	
 	public void actionSelectActivity(ActionEvent event) {
 		//println("Clicked on ComboBox Option");
 		String op = activeBox.getValue().toString();
+		
 		//println(activeBox.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		switch(op) {
 		case "Active":
+			for(Node a: invisDateRange) {
+				a.setVisible(false);
+			}break;
+		case "Inactive":
 			for(Node a: invisDateRange) {
 				a.setVisible(false);
 			}break;
@@ -110,16 +116,9 @@ public static boolean getClose() {return returnEmployee;}
 				a.setVisible(true);
 			}break;		
 		}		
-		
-		
 	}
-	public void actionQuit(ActionEvent event) {
-		//Stage st=(Stage)cancelButton.getScene().getWindow();
-		quit(event);
-		//st.close();
-
-
-	}
+	
+	public void actionQuit(ActionEvent event) {	quit(event);}
 	public void actionCancel(ActionEvent event) {
 		returnEmployee=false;
 		quit(event);
@@ -173,12 +172,14 @@ public static boolean getClose() {return returnEmployee;}
 		int sel=activeBox.getSelectionModel().getSelectedIndex();
 		System.out.println("selected active window: "+sel);
 		emp.setActive(sel);
-		emp.setInactiveDate(inactive);
+		if(inactive!=null)
+			emp.setInactiveDate(inactive);
+		else {emp.setInactiveDate(null);}
 		//ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1).setActive(sel);
 		
 		
 		//emp=getEmployeeWhenClose();
-		System.out.println("closing "+name);//+emp.getName());
+		System.out.println("closing "+name+" "+returnEmployee);//+emp.getName());
 
 		st.close();
 		//actionQuit(event);

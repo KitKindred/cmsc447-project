@@ -174,6 +174,7 @@ public class IOFunctions {
 				ldtInactive=LocalDateTime.parse(inactiveDate, format);
 				
 				p.setInactiveDate(ldtInactive);
+				System.out.println("p. "+p.getInactiveDate());
 			}
 			
 			if(ar.length>9) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}

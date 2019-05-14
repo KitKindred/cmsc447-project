@@ -61,7 +61,7 @@ public class TimeOffRequestBuilder {
 		}
 
 		System.out.println("test");
-		
+
 		disable.add(saveButton);
 		disable.add(FromMonth);
 		disable.add(FromDay);
@@ -73,8 +73,8 @@ public class TimeOffRequestBuilder {
 
 		System.out.println("test2");
 		for(Node n:disable) {
-			
-			
+
+
 			n.setDisable(true);
 		}
 		System.out.println("test3");
@@ -153,7 +153,10 @@ public class TimeOffRequestBuilder {
 		}
 
 		FromDay.setDisable(false);
-
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
 	public void actionSelectFromDay(ActionEvent event) {
 
@@ -164,6 +167,10 @@ public class TimeOffRequestBuilder {
 			b.getSelectionModel().clearSelection();
 		}
 		else {System.out.println("date ok");}
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
 	public void actionSelectToDay(ActionEvent event) {
 
@@ -174,9 +181,36 @@ public class TimeOffRequestBuilder {
 			b.getSelectionModel().clearSelection();
 		}
 		else {System.out.println("date ok");}
-		
-		saveButton.setDisable(false);
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
+
+
+	private boolean dateCheck() {
+		if(FromYear.getSelectionModel().getSelectedIndex()==-1
+			||FromMonth.getSelectionModel().getSelectedIndex()==-1
+			||FromDay.getSelectionModel().getSelectedIndex()==-1
+			||ToYear.getSelectionModel().getSelectedIndex()==-1
+			||ToMonth.getSelectionModel().getSelectedIndex()==-1
+			||ToDay.getSelectionModel().getSelectedIndex()==-1) {
+			return false;
+		}
+		
+		int fy=Integer.parseInt(FromYear.getValue().toString());
+		int fd=Integer.parseInt(FromDay.getValue().toString());
+		int ty=Integer.parseInt(ToYear.getValue().toString());
+		int td=Integer.parseInt(ToDay.getValue().toString());
+
+		LocalDateTime from=LocalDateTime.of(fy, fmm, fd, 0, 0);
+		LocalDateTime to=LocalDateTime.of(ty, tmm, td, 0, 0);
+
+		Duration duration = Duration.between(from, to);
+
+		return duration.toDays()>0;
+	}
+
 	public void actionSelectFromYear(ActionEvent event) {
 		System.out.println("\t"+FromDay.getItems().size());
 		FromMonth.setDisable(false);
@@ -200,7 +234,10 @@ public class TimeOffRequestBuilder {
 				}
 			}
 		}
-		
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
 	public void actionSelectToYear(ActionEvent event) {
 		System.out.println("\t"+ToDay.getItems().size());
@@ -226,6 +263,10 @@ public class TimeOffRequestBuilder {
 			}
 		}
 		//ToMonth.setDisable(false);
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
 	public void actionSelectToMonth(ActionEvent event) {
 		ToDay.getItems().clear();
@@ -290,7 +331,10 @@ public class TimeOffRequestBuilder {
 		}
 
 		ToDay.setDisable(false);
-
+		if(dateCheck())
+			saveButton.setDisable(false);
+		else
+			saveButton.setDisable(true);
 	}
 
 	public void actionSave(ActionEvent event) {
@@ -302,18 +346,18 @@ public class TimeOffRequestBuilder {
 
 		LocalDateTime from=LocalDateTime.of(fy, fmm, fd, 0, 0);
 		LocalDateTime to=LocalDateTime.of(ty, tmm, td,0,0);
-		
+
 		Duration duration = Duration.between(from, to);
 		long diff = Math.abs(duration.toDays());		
-		
+
 		Shift sh=new Shift(from, (int)diff);
-	
-		
+
+
 		req= new TimeOffRequest(sh, (int)prioritySlider.getValue());
-		
+
 		System.out.println("save pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
-	    stage.close();
+		stage.close();
 
 	}
 	public void actionCancel(ActionEvent event) {
@@ -321,18 +365,18 @@ public class TimeOffRequestBuilder {
 
 		System.out.println("cancel pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
-	    stage.close();
-	    
-		
-		
-		
+		stage.close();
+
+
+
+
 	}
 	public void quit(ActionEvent event) {actionCancel(event);
-		
+
 	}
 	public void close(ActionEvent event) {
 		System.out.println("close pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
-	    stage.close();
+		stage.close();
 	}
 }
