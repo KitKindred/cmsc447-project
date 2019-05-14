@@ -187,7 +187,6 @@ public class dateStart {
 		
 		req=from;
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
-		
 	    stage.close();
 
 	}

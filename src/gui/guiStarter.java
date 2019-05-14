@@ -31,41 +31,13 @@ public class guiStarter extends Application {
 	  
 	 @Override
 	 public void stop() {
-		 try {
-			// System.out.println("saveEmployees() test");
-			 boolean choice=false;
-			 System.out.println("saved? "+controller.getEditWithoutSave());
-			 if(controller.getEditWithoutSave()) {
-				 System.out.println("would you like to save");
+/*
+		 if(controller.getEditWithoutSave()){
+			 if(controller.changeBox()) {
 				 
-				 try {
-						String path="/gui/yesno.fxml";
-						Parent root = FXMLLoader.load(getClass().getResource(path));
-						Stage st = new Stage();
-						Scene scene = new Scene(root);
-						st.setScene(scene);
-						st.initModality(Modality.APPLICATION_MODAL);
-						st.setTitle("Unsaved Changes!");
-						
-						st.showAndWait();
-						
-						choice=yesno.getClose();
-						
-					}catch(Exception e) {System.out.println("error?"+e.toString());}
-				 
-				 if(choice) {
-					 IOFunctions.saveEmployees();		 
-					 
-				 }
-				 else {
-					 System.out.println("choice: not saving");
-				 }
-				 
-			 }			
-		} catch (IOException e) {
-			System.out.println("Error saving employees: " + e.toString());
-		}
-		 	 
+			 }
+		 }*/
+		 System.out.println("stopping");
 	 }
 	 
 	 public static void go(String[] args) {

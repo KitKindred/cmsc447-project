@@ -1,4 +1,5 @@
 package gui;
+import java.awt.Event;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,6 +25,7 @@ import javafx.scene.Scene;
 import sysfiles.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -64,6 +67,8 @@ public class controller {
 
 	static int currentID;
 	private ArrayList<Node> invisSelectEmployee, invisDateRange;
+
+	private boolean clicked=false;
 
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
@@ -212,24 +217,49 @@ public class controller {
 		s.printShifts();
 	}
 
+	public void currentEmpSave(MouseEvent event) {
+		//if(clicked)clicked=false;
+		//else clicked=true;
+
+
+		System.out.println("in currentEmpSave");
+		if(editedWithoutSave) {
+			System.out.println("edw/osave");
+			if(changeBox()) {
+				saveEmployee(new ActionEvent());
+				editedWithoutSave=false;
+				System.out.println("finished saved\n~~~~~~~~~~~~~~~~~~~~~~~\n");
+			}	
+			else {
+				//checkID(new ActionEvent(manageSelectEmployee,manageSelectEmployee));				
+			}
+		}
+		else {			
+			System.out.println("gets stuck here for first click after confirmation gui");
+			//checkID(new ActionEvent(manageSelectEmployee,manageSelectEmployee));
+		}
+		//manageSelectEmployee.getSelectionModel().clearAndSelect(manageSelectEmployee.getSelectionModel().getSelectedIndex());
+	}
+
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
-		if(editedWithoutSave) {
+		//System.out.println(""+event.getSource()+" "+event.getTarget());
+
+		/*if(editedWithoutSave) {
 			if(changeBox()) {
 				saveEmployee(event);
 			}	
-		}
+		}*/
 
 		System.out.println("checkID: emp selected: ");
 		String name="Example Name";
 		String email="Example Email";
 		int active = 0;
-		// fix nullpointerexception, when checkID is called and there is nothing selected
-		// no idea what is actually causing the extra call though
+
 		if (manageSelectEmployee.getValue() == null) {
 			return;
 		}
-
+		System.out.println("test");
 
 		//int ID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 
@@ -247,9 +277,6 @@ public class controller {
 			a.setVisible(true);
 		}
 
-		
-		
-		
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
 		manageEmployeeIDField.setText("ID: "+ID);//setText to be whatever the employee's id is
 		manageEmployeeProfession.setText("Profession: "+getProf(emp.getType()));
@@ -257,10 +284,27 @@ public class controller {
 		manageActivityField.getSelectionModel().select(active);
 
 		manageEmployeeEmail.setText(email);
+
+		manageDateRange1.setText("Set "+getAct(emp.getActive())+" Date");
+		manageDateStart.setText(emp.getInactiveDate().toString());
+
 		//manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
 		editedWithoutSave=false;
 	}
-	
+
+	private String getAct(int act) {
+		switch(act) {
+		case 0:
+			return "Active";
+		case 1:
+			return "Inactive";
+		case 2:
+			return "Maternity";
+		default:
+			return"";
+
+		}
+	}
 	private String getProf(int type) {
 		switch(type) {
 		case 0:
@@ -271,11 +315,11 @@ public class controller {
 			return "Intern";
 		default: 
 			return null;
-		
-		
+
+
 		}
-		
-		
+
+
 	}
 
 	/*eventually add Employee to the comboBox and not a string representation of one*///maybe
@@ -454,18 +498,26 @@ public class controller {
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
 		manageEmployeeEmail.setText(emp.getEmail());
 		manageActivityField.getSelectionModel().select(emp.getActive());;
-
+		manageDateRange1.setText("Set "+getProf(emp.getType())+" Date");
+		manageDateStart.setText(emp.getInactiveDate().toString());
 	}
 
 	// exits without saving, need to add in save flag check
 	public void quit(ActionEvent event) {
+
 		if(editedWithoutSave) {
-			if(editedWithoutSave) {
-				if(changeBox()) {
-					saveEmployee(event);
-				}	
+			if(changeBox()) {
+				saveEmployee(event);
+			}
+			else {
+				Platform.exit();
 			}
 		}
+		else {
+			Platform.exit();
+		}
+
+
 	}
 
 	public static boolean getEditWithoutSave() {
