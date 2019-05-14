@@ -108,7 +108,7 @@ public class controller {
 
 	//will generate schedule
 	public void generate(ActionEvent event) {
-		System.out.println("SCHEDULE GENERATED");
+		System.out.println("ATTEMPTING TO GEN SCHEDULE");
 
 		LocalDate d1 = LocalDate.of(2018, 7, 1);
 		LocalDate d2 = LocalDate.of(2018, 10, 1);
@@ -125,19 +125,6 @@ public class controller {
 		s.createSchedule(ProgramDriver.getActiveID(), ProgramDriver.getEmployees());
 		s.printShifts();
 	}
-/*
-	//create a new employee and add to end of list
-	public void makeNewEmployee() {
-		println("new employee");
-		//in place of a new gui, placeholder employee yay!
-		manageSelectEmployee.getItems().add("new employee");
-		ProgramDriver.addDoctor(0, "new employee", ProgramDriver.getID());
-
-		//need to make the AddDoctor GUI
-		//will return a created doctor to add to the map and stuff
-		//ProgramDriver.addDoctor(, , i);
-
-	}*/
 
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
@@ -185,7 +172,7 @@ public class controller {
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText().replace("~", "");
 		
-		String email = manageEmployeeEmail.getText().replace(" ","");
+		String email = manageEmployeeEmail.getText().replace(" ","").replace("~", "");
 		
 		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 		

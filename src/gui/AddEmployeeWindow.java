@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import sysfiles.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import classinfo.*;
@@ -73,6 +74,14 @@ public static boolean getClose() {return returnEmployee;}
 		
 		if(!email.contains("@")) {
 			System.out.println("error: email must contain '@'.");
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Email Error");
+			alert.setHeaderText("Email Formatting Error");
+			alert.setContentText("Email's must have the @ symbol!");
+
+			alert.showAndWait();
+			
 			returnEmployee=false;
 			st.close();
 			return;
