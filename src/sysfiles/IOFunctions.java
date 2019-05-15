@@ -39,7 +39,7 @@ public class IOFunctions {
 			storeLine+=p.getActive()+"~";
 			storeLine+=p.getHoursWorked()+"~";
 			storeLine+=p.getEmail()+"~[";
-			
+
 			for(Shift s:p.getShifts()) {
 				storeLine.concat(s.getData()+"`");//return "startTime(local date time),length";
 			}
@@ -52,22 +52,21 @@ public class IOFunctions {
 
 			String ldtstr = p.getInactiveDate() != null
 					? p.getInactiveDate().toString()
-					:"";
-					
-			storeLine+=ldtstr;
+							:"";
 
-			if(p.getType()==0) {
+					storeLine+=ldtstr;
 
-				storeLine+=("~"+((Doctor) p).getAttending());
+					if(p.getType()==0) {
+						storeLine+=("~"+((Doctor) p).getAttending());
+						storeLine+=("~"+((Doctor)p).getAttendingDate());
+					}
 
-			}
+					storeLine+=("}\r\n");
 
-			storeLine+=("}\r\n");
-
-			//System.out.print(storeLine);
-			out.write(storeLine);
-			i+=1;
-			storeLine="";
+					//System.out.print(storeLine);
+					out.write(storeLine);
+					i+=1;
+					storeLine="";
 		}
 
 		if(out!=null)
@@ -87,8 +86,8 @@ public class IOFunctions {
 			out.close();
 			System.out.println("Created employees.txt");
 		}
-		
-		
+
+
 		int i=0;
 		int count=0;
 		is= new Scanner(f);
@@ -107,18 +106,19 @@ public class IOFunctions {
 
 			is= new Scanner(f);
 			is.nextLine();
-			
+
 			System.out.println("fixed empty file");
 		}
-		
+
 		String ar[];
 		while(is.hasNextLine()) {
 			int id = -1,type = -1, worked;
-			int active = -1, attend;
+			int active = -1;
+			boolean attend;
 			String name = "";
 			String email="";
 			String inactiveDate="";
-			
+			String attDate="";
 			line=is.nextLine();
 			line=line.substring(1, line.length()-1);/*{id~name~type~active~worked~[SHIFTS]~<TORS>~ATTEND}*/
 			System.out.println(line);
@@ -134,13 +134,13 @@ public class IOFunctions {
 				active=Integer.parseInt(ar[3]);		
 				worked=Integer.parseInt(ar[4]);
 				email=ar[5];
-				
+
 				//System.out.println("\n\tloading: "+id+name+type+active+worked+email);
-				
+
 			}
 			catch (Exception e) {
 				System.out.println("Error parsing saved employee file: " + e.toString());
-				
+
 			}
 			ProgramDriver.addDoctor(type, name, id,email);
 
@@ -166,30 +166,42 @@ public class IOFunctions {
 					p.addTimeOff(tor);
 				}
 			}
-			
+
 			inactiveDate=ar[8];//.substring(1, ar[8].length()-1);
+			LocalDateTime ldtInactive;
+			DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
 			if(inactiveDate.length()>0) {
-				LocalDateTime ldtInactive;
-				DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 				ldtInactive=LocalDateTime.parse(inactiveDate, format);
-				
 				p.setInactiveDate(ldtInactive);
 				System.out.println("p. "+p.getInactiveDate());
 			}
-			
+
 			if(ar.length>9) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
 
+			attDate=ar[10];
+			if(ar.length>10) {
+				if(attDate.equals("null")) {
+					((Doctor)p).setAttendingDate(null);
+					break;
+				}
+				else{
+					ldtInactive=LocalDateTime.parse(attDate, format);
+					((Doctor)p).setAttendingDate(ldtInactive);
+					System.out.println(((Doctor)p).getAttendingDate());
+				}
+			}
 		}
 		if(is!=null)
 			is.close();
 		return i;
 	} 
-	
+
 	private static Shift getsh(String str) {//already split by , now by "2018-11-08T15:00"
 
 		String[] s=str.split(",");
 		System.out.println(str);
-		
+
 		DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime ldt=LocalDateTime.parse(s[0], formatter);
 		Shift sh=new Shift(ldt,Integer.parseInt(s[1]));
@@ -201,14 +213,14 @@ public class IOFunctions {
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 }

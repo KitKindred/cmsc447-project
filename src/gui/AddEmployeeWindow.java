@@ -70,8 +70,10 @@ public class AddEmployeeWindow {
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Set "+activeBox.getSelectionModel().getSelectedItem().toString()+"'s Inactivity Date");
-
+			
+			st.setResizable(false);
 			st.showAndWait();
+			
 
 			if(dateStart.saveDate) {
 				ldtInactive=dateStart.req;
@@ -140,7 +142,7 @@ public static boolean getClose() {return returnEmployee;}
 			alert.setTitle("Email Error");
 			alert.setHeaderText("Email Formatting Error");
 			alert.setContentText("Email's must have the @ symbol!");
-
+			alert.setResizable(false);
 			alert.showAndWait();
 			
 			returnEmployee=false;
@@ -166,6 +168,7 @@ public static boolean getClose() {return returnEmployee;}
 			alert.setHeaderText("No Profession Selected");
 			alert.setContentText("Please select a profession!");
 
+			alert.setResizable(false);
 			alert.showAndWait();
 			returnEmployee = false;
 			return;
@@ -178,7 +181,7 @@ public static boolean getClose() {return returnEmployee;}
 			alert.setTitle("Maternity Error");
 			alert.setHeaderText("No Maternity Start Date Selected");
 			alert.setContentText("Please select a start date for Maternity Leave!");
-
+			alert.setResizable(false);
 			alert.showAndWait();
 			returnEmployee = false;
 			return;
