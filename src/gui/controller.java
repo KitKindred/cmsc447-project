@@ -555,7 +555,7 @@ public class controller {
 			}
 		}
 		else {
-			/*editedWithoutSave=false; is false*/
+			Platform.exit();
 		}
 
 
