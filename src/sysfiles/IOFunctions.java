@@ -48,8 +48,13 @@ public class IOFunctions {
 				storeLine+=tor.getData()+"`";//return this.s.getData()+";"+this.priority;
 
 			}
-			storeLine+=(">");
+			storeLine+=(">~");
 
+			String ldtstr = p.getInactiveDate() != null
+					? p.getInactiveDate().toString()
+					:"";
+					
+			storeLine+=ldtstr;
 
 			if(p.getType()==0) {
 
@@ -59,7 +64,7 @@ public class IOFunctions {
 
 			storeLine+=("}\r\n");
 
-			System.out.print(storeLine);
+			//System.out.print(storeLine);
 			out.write(storeLine);
 			i+=1;
 			storeLine="";
@@ -112,10 +117,11 @@ public class IOFunctions {
 			int active = -1, attend;
 			String name = "";
 			String email="";
+			String inactiveDate="";
+			
 			line=is.nextLine();
 			line=line.substring(1, line.length()-1);/*{id~name~type~active~worked~[SHIFTS]~<TORS>~ATTEND}*/
 			System.out.println(line);
-
 
 			ar=line.split("~");
 			for(String s:ar) {
@@ -129,7 +135,7 @@ public class IOFunctions {
 				worked=Integer.parseInt(ar[4]);
 				email=ar[5];
 				
-				System.out.println("\n\tloading: "+id+name+type+active+worked+email);
+				//System.out.println("\n\tloading: "+id+name+type+active+worked+email);
 				
 			}
 			catch (Exception e) {
@@ -160,7 +166,18 @@ public class IOFunctions {
 					p.addTimeOff(tor);
 				}
 			}
-			if(ar.length>8) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
+			
+			inactiveDate=ar[8];//.substring(1, ar[8].length()-1);
+			if(inactiveDate.length()>0) {
+				LocalDateTime ldtInactive;
+				DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+				ldtInactive=LocalDateTime.parse(inactiveDate, format);
+				
+				p.setInactiveDate(ldtInactive);
+				System.out.println("p. "+p.getInactiveDate());
+			}
+			
+			if(ar.length>9) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
 
 		}
 		if(is!=null)
@@ -184,4 +201,14 @@ public class IOFunctions {
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

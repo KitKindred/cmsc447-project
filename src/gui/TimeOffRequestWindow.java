@@ -102,6 +102,10 @@ public class TimeOffRequestWindow {
 		}
 		
 		index = RequestBox.getSelectionModel().getSelectedIndex();
+		if(index==-1) {
+			System.out.println("cannot remove index -1");
+			return;
+		}
 		RequestBox.getSelectionModel().clearSelection();
 		RequestBox.getItems().remove(index);
 		tor.remove(index);
@@ -110,8 +114,12 @@ public class TimeOffRequestWindow {
 	}
 	public static int getSelection() {return selected;}
 	public void actionEditSelectedRequest(ActionEvent event) {
-		selected=RequestBox.getSelectionModel().getSelectedIndex();
 		
+		selected=RequestBox.getSelectionModel().getSelectedIndex();
+		if(selected==-1) {
+			System.out.println("cannot select a non-selected index.");
+			return;
+		}
 		
 		
 		System.out.println("edit req");
