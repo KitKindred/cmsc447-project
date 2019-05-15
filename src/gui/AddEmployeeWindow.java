@@ -2,6 +2,7 @@ package gui;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,6 @@ public class AddEmployeeWindow {
 
 		activeBox.setValue(activeBox.getItems().get(0));
 		professionBox.setValue(professionBox.getItems().get(0));
-		
 		manageDateRange1.setText("");
 
 		emailBox.setText("");
@@ -77,7 +77,8 @@ public class AddEmployeeWindow {
 				ldtInactive=dateStart.req;
 				System.out.println("t");
 				System.out.println(ldtInactive.toString());
-				manageDateStart.setText(ldtInactive.toString());
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+				manageDateStart.setText(ldtInactive.format(format));
 				
 //				ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);
 				inactive=(ldtInactive);
@@ -160,19 +161,34 @@ public static boolean getClose() {return returnEmployee;}
 			type=2;
 			break;
 		default:
-			System.out.println("ERROR UNSELECTED PROFESSION");
-			break;
-		
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Profession Error");
+			alert.setHeaderText("No Profession Selected");
+			alert.setContentText("Please select a profession!");
+
+			alert.showAndWait();
+			returnEmployee = false;
+			return;
 		}
 		
+		int sel=activeBox.getSelectionModel().getSelectedIndex();
+		System.out.println("selected active window: "+sel);
+		if (sel == 2 && inactive == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Maternity Error");
+			alert.setHeaderText("No Maternity Start Date Selected");
+			alert.setContentText("Please select a start date for Maternity Leave!");
+
+			alert.showAndWait();
+			returnEmployee = false;
+			return;
+		}
 		
 		ProgramDriver.addDoctor(type, name,ProgramDriver.getID(),email);
 		emp = ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1);
 		
-		int sel=activeBox.getSelectionModel().getSelectedIndex();
-		System.out.println("selected active window: "+sel);
 		emp.setActive(sel);
-		if(inactive!=null)
+		if(inactive!=null && true)
 			emp.setInactiveDate(inactive);
 		else {emp.setInactiveDate(null);}
 		//ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1).setActive(sel);
