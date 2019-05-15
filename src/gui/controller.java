@@ -152,24 +152,8 @@ public class controller {
 					ProgramDriver.getEmployees().get(currentID).setEmail(mail);
 				}
 			}
-			
-			
-		});
-		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(newValue.indexOf('~')!=-1) {
-					manageEmployeeNameText.setText(manageEmployeeNameText.getText().replace("~",""));
-					return;
-				}
-				actionChanged(null);
-
-				//editedWithoutSave=true;
-				
-				//System.out.println("employee name changed");
-			}
 		});
 	}
-
 
 	/*GUI ACTION FUNCTIONS*/
 
