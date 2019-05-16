@@ -54,9 +54,6 @@ public class controller {
 	@FXML
 	Button genSchedExpoButton;
 
-
-	//MANAGE EMPLOYEES TAB SECTION VARIABLES
-
 	@FXML 
 	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1,attendingWeekButton;
 
@@ -67,37 +64,49 @@ public class controller {
 	ComboBox manageActivityField, manageSelectEmployee;
 
 	@FXML
-	Text manageEmployeeIDField,manageEmployeeProfession;
+	Text manageEmployeeIDField,manageEmployeeProfession,activityText,attendText,maternityText,emailText;
 
-	static int currentID;
-	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor;
+	static int currentID=-1;
+	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor,disableUntilLoad;
 
-	private boolean clicked=false;
+	//private boolean clicked=false;
 	private int oldindex=-1;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		invisSelectEmployee = new ArrayList<Node>();
 		invisDateRange = new ArrayList<Node>();
 		invisDoctor= new ArrayList<Node>();
-
+		disableUntilLoad=new ArrayList<Node>();
+		
 		invisSelectEmployee.add(manageEmployeeIDField);
 		invisSelectEmployee.add(manageEmployeeNameText);
 		invisSelectEmployee.add(manageEmployeeEmail);
 		invisSelectEmployee.add(manageEmployeeProfession);
 		invisSelectEmployee.add(manageActivityField);
-		invisSelectEmployee.add(manageSaveButton);
+		//invisSelectEmployee.add(manageSaveButton);
 		invisSelectEmployee.add(GetTimeOffButton);
+		invisSelectEmployee.add(emailText);
+		invisSelectEmployee.add(activityText);
 
-
+		disableUntilLoad.add(manageSaveButton);
+		disableUntilLoad.add(createEmployeeButton);
+		disableUntilLoad.add(genSchedExpoButton);
+		disableUntilLoad.add(manageSelectEmployee);
+		
+		for(Node a: disableUntilLoad) {a.setDisable(true);}
+		
+		
+		
 		invisDateRange.add(manageDateRange1);
 		invisDateRange.add(manageDateStart);
+		invisDateRange.add(maternityText);
 		//invisDateRange.add(manageDateRange2);
 		//invisDateRange.add(manageDateRange3);
 
 		System.out.println(attendingWeekButton);
 		invisDoctor.add(attendingWeekButton);
 		invisDoctor.add(attendingWeekText);
-
+		invisDoctor.add(attendText);
 		manageSelectEmployee.setVisible(true);
 
 		manageEmployeeNameText.setText("FIRSTNAME LASTNAME");
@@ -109,13 +118,20 @@ public class controller {
 				"Maternity"
 				);
 
+		//manageSelectEmployee.setStyle("<color-stop>red 70%");
+		
 		for(Node a: invisDateRange) {a.setVisible(false);}
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
+		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
 
+		
+		
+		
 		populate();//IOFunctions.readAllEmployees());
 		//manageDateRange1.setVisible(false);
 
+		
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -162,6 +178,10 @@ public class controller {
 				}
 			}
 		});
+		
+		
+		for(Node a: disableUntilLoad) {a.setDisable(false);}
+		
 	}
 
 	/*GUI ACTION FUNCTIONS*/
@@ -387,6 +407,8 @@ st.setResizable(false);
 	//as it is right now, it's ugly but it works
 	public void saveEmployee(ActionEvent event) {
 
+		if(currentID==-1) {return;}
+		
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText();
 
