@@ -215,8 +215,8 @@ public class IOFunctions {
 	}
 	
 	public static boolean exportCalendar(String iCal) {
-		StringBuilder builder = new StringBuilder(); // This creates the ics file after the gui window is closed.
-	    File file = new File("cal.ics");
+		StringBuilder builder = new StringBuilder(); 
+		File file = new File("cal.ics");
 	    builder.append("cal");
 	    builder.append(".ics");
 	
@@ -229,9 +229,10 @@ public class IOFunctions {
 	    	BufferedWriter bw = new BufferedWriter(fw);
 	    	bw.write(iCal);
 	    	bw.close();
+	    	
 	    	return true;
 	    } catch (IOException e) {
-	    	System.out.println("Error saving files");
+	    	System.out.println("Error saving calendar:" + e.getMessage());
 	    	return false;
 	    }
 	}

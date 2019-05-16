@@ -304,7 +304,21 @@ st.setResizable(false);
 
 		s.createSchedule(ProgramDriver.getActiveID(), ProgramDriver.getEmployees());
 		s.printShifts();
-		IOFunctions.exportCalendar(s.export());
+		if (IOFunctions.exportCalendar(s.export())) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Calendar Exported");
+			alert.setHeaderText("Calendar Exported Successfully");
+			alert.setContentText("Calendar saved to cal.ics!");
+			
+			alert.showAndWait();
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Calendar Not Exported");
+			alert.setHeaderText("Calendar Exporting Failed");
+			alert.setContentText("Calendar failed to save!");
+			
+			alert.showAndWait();
+		}
 	}
 
 	//the currently selected employee
