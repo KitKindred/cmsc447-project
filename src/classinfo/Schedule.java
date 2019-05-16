@@ -278,4 +278,49 @@ public class Schedule {
         	isValidSchedule = false;
         }
     }
+        public String Export() {
+        
+        String Cal =
+                "BEGIN:VCALENDAR\n"+
+                        "VERSION:1.0\n";
+        String event = "";
+        Object[] keys = otherShifts.keySet().toArray();
+        Arrays.sort(keys);
+
+        for (Object name: keys) {
+            String year =String.valueOf(otherShifts.get(name).getStartTime().getYear());
+            String month =  String.valueOf(otherShifts.get(name).getStartTime().getMonthValue());
+            String day = String.valueOf(otherShifts.get(name).getStartTime().getDayOfMonth());
+            String hourS = String.valueOf(otherShifts.get(name).getStartTime().getHour()); //Start time for the employee
+            String min = String.valueOf(otherShifts.get(name).getStartTime().getMinute());
+            String sec =String.valueOf(otherShifts.get(name).getStartTime().getSecond());
+
+            String hourE = String.valueOf(otherShifts.get(name).getStartTime().getHour()+otherShifts.get(name).getLength());//end time for the employee
+
+            String start = year+month+day+"T"+hourS+min+sec;
+            String end = year+month+day+"T"+hourE+min+sec;
+
+            event=event +
+                    "BEGIN:VEVENT\r\n" +
+                    "DTSTART:" + start + "\n"+
+                    "DTEND:"+ end + "\n" +
+                    "LOCATION:4940 Eastern Ave, Baltimore, MD 21224\n" +
+                    "DESCRIPTION:Work\n" +
+                    "SUMMARY:Work\n" +
+                    "PRIORITY:3\n" +
+                    "END:VEVENT\n";
+
+        }
+
+        // if file doesnt exists, then create it
+        //if (!file.exists()) {
+        //    file.createNewFile();
+        //}
+
+        String end = "END:VCALENDAR\n";
+        String ical = Cal+event+end;
+        return ical;
+
+
+    }
 }
