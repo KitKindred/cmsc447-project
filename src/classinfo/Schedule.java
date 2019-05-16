@@ -1,6 +1,7 @@
 package classinfo;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -283,47 +284,67 @@ public class Schedule {
         	isValidSchedule = false;
         }
     }
+    
     public String export() {
         
-        String Cal =
-                "BEGIN:VCALENDAR\n"+
-                        "VERSION:1.0\n";
+    	
+    	
+    	
+    	if (!isValidSchedule) {
+        	return null;
+        }
+        
+    	
+    	
+    	
+    	
+    	String Cal =
+                "BEGIN:VCALENDAR\r\n"+
+                        "VERSION:2.0\r\n";
         String event = "";
         Object[] keys = otherShifts.keySet().toArray();
         Arrays.sort(keys);
 
         for (Object name: keys) {
-            String year =String.valueOf(otherShifts.get(name).getStartTime().getYear());
-            String month =  String.valueOf(otherShifts.get(name).getStartTime().getMonthValue());
-            String day = String.valueOf(otherShifts.get(name).getStartTime().getDayOfMonth());
-            String hourS = String.valueOf(otherShifts.get(name).getStartTime().getHour()); //Start time for the employee
-            String min = String.valueOf(otherShifts.get(name).getStartTime().getMinute());
-            String sec =String.valueOf(otherShifts.get(name).getStartTime().getSecond());
+        	LocalDateTime tempStart = otherShifts.get(name).getStartTime();
+        	LocalDateTime tempEnd = tempStart.plusHours(otherShifts.get(name).getLength());
+            String yearStart  = String.format("%04d", tempStart.getYear());
+            String monthStart = String.format("%02d", tempStart.getMonth().getValue());
+            String dayStart   = String.format("%02d", tempStart.getDayOfMonth());
+            String hourStart  = String.format("%02d", tempStart.getHour()); //Start time for the employee
+            String minStart   = String.format("%02d", tempStart.getMinute());
+            String secStart   = String.format("%02d", tempStart.getSecond());
 
-            String hourE = String.valueOf(otherShifts.get(name).getStartTime().getHour()+otherShifts.get(name).getLength());//end time for the employee
+            String yearEnd  = String.format("%04d", tempEnd.getYear());
+            String monthEnd = String.format("%02d", tempEnd.getMonth().getValue());
+            String dayEnd   = String.format("%02d", tempEnd.getDayOfMonth());
+            String hourEnd  = String.format("%02d", tempEnd.getHour()); //End time for the employee
+            String minEnd   = String.format("%02d", tempEnd.getMinute());
+            String secEnd   = String.format("%02d", tempEnd.getSecond());
+            //end time for the employee
 
-            String start = year+month+day+"T"+hourS+min+sec;
-            String end = year+month+day+"T"+hourE+min+sec;
+            String start = yearStart+monthStart+dayStart+"T"+hourStart+minStart+secStart;
+            String end = yearEnd+monthEnd+dayEnd+"T"+hourEnd+minEnd+secEnd;
             String employee = "";
             try {
-            	employee = otherShifts.get(name).getEmployee().getName();
+            	employee = otherShifts.get(name).getEmployee().getName().replace("\\", "\\\\").replace(",", "\\,");
             } catch (NullPointerException e) {
-            	// do nothing, no name on sheet
+            	employee = "noName";
             }
             
             event=event +
                     "BEGIN:VEVENT\r\n" +
-                    "DTSTART:" + start +"00" + "\n"+
-                    "DTEND:"+ end +"00" + "\n" +
-                    "LOCATION:4940 Eastern Ave, Baltimore, MD 21224\n" +
-                    "DESCRIPTION:Work\n" +
-                    "SUMMARY:"+employee+" Shift\n" +
-                    "PRIORITY:3\n" +
-                    "END:VEVENT\n";
+                    "DTSTART:" + start + "\r\n"+
+                    "DTEND:"+ end + "\r\n" +
+                    "LOCATION:4940 Eastern Ave\\, Baltimore\\, MD 21224\r\n" +
+                    "DESCRIPTION:Work\r\n" +
+                    "SUMMARY:"+employee+" Shift\r\n" +
+                    "PRIORITY:3\r\n" +
+                    "END:VEVENT\r\n";
 
         }
 
-        String end = "END:VCALENDAR\n";
+        String end = "END:VCALENDAR\r\n";
         String ical = Cal+event+end;
         return ical;
     }

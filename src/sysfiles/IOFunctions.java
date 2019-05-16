@@ -215,6 +215,10 @@ public class IOFunctions {
 	}
 	
 	public static boolean exportCalendar(String iCal) {
+		if (iCal == null) {
+			return false;
+		}
+		
 		StringBuilder builder = new StringBuilder(); 
 		File file = new File("cal.ics");
 	    builder.append("cal");
