@@ -3,6 +3,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.*;
 import java.util.HashMap;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
@@ -283,8 +284,11 @@ public class Schedule {
         	isValidSchedule = false;
         }
     }
-        public String Export() {
-        
+        public void Export() throws IOException {
+        StringBuilder builder = new StringBuilder();
+        File file = new File("cal.ics");
+        builder.append("cal");
+        builder.append(".ics");
         String Cal =
                 "BEGIN:VCALENDAR\n"+
                         "VERSION:1.0\n";
@@ -320,13 +324,14 @@ public class Schedule {
         }
 
         // if file doesnt exists, then create it
-        //if (!file.exists()) {
-        //    file.createNewFile();
-        //}
-
-        String end = "END:VCALENDAR\n";
-        String ical = Cal+event+end;
-        return ical;
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            String end = "END:VCALENDAR\n";
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(Cal + event+end);
+            bw.close();
 
 
     }
