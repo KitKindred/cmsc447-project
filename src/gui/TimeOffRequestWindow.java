@@ -68,18 +68,14 @@ public class TimeOffRequestWindow {
 			System.out.println("add path "+path);
 			//Parent root = FXMLLoader.load(getClass().getResource(path));
 			Stage st = new Stage();
-			System.out.println("add after stage");
 			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(path)));
-			System.out.println("add after scene");
+			
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Create New Time Off Request");
 			
-			System.out.println("before show");
-			
-			st.showAndWait();
-			System.out.println("after show request");
-			
+			st.setResizable(false);
+			st.showAndWait();			
 			
 			if (TimeOffRequestBuilder.req != null) {
 				tor.add(TimeOffRequestBuilder.req);
@@ -87,12 +83,9 @@ public class TimeOffRequestWindow {
 				changed=true;
 			}
 			
-			
 		}catch(Exception e) {
 			System.out.println("ERROR SHOWING "+e.toString());
 		}
-		
-		
 	}
 	public void actionRemoveSelectedRequest(ActionEvent event) {
 		int index=0;
@@ -113,35 +106,27 @@ public class TimeOffRequestWindow {
 		
 	}
 	public static int getSelection() {return selected;}
-	public void actionEditSelectedRequest(ActionEvent event) {
-		
+	
+	public void actionEditSelectedRequest(ActionEvent event) {	
 		selected=RequestBox.getSelectionModel().getSelectedIndex();
 		if(selected==-1) {
 			System.out.println("cannot select a non-selected index.");
 			return;
 		}
 		
-		
-		System.out.println("edit req");
 		try {
-			
 			String path="/gui/TimeOffRequestModifier.fxml";
 			//System.out.println("add path "+path);
 			//Parent root = FXMLLoader.load(getClass().getResource(path));
 			Stage st = new Stage();
-			System.out.println("add after stage");
 			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(path)));
-			System.out.println("add after scene");
+
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Edit Time Off Request");
 			
-			System.out.println("before show");
-			
-			
+			st.setResizable(false);
 			st.showAndWait();
-			
-			System.out.println("after show request");
 			
 			TimeOffRequest time=TimeOffRequestModifier.req;
 			if (time != null) {
@@ -151,9 +136,6 @@ public class TimeOffRequestWindow {
 				RequestBox.getItems().remove(selected);
 				RequestBox.getItems().add(selected, TimeOffRequestModifier.req);
 				RequestBox.getSelectionModel().select(selected);
-				//RequestBox.getItems().add(TimeOffRequestModifier.req.toString());
-				
-				
 				
 				changed=true;
 			}

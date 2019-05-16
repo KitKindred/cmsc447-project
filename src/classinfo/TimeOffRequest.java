@@ -21,7 +21,7 @@ public class TimeOffRequest {
     }
     public String toString() {
     	//System.out.println("TEST");
-    	return this.s+"\t"+this.priority;
+    	return this.s+"\tPriority: "+this.priority;
     	
     }
 }

@@ -19,7 +19,7 @@ public class guiStarter extends Application {
 	        	String path="/gui/scheduler.fxml";
 	            // Read file fxml and draw interface.
 	            Parent root = FXMLLoader.load(getClass().getResource(path));
-	 
+	            primaryStage.setResizable(false);
 	            primaryStage.setTitle("Schedule Builder");
 	            primaryStage.setScene(new Scene(root));
 	            primaryStage.show();

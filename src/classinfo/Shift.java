@@ -1,5 +1,6 @@
 package classinfo;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Shift {
     private Profession employee;
@@ -45,6 +46,8 @@ public class Shift {
     
     @Override
     public String toString() {
-        return startTime + ": " + length + " hours";
+    	//return startTime.toString() + ": " + length + " hours";
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        return startTime.format(format) + " until " + startTime.plusHours(length).format(format) + ".";
     }
 }

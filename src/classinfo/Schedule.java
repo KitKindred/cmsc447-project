@@ -155,6 +155,11 @@ public class Schedule {
         this.createShifts();
 
         int[] arrIds = ids.stream().mapToInt(i->i).toArray(); // int array of active doctors
+        if (arrIds.length == 0) {
+        	System.out.println("No active doctors! Cannot generate schedule.");
+        	isValidSchedule = false;
+        	return;
+        }
         Model model = new Model("Scheduler"); // Create solver
         //IntVar[] vars = new IntVar[otherShifts.size()];
         HashMap<Integer, IntVar> varMap = new HashMap<Integer, IntVar>(); // HashMap of IntVars for the solver

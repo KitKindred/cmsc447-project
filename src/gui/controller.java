@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -45,50 +48,65 @@ public class controller {
 	private void println(String s) {System.out.println(s);}
 
 	private static boolean editedWithoutSave = false; 
+	private static boolean isSwitchingEmps = false;
 
 	//GENERATE SCHEDULE TAB SECTION VARIABLES 
 	@FXML
 	Button genSchedExpoButton;
 
-
-	//MANAGE EMPLOYEES TAB SECTION VARIABLES
-
 	@FXML 
-	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1;
+	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1,attendingWeekButton;
 
 
 	@FXML
-	TextField manageEmployeeNameText,manageEmployeeEmail,manageDateStart;
+	TextField manageEmployeeNameText,manageEmployeeEmail,manageDateStart,attendingWeekText;
 	@FXML
 	ComboBox manageActivityField, manageSelectEmployee;
 
 	@FXML
-	Text manageEmployeeIDField,manageEmployeeProfession;
+	Text manageEmployeeIDField,manageEmployeeProfession,activityText,attendText,maternityText,emailText;
 
-	static int currentID;
-	private ArrayList<Node> invisSelectEmployee, invisDateRange;
+	static int currentID=-1;
+	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor,disableUntilLoad;
 
-	private boolean clicked=false;
+	//private boolean clicked=false;
 	private int oldindex=-1;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		invisSelectEmployee = new ArrayList<Node>();
 		invisDateRange = new ArrayList<Node>();
-
+		invisDoctor= new ArrayList<Node>();
+		disableUntilLoad=new ArrayList<Node>();
+		
 		invisSelectEmployee.add(manageEmployeeIDField);
 		invisSelectEmployee.add(manageEmployeeNameText);
 		invisSelectEmployee.add(manageEmployeeEmail);
 		invisSelectEmployee.add(manageEmployeeProfession);
 		invisSelectEmployee.add(manageActivityField);
-		invisSelectEmployee.add(manageSaveButton);
+		//invisSelectEmployee.add(manageSaveButton);
 		invisSelectEmployee.add(GetTimeOffButton);
+		invisSelectEmployee.add(emailText);
+		invisSelectEmployee.add(activityText);
 
-
+		disableUntilLoad.add(manageSaveButton);
+		disableUntilLoad.add(createEmployeeButton);
+		disableUntilLoad.add(genSchedExpoButton);
+		disableUntilLoad.add(manageSelectEmployee);
+		
+		for(Node a: disableUntilLoad) {a.setDisable(true);}
+		
+		
+		
 		invisDateRange.add(manageDateRange1);
 		invisDateRange.add(manageDateStart);
+		invisDateRange.add(maternityText);
 		//invisDateRange.add(manageDateRange2);
 		//invisDateRange.add(manageDateRange3);
 
+		System.out.println(attendingWeekButton);
+		invisDoctor.add(attendingWeekButton);
+		invisDoctor.add(attendingWeekText);
+		invisDoctor.add(attendText);
 		manageSelectEmployee.setVisible(true);
 
 		manageEmployeeNameText.setText("FIRSTNAME LASTNAME");
@@ -100,18 +118,20 @@ public class controller {
 				"Maternity"
 				);
 
-		for(Node a: invisDateRange) {
-			a.setVisible(false);
-		}
+		//manageSelectEmployee.setStyle("<color-stop>red 70%");
+		
+		for(Node a: invisDateRange) {a.setVisible(false);}
+		for(Node a: invisSelectEmployee) {a.setVisible(false);}
+		System.out.println("a"+invisDoctor);
+		for(Node a: invisDoctor) {a.setVisible(false);}
 
-
-		for(Node a: invisSelectEmployee) {
-			a.setVisible(false);
-		}
-
+		
+		
+		
 		populate();//IOFunctions.readAllEmployees());
 		//manageDateRange1.setVisible(false);
 
+		
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -119,9 +139,12 @@ public class controller {
 					manageEmployeeNameText.setText(manageEmployeeNameText.getText().replace("~",""));
 					return;
 				}
-				//editedWithoutSave=true;
-				
-				//System.out.println("employee name changed");
+				String old=ProgramDriver.getEmployees().get(currentID).getName();
+				String name=manageEmployeeNameText.getText();
+				ProgramDriver.getEmployees().get(currentID).setName(name);
+				ProgramDriver.getNameID().remove(old);
+				ProgramDriver.getNameID().put(name, currentID);
+				actionChanged(null);
 			}
 		});
 		manageEmployeeNameText.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -132,19 +155,19 @@ public class controller {
 					ProgramDriver.getEmployees().get(currentID).setName(name);
 					ProgramDriver.getNameID().remove(old);
 					ProgramDriver.getNameID().put(name, currentID);
-					editedWithoutSave=true;
 				}
 			}
 		});
-		
+
 		manageEmployeeEmail.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(newValue.indexOf("~")!=-1) {
-					manageEmployeeEmail.setText(manageEmployeeEmail.getText());//.replace("~",""));
 					manageEmployeeEmail.setText(manageEmployeeEmail.getText().replace("~",""));
 					return;
 				}
-				//editedWithoutSave=true;
+				String mail=manageEmployeeEmail.getText();
+				ProgramDriver.getEmployees().get(currentID).setEmail(mail);
+				actionChanged(null);
 			}
 		});
 		manageEmployeeEmail.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -152,20 +175,22 @@ public class controller {
 				if(n) {
 					String mail=manageEmployeeEmail.getText();
 					ProgramDriver.getEmployees().get(currentID).setEmail(mail);
-					editedWithoutSave=true;
 				}
 			}
-			
-			
 		});
+		
+		
+		for(Node a: disableUntilLoad) {a.setDisable(false);}
+		
 	}
-
 
 	/*GUI ACTION FUNCTIONS*/
 
 	public void actionChanged(ActionEvent event) {
-		System.out.println("changed is now true");
-		editedWithoutSave=true;
+		if (!isSwitchingEmps) {
+			System.out.println("Changed is now true");
+			editedWithoutSave=true;
+		}
 	}
 
 
@@ -179,16 +204,52 @@ public class controller {
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Set "+manageSelectEmployee.getSelectionModel().getSelectedItem().toString()+"'s Inactivity Date");
-
+st.setResizable(false);
 			st.showAndWait();
 
 			if(dateStart.saveDate) {
 				if(dateStart.req!=null) {
-				editedWithoutSave=true;
-				ldtInactive=dateStart.req;
+					actionChanged(event);
+					ldtInactive=dateStart.req;
+					DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+					manageDateStart.setText(ldtInactive.format(format));
+					ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);}
+			}
+		}catch(Exception e) {System.out.println("error?"+e.toString());}
 
-				manageDateStart.setText(ldtInactive.toString());
-				ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);}
+	}
+
+
+	public void actionLaunchAttendingWindow(ActionEvent event) {
+		if(ProgramDriver.getEmployees().get(currentID).getType()!=0) {System.out.println("not a doctor");return;}
+		LocalDateTime ldtAtt;
+		try {
+			String path="/gui/dateStart.fxml";
+			Parent root = FXMLLoader.load(getClass().getResource(path));
+			Stage st = new Stage();
+			Scene scene = new Scene(root);
+			st.setScene(scene);
+			st.initModality(Modality.APPLICATION_MODAL);
+			st.setTitle("Set "+manageSelectEmployee.getSelectionModel().getSelectedItem().toString()+"'s Attending Week Date");
+
+			st.setResizable(false);
+			st.showAndWait();
+
+			if(dateStart.saveDate) {
+				if(dateStart.req!=null) {
+					actionChanged(event);
+					ldtAtt=dateStart.req;
+
+					/*just let them choose whatever day to start attending week for
+					WeekFields wee=WeekFields.of(Locale.getDefault());
+					System.out.println(ldtAtt.getDayOfWeek().getValue()+" "+wee.getFirstDayOfWeek().getValue());
+					ldtAtt=ldtAtt.minusDays(ldtAtt.getDayOfWeek().getValue()-wee.getFirstDayOfWeek().getValue());
+					 */
+
+					DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+					attendingWeekText.setText(ldtAtt.format(format));
+					((Doctor)ProgramDriver.getEmployees().get(currentID)).setAttendingDate(ldtAtt);
+				}
 			}
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
 
@@ -206,6 +267,7 @@ public class controller {
 		ButtonType noB= new ButtonType("No");
 
 		alert.getButtonTypes().setAll(yesB,noB);
+		alert.setResizable(false);
 		Optional<ButtonType> result=alert.showAndWait();
 
 		if(result.get()==yesB) {
@@ -254,6 +316,8 @@ public class controller {
 		if (manageSelectEmployee.getValue() == null) {
 			return;
 		}
+
+		isSwitchingEmps = true;
 		System.out.println("test");
 
 		//int ID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
@@ -263,9 +327,9 @@ public class controller {
 		//int ID=ProgramDriver.getNameID().get(name);
 		currentID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 		//currentID=ID;
-		println("\n\n\tcurrentID: "+currentID);
+		println("currentID: "+currentID);
 		Profession emp=ProgramDriver.getEmployees().get(currentID);
-		System.out.println(""+emp.getName());
+
 		name=emp.getName();
 		active=emp.getActive();
 		email=emp.getEmail();
@@ -283,12 +347,34 @@ public class controller {
 		manageEmployeeEmail.setText(email);
 
 		manageDateRange1.setText("Set "+getAct(emp.getActive())+" Date");
-		if(emp.getActive()==2)
-			manageDateStart.setText(emp.getInactiveDate().toString());
-
+		if(emp.getActive()==2) {
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			manageDateStart.setText(emp.getInactiveDate().format(format));
+		}
 		//manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
 		//editedWithoutSave=false;
 		oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
+
+		if(emp.getType()==0) {
+
+			for(Node a: invisDoctor) {
+				a.setVisible(true);				
+			}
+			LocalDateTime ldt=((Doctor)emp).getAttendingDate();
+			if(ldt!=null) {
+				DateTimeFormatter format=DateTimeFormatter.ofPattern("MM/dd/yyyy");
+				attendingWeekText.setText(ldt.format(format));
+			}
+			else {attendingWeekText.setText("");}
+		}
+		else {
+			for(Node a:invisDoctor) {
+				a.setVisible(false);
+			}
+			attendingWeekText.setText("");
+		}
+
+		isSwitchingEmps = false;
 	}
 
 	private String getAct(int act) {
@@ -321,8 +407,10 @@ public class controller {
 	//as it is right now, it's ugly but it works
 	public void saveEmployee(ActionEvent event) {
 
+		if(currentID==-1) {return;}
+		
 		String name = manageSelectEmployee.getValue().toString();
-		String newName = manageEmployeeNameText.getText();//.replace("~", "");
+		String newName = manageEmployeeNameText.getText();
 
 		String email = manageEmployeeEmail.getText().replace(" ","").replace("~", "");
 		if(!email.contains("@")) {
@@ -330,7 +418,7 @@ public class controller {
 			alert.setTitle("Email Error");
 			alert.setHeaderText("Email Formatting Error");
 			alert.setContentText("Email's must have the @ symbol!");
-
+			
 			alert.showAndWait();
 			return;
 
@@ -339,7 +427,7 @@ public class controller {
 		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 
 		int id=currentID;
-//		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
+		//		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
 		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
 		println("saving current employee "+name);
 
@@ -348,19 +436,19 @@ public class controller {
 
 			println(name+" "+id);
 			//worker= Main.getP().get(id);
-			
+
 			worker.setName(manageEmployeeNameText.getText());
 			worker.setEmail(email);
 			//worker.setActive(active);
-			
+
 			/*maternity leave check*/
-			
+
 			if(active==2) {
 				if(worker.getInactiveDate()==null) {
 					throw new Exception(worker.getName()+"'s Maternity Leave has no Associated Start Date!");
 				}
 			}
-			
+
 			IOFunctions.saveEmployees();
 			editedWithoutSave=false;
 
@@ -376,7 +464,7 @@ public class controller {
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().remove(id);
 
-//		manageSelectEmployee.setValue(newName);
+		//		manageSelectEmployee.setValue(newName);
 		manageSelectEmployee.getItems().add(id, newName);
 		manageSelectEmployee.getSelectionModel().select(id);
 	}
@@ -391,7 +479,6 @@ public class controller {
 	//when certain Active combobox option is selected, either enables or disables view of the daterange that would be used beside it
 	//currently, that range is unused
 	public void showDateRange(ActionEvent event) {
-		println("Clicked on ComboBox Option");
 		String op = manageActivityField.getValue().toString();
 		println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
@@ -413,27 +500,32 @@ public class controller {
 			System.out.println("maternity check");
 
 			if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {
-				System.out.println("inactive date nonexist");
-				
-				actionLaunchDateRangeWindow(new ActionEvent(manageDateRange1,manageDateRange1));
+				System.out.println("inactive date nonexist, using today");
+				LocalDateTime today = LocalDateTime.now().toLocalDate().atStartOfDay();
+				ProgramDriver.getEmployees().get(currentID).setInactiveDate(today);
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+				manageDateStart.setText(today.format(format));
+				/*actionLaunchDateRangeWindow(new ActionEvent(manageDateRange1,manageDateRange1));
 				System.out.println(oldindex);
-				if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {/*canceled box*/
+				if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {/*canceled box
 				if(oldindex!=-1) {
 					try {
-					manageActivityField.getSelectionModel().clearAndSelect(oldindex);
+						System.out.println(oldindex);
+						manageActivityField.getSelectionModel().clearAndSelect(oldindex);
+
+						System.out.println(manageActivityField.getSelectionModel().getSelectedIndex());
 					}catch(IndexOutOfBoundsException e) {
 						System.out.println("oldindex: "+oldindex+" "+manageActivityField.getSelectionModel().getSelectedIndex());
 					}
-					
+
 					ProgramDriver.getEmployees().get(currentID).setActive(oldindex);
 				}
-				}
+				}*/
 			}
 			break;		
 		}
-		if(index!=oldindex) {
-			editedWithoutSave=true;
-		}
+		actionChanged(event);
+
 		oldindex=index; 
 		System.out.println(oldindex);
 	}
@@ -471,11 +563,12 @@ public class controller {
 			Stage st = new Stage();
 			Scene scene = new Scene(root);
 			st.setScene(scene);
+			st.setResizable(false);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle(manageSelectEmployee.getSelectionModel().getSelectedItem().toString()+"'s Time Off Requests");
 
 			System.out.println("before show");
-
+			
 			st.showAndWait();
 			System.out.println("after show");
 
@@ -484,7 +577,7 @@ public class controller {
 
 				ProgramDriver.getEmployees().get(manageSelectEmployee.getSelectionModel().getSelectedIndex()).setTimeOff(TimeOffRequestWindow.tor);
 
-				editedWithoutSave=true;
+				actionChanged(event);
 				TimeOffRequestWindow.changed=false;
 			}
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
@@ -501,16 +594,16 @@ public class controller {
 			Scene scene = new Scene(root);
 
 			st.setScene(scene);
-
+			st.setResizable(false);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Create a New Employee");
 			st.showAndWait();
-
+			
 			if(AddEmployeeWindow.getClose()) {
 				System.out.println("want saving emp window?");
 				addEmployee(ProgramDriver.getEmployees().get(ProgramDriver.getID()-1));
-				editedWithoutSave=true;	
-				
+				actionChanged(event);
+
 			}
 
 			//newEmp=AddEmployeeWindow.getEmp();
@@ -526,9 +619,9 @@ public class controller {
 		}
 		println("\tid: "+emp.getId()+" "+emp.getActive());
 		manageSelectEmployee.getItems().add(emp.getName());
-		
+
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
-		
+
 		manageEmployeeEmail.setText(emp.getEmail());
 		manageActivityField.getSelectionModel().select(emp.getActive());;
 		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
@@ -551,7 +644,7 @@ public class controller {
 			}
 		}
 		else {
-			/*editedWithoutSave=false; is false*/
+			Platform.exit();
 		}
 
 
