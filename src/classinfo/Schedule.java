@@ -309,8 +309,8 @@ public class Schedule {
 
             event=event +
                     "BEGIN:VEVENT\r\n" +
-                    "DTSTART:" + start + "\n"+
-                    "DTEND:"+ end + "\n" +
+                    "DTSTART:" + start +"00" + "\n"+
+                    "DTEND:"+ end +"00" + "\n" +
                     "LOCATION:4940 Eastern Ave, Baltimore, MD 21224\n" +
                     "DESCRIPTION:Work\n" +
                     "SUMMARY:"+employee+" Shift\n" +
