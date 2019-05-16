@@ -2,6 +2,7 @@ package classinfo;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
@@ -60,6 +61,22 @@ public class Main {
         //s.printShifts();
 
         guiStarter.go(args);
+	    
+	StringBuilder builder = new StringBuilder(); // This creates the ics file after the gui window is closed.
+        File file = new File("cal.ics");
+        builder.append("cal");
+        builder.append(".ics");
+
+        String iCal = s.Export();
+
+        if (!file.exists()) {
+        file.createNewFile();
+        }
+
+        FileWriter fw = new FileWriter(file.getAbsoluteFile());
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write(iCal);
+        bw.close();
         
     }
 
