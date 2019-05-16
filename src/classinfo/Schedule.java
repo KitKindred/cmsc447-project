@@ -299,6 +299,8 @@ public class Schedule {
 
             String start = year+month+day+"T"+hourS+min+sec;
             String end = year+month+day+"T"+hourE+min+sec;
+            
+            String employee = otherShifts.get(name).getEmployee().getName();
 
             event=event +
                     "BEGIN:VEVENT\r\n" +
@@ -306,7 +308,7 @@ public class Schedule {
                     "DTEND:"+ end + "\n" +
                     "LOCATION:4940 Eastern Ave, Baltimore, MD 21224\n" +
                     "DESCRIPTION:Work\n" +
-                    "SUMMARY:Work\n" +
+                    "SUMMARY:"+employee+" Shift\n" +
                     "PRIORITY:3\n" +
                     "END:VEVENT\n";
 
