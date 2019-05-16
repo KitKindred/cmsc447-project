@@ -45,10 +45,10 @@ public class ProgramDriver {
 			employees.put(i_d, new Doctor(i_d, type, name));
 			break;
 		case 1:
-			employees.put(id, new Moonlighter(i_d, type, name));
+			employees.put(i_d, new Moonlighter(i_d, type, name));
 			break;
 		case 2:
-			employees.put(id, new Intern(i_d, type, name));
+			employees.put(i_d, new Intern(i_d, type, name));
 			break;
 		default:
 			throw new IllegalArgumentException();

@@ -41,11 +41,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sysfiles.IOFunctions;
 import classinfo.*;
+
 public class controller {
-	private void print() {print("");}
-	private void println() {println("");}
-	private void print(String s) {System.out.print(s);}
-	private void println(String s) {System.out.println(s);}
 
 	private static boolean editedWithoutSave = false; 
 	private static boolean isSwitchingEmps = false;
@@ -69,7 +66,6 @@ public class controller {
 	static int currentID=-1;
 	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor,disableUntilLoad;
 
-	//private boolean clicked=false;
 	private int oldindex=-1;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
@@ -129,8 +125,7 @@ public class controller {
 		
 		
 		
-		populate();//IOFunctions.readAllEmployees());
-		//manageDateRange1.setVisible(false);
+		populate();
 
 		
 
@@ -205,7 +200,7 @@ public class controller {
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Set "+manageSelectEmployee.getSelectionModel().getSelectedItem().toString()+"'s Inactivity Date");
-st.setResizable(false);
+			st.setResizable(false);
 			st.showAndWait();
 
 			if(dateStart.saveDate) {
@@ -295,7 +290,6 @@ st.setResizable(false);
 
 		Schedule s = new Schedule(d1, d2);
 
-		//ProgramDriver drive = new ProgramDriver();
 
 		if(ProgramDriver.getEmployees().size()==0) {
 			System.out.println("No employees to schedule for!");
@@ -336,14 +330,12 @@ st.setResizable(false);
 		isSwitchingEmps = true;
 		System.out.println("test");
 
-		//int ID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 
 		name = manageSelectEmployee.getValue().toString();
 
-		//int ID=ProgramDriver.getNameID().get(name);
 		currentID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
-		//currentID=ID;
-		println("currentID: "+currentID);
+
+		System.out.println("currentID: "+currentID);
 		Profession emp=ProgramDriver.getEmployees().get(currentID);
 
 		name=emp.getName();
@@ -358,7 +350,6 @@ st.setResizable(false);
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
 		manageEmployeeIDField.setText("ID: "+currentID);//setText to be whatever the employee's id is
 		manageEmployeeProfession.setText("Profession: "+getProf(emp.getType()));
-		//println("\temp activity: "+active);
 		manageActivityField.getSelectionModel().select(active);
 
 		manageEmployeeEmail.setText(email);
@@ -368,8 +359,7 @@ st.setResizable(false);
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 			manageDateStart.setText(emp.getInactiveDate().format(format));
 		}
-		//manageActivityField.setValue("Active");//setValue to be whatever the employee's value is
-		//editedWithoutSave=false;
+
 		oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
 
 		if(emp.getType()==0) {
@@ -420,8 +410,7 @@ st.setResizable(false);
 		}
 	}
 
-	/*eventually add Employee to the comboBox and not a string representation of one*///maybe
-	//as it is right now, it's ugly but it works
+
 	public void saveEmployee(ActionEvent event) {
 
 		if(currentID==-1) {return;}
@@ -444,19 +433,15 @@ st.setResizable(false);
 		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 
 		int id=currentID;
-		//		int id=Integer.parseInt(manageEmployeeIDField.getText().split(" ")[1]);
 		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
-		println("saving current employee "+name);
+		System.out.println("saving current employee "+name);
 
 		Profession worker=ProgramDriver.getEmployees().get(currentID);
 		try {
-
-			println(name+" "+id);
-			//worker= Main.getP().get(id);
+			System.out.println(name+" "+id);
 
 			worker.setName(manageEmployeeNameText.getText());
 			worker.setEmail(email);
-			//worker.setActive(active);
 
 			/*maternity leave check*/
 
@@ -476,12 +461,8 @@ st.setResizable(false);
 		}		
 		System.out.println(active);
 		manageActivityField.getSelectionModel().select(active);
-		//println(manageActivityField.getSelectionModel().getSelectedIndex()+"");
-		//to properly update the combobox text selection
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().remove(id);
-
-		//		manageSelectEmployee.setValue(newName);
 		manageSelectEmployee.getItems().add(id, newName);
 		manageSelectEmployee.getSelectionModel().select(id);
 	}
@@ -491,18 +472,11 @@ st.setResizable(false);
 		System.out.println("delete pressed");
 	}
 
-	//currently unused?
-	public void checkIDMenu(ActionEvent event) {
-		System.out.println("menu select");
-		//		manageSelectEmployee.setText("EMP");
-
-	}
 
 	//when certain Active combobox option is selected, either enables or disables view of the daterange that would be used beside it
-	//currently, that range is unused
 	public void showDateRange(ActionEvent event) {
 		String op = manageActivityField.getValue().toString();
-		println(manageActivityField.getValue().toString());
+		System.out.println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		int index=manageActivityField.getSelectionModel().getSelectedIndex();
 		ProgramDriver.getEmployees().get(currentID).setActive(manageActivityField.getSelectionModel().getSelectedIndex());
@@ -527,22 +501,6 @@ st.setResizable(false);
 				ProgramDriver.getEmployees().get(currentID).setInactiveDate(today);
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 				manageDateStart.setText(today.format(format));
-				/*actionLaunchDateRangeWindow(new ActionEvent(manageDateRange1,manageDateRange1));
-				System.out.println(oldindex);
-				if(ProgramDriver.getEmployees().get(currentID).getInactiveDate()==null) {/*canceled box
-				if(oldindex!=-1) {
-					try {
-						System.out.println(oldindex);
-						manageActivityField.getSelectionModel().clearAndSelect(oldindex);
-
-						System.out.println(manageActivityField.getSelectionModel().getSelectedIndex());
-					}catch(IndexOutOfBoundsException e) {
-						System.out.println("oldindex: "+oldindex+" "+manageActivityField.getSelectionModel().getSelectedIndex());
-					}
-
-					ProgramDriver.getEmployees().get(currentID).setActive(oldindex);
-				}
-				}*/
 			}
 			break;		
 		}
@@ -552,22 +510,17 @@ st.setResizable(false);
 		System.out.println(oldindex);
 	}
 
-	//unused
-	public void stuff(ActionEvent event) {
-		System.out.println("stuff menu pressed");
-	}
-
 	//populate the employee selection box with employees read from files 
-	public void populate() {//HashMap<Integer, Profession> hp) {
+	public void populate() {
 		manageSelectEmployee.getItems().clear();
 		String name = "Sample Employee";
 		HashMap<Integer, Profession> hp=ProgramDriver.getEmployees();
 		for(Map.Entry<Integer, Profession>entry:hp.entrySet()) {
-			println(entry.toString());
-			println(entry.getValue().toString());
-			println(entry.getValue().getName().toString());
+			System.out.println(entry.toString());
+			System.out.println(entry.getValue().toString());
+			System.out.println(entry.getValue().getName().toString());
 			name=entry.getValue().getName();
-			println(name);
+			System.out.println(name);
 			manageSelectEmployee.getItems().add(name);
 		}
 	}
@@ -627,8 +580,6 @@ st.setResizable(false);
 				actionChanged(event);
 
 			}
-
-			//newEmp=AddEmployeeWindow.getEmp();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -639,7 +590,7 @@ st.setResizable(false);
 			System.out.println("empwindow closed without saving");
 			return;
 		}
-		println("\tid: "+emp.getId()+" "+emp.getActive());
+		System.out.println("\tid: "+emp.getId()+" "+emp.getActive());
 		manageSelectEmployee.getItems().add(emp.getName());
 
 		manageSelectEmployee.getSelectionModel().select(emp.getId());
@@ -652,22 +603,14 @@ st.setResizable(false);
 		}
 	}
 
-	// exits without saving, need to add in save flag check
 	public void quit(ActionEvent event) {
 
 		if(editedWithoutSave) {
 			if(changeBox()) {
 				saveEmployee(event);
-				Platform.exit();
-			}
-			else {
-				editedWithoutSave=false;
-				Platform.exit();
 			}
 		}
-		else {
-			Platform.exit();
-		}
+		Platform.exit();
 
 
 	}

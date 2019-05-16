@@ -53,7 +53,6 @@ public class TimeOffRequestWindow {
 	}
 
 	public void actionCloseTimeOffWindow(ActionEvent event) {
-		// write saving solution here
 		
 		System.out.println("close pressed");
 		Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -66,7 +65,6 @@ public class TimeOffRequestWindow {
 			
 			String path="/gui/TimeOffRequestBuilder.fxml";
 			System.out.println("add path "+path);
-			//Parent root = FXMLLoader.load(getClass().getResource(path));
 			Stage st = new Stage();
 			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(path)));
 			
@@ -116,8 +114,6 @@ public class TimeOffRequestWindow {
 		
 		try {
 			String path="/gui/TimeOffRequestModifier.fxml";
-			//System.out.println("add path "+path);
-			//Parent root = FXMLLoader.load(getClass().getResource(path));
 			Stage st = new Stage();
 			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(path)));
 
@@ -140,13 +136,8 @@ public class TimeOffRequestWindow {
 				changed=true;
 			}
 			
-			
 		}catch(Exception e) {
 			System.out.println("ERROR SHOWING "+e.toString());
 		}
-		
-		
-		
 	}
-
 }

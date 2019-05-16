@@ -40,8 +40,6 @@ public class TimeOffRequestBuilder {
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
-		//FromDay.setDisable(true);
-		//ToDay.setDisable(true);
 
 		fmm=0;
 		tmm=0;
@@ -65,11 +63,9 @@ public class TimeOffRequestBuilder {
 		disable.add(saveButton);
 		disable.add(FromMonth);
 		disable.add(FromDay);
-		//disable.add(FromYear);
-		//disable.add(ToYear);
+
 		disable.add(ToMonth);
 		disable.add(ToDay);
-		//disable.add(prioritySlider);
 
 		System.out.println("test2");
 		for(Node n:disable) {
@@ -262,7 +258,6 @@ public class TimeOffRequestBuilder {
 				}
 			}
 		}
-		//ToMonth.setDisable(false);
 		if(dateCheck())
 			saveButton.setDisable(false);
 		else

@@ -42,11 +42,12 @@ public class Shift {
         return this.employee;
     }
 
-    public String getData() {return startTime.toString().replace("T", " ")+","+length;}
+    public String getData() {
+    	return startTime.toString().replace("T", " ")+","+length;
+    }
     
     @Override
     public String toString() {
-    	//return startTime.toString() + ": " + length + " hours";
     	DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         return startTime.format(format) + " until " + startTime.plusHours(length).format(format) + ".";
     }

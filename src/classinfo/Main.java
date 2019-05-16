@@ -1,6 +1,5 @@
 package classinfo;
-import java.util.HashMap;
-import java.util.ArrayList;
+
 import java.io.IOException;
 import java.io.*;
 import java.time.LocalDate;
@@ -8,62 +7,26 @@ import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
 import sysfiles.IOFunctions;
 import gui.guiStarter;
+
 public class Main {
 
-	private static HashMap <Integer,Profession> p;
-	static int id=0;
     public static void main(String[] args) {
-
-    	LocalDate d1 = LocalDate.of(2018, 7, 1);
-        LocalDate d2 = LocalDate.of(2018, 10, 1);
-
-        Schedule s = new Schedule(d1, d2);
-        /*
-        int n = 8;
-        Model model = new Model(n + "-queens problem");
-        IntVar[] vars = new IntVar[n];
-        for(int q = 0; q < n; q++){
-            vars[q] = model.intVar("Q_"+q, 1, n);
-        }
-        for(int i  = 0; i < n-1; i++){
-            for(int j = i + 1; j < n; j++){
-                model.arithm(vars[i], "!=",vars[j]).post();
-                model.arithm(vars[i], "!=", vars[j], "-", j - i).post();
-                model.arithm(vars[i], "!=", vars[j], "+", j - i).post();
-            }
-        }
-        Solution solution = model.getSolver().findSolution();
-        if(solution != null){
-            System.out.println(solution.toString());
-        }*/
+        
+        // the main driver of most of the non-gui sections of the employees
         ProgramDriver drive = new ProgramDriver();
 
-
-
-
-
-    	
-        //boolean saved=IOFunctions.saveAllEmployees(drive.getEmployees());
-        /*HashMap<Integer,Profession> */
-    	//p=
+        // attempt to load the employees
         try {
         	System.out.println("loadEmployees()");
 			IOFunctions.loadEmployees();
+			drive.printEmployees();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-		//	System.out.println("readAllEmployees()");
-		//	IOFunctions.readAllEmployees();
+			System.out.println("Error loading employees!");
 		}
+        
 
-        drive.printEmployees();
-
-        //s.createSchedule(drive.getActiveID(), drive.getEmployees());
-        //s.printShifts();
-
-        guiStarter.go(args);
-	    
+        
+        // start the main gui of the program
+        guiStarter.go(args);   
     }
-
-    public static HashMap<Integer,Profession> getP()
-    {return ProgramDriver.getEmployees();}
 }

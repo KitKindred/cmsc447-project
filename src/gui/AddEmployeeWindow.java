@@ -39,7 +39,6 @@ public class AddEmployeeWindow {
 	private LocalDateTime inactive;
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
-		//returnEmployee=true;
 		invisDateRange = new ArrayList<Node>();
 		activeBox.getItems().addAll("Active","Inactive","Maternity");
 		professionBox.getItems().addAll("Doctor","Moonlighter","Intern");
@@ -81,8 +80,6 @@ public class AddEmployeeWindow {
 				System.out.println(ldtInactive.toString());
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 				manageDateStart.setText(ldtInactive.format(format));
-				
-//				ProgramDriver.getEmployees().get(currentID).setInactiveDate(ldtInactive);
 				inactive=(ldtInactive);
 			}
 		}catch(Exception e) {System.out.println("error? "+e.toString());}
@@ -100,10 +97,7 @@ public static boolean getClose() {return returnEmployee;}
 	
 	
 	public void actionSelectActivity(ActionEvent event) {
-		//println("Clicked on ComboBox Option");
 		String op = activeBox.getValue().toString();
-		
-		//println(activeBox.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		switch(op) {
 		case "Active":
@@ -128,80 +122,78 @@ public static boolean getClose() {return returnEmployee;}
 	}
 	public void quit(ActionEvent event) {
 		Stage st=(Stage)cancelButton.getScene().getWindow();
-		if(returnEmployee==false) {System.out.println("closing empwindow without saving");st.close();return;}
+		if(returnEmployee==false) {
+			System.out.println("closing empwindow without saving");
+			st.close();
+			return;
+		}
 		else {
-		String professionType=professionBox.getValue().toString();
-		String name=nameBox.getText().replace("~", "");
-		System.out.println(emailBox);
-		String email=emailBox.getText().replace("~", "");
-		
-		if(!email.contains("@")) {
-			System.out.println("error: email must contain '@'.");
+			String professionType=professionBox.getValue().toString();
+			String name=nameBox.getText().replace("~", "");
+			System.out.println(emailBox);
+			String email=emailBox.getText().replace("~", "");
 			
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Email Error");
-			alert.setHeaderText("Email Formatting Error");
-			alert.setContentText("Email's must have the @ symbol!");
-			alert.setResizable(false);
-			alert.showAndWait();
+			if(!email.contains("@")) {
+				System.out.println("error: email must contain '@'.");
+				
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Email Error");
+				alert.setHeaderText("Email Formatting Error");
+				alert.setContentText("Email's must have the @ symbol!");
+				alert.setResizable(false);
+				alert.showAndWait();
+				
+				returnEmployee=false;
+				return;
+			}
 			
-			returnEmployee=false;
-			//st.close();
-			return;
-		}
-		
-		int type=0;
-		
-		switch(professionType) {
-		case "Doctor":
-			type=0;
-			break;
-		case "Moonlighter":
-			type=1;
-			break;
-		case "Intern":
-			type=2;
-			break;
-		default:
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Profession Error");
-			alert.setHeaderText("No Profession Selected");
-			alert.setContentText("Please select a profession!");
-
-			alert.setResizable(false);
-			alert.showAndWait();
-			returnEmployee = false;
-			return;
-		}
-		
-		int sel=activeBox.getSelectionModel().getSelectedIndex();
-		System.out.println("selected active window: "+sel);
-		if (sel == 2 && inactive == null) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Maternity Error");
-			alert.setHeaderText("No Maternity Start Date Selected");
-			alert.setContentText("Please select a start date for Maternity Leave!");
-			alert.setResizable(false);
-			alert.showAndWait();
-			returnEmployee = false;
-			return;
-		}
-		
-		ProgramDriver.addDoctor(type, name,ProgramDriver.getID(),email);
-		emp = ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1);
-		
-		emp.setActive(sel);
-		if(inactive!=null && true)
-			emp.setInactiveDate(inactive);
-		else {emp.setInactiveDate(null);}
-		//ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1).setActive(sel);
-		
-		
-		//emp=getEmployeeWhenClose();
-		System.out.println("closing "+name+" "+returnEmployee);//+emp.getName());
-
-		st.close();
-		//actionQuit(event);
+			int type=0;
+			
+			switch(professionType) {
+			case "Doctor":
+				type=0;
+				break;
+			case "Moonlighter":
+				type=1;
+				break;
+			case "Intern":
+				type=2;
+				break;
+			default:
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Profession Error");
+				alert.setHeaderText("No Profession Selected");
+				alert.setContentText("Please select a profession!");
+	
+				alert.setResizable(false);
+				alert.showAndWait();
+				returnEmployee = false;
+				return;
+			}
+			
+			int sel=activeBox.getSelectionModel().getSelectedIndex();
+			System.out.println("selected active window: "+sel);
+			if (sel == 2 && inactive == null) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Maternity Error");
+				alert.setHeaderText("No Maternity Start Date Selected");
+				alert.setContentText("Please select a start date for Maternity Leave!");
+				alert.setResizable(false);
+				alert.showAndWait();
+				returnEmployee = false;
+				return;
+			}
+			
+			ProgramDriver.addDoctor(type, name,ProgramDriver.getID(),email);
+			emp = ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1);
+			
+			emp.setActive(sel);
+			if(inactive!=null && true)
+				emp.setInactiveDate(inactive);
+			else {emp.setInactiveDate(null);}
+			System.out.println("closing "+name+" "+returnEmployee);//+emp.getName());
+	
+			st.close();
 		}
 	}
 }

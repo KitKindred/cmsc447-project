@@ -41,11 +41,11 @@ public class IOFunctions {
 			storeLine+=p.getEmail()+"~[";
 
 			for(Shift s:p.getShifts()) {
-				storeLine.concat(s.getData()+"`");//return "startTime(local date time),length";
+				storeLine.concat(s.getData()+"`");
 			}
 			storeLine+=("]~<");
 			for(TimeOffRequest tor: p.getTimeOffRequests()) {
-				storeLine+=tor.getData()+"`";//return this.s.getData()+";"+this.priority;
+				storeLine+=tor.getData()+"`";
 
 			}
 			storeLine+=(">~");
@@ -63,7 +63,6 @@ public class IOFunctions {
 
 					storeLine+=("}\r\n");
 
-					//System.out.print(storeLine);
 					out.write(storeLine);
 					i+=1;
 					storeLine="";
@@ -135,8 +134,6 @@ public class IOFunctions {
 				worked=Integer.parseInt(ar[4]);
 				email=ar[5];
 
-				//System.out.println("\n\tloading: "+id+name+type+active+worked+email);
-
 			}
 			catch (Exception e) {
 				System.out.println("Error parsing saved employee file: " + e.toString());
@@ -167,7 +164,7 @@ public class IOFunctions {
 				}
 			}
 
-			inactiveDate=ar[8];//.substring(1, ar[8].length()-1);
+			inactiveDate=ar[8];
 			LocalDateTime ldtInactive;
 			DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -197,7 +194,7 @@ public class IOFunctions {
 		return i;
 	} 
 
-	private static Shift getsh(String str) {//already split by , now by "2018-11-08T15:00"
+	private static Shift getsh(String str) {
 
 		String[] s=str.split(",");
 		System.out.println(str);
@@ -208,7 +205,7 @@ public class IOFunctions {
 
 		return sh;
 	}
-	private static TimeOffRequest gettor(String str) {//return this.s.getData()+";"+this.priority;
+	private static TimeOffRequest gettor(String str) {
 		String[] s=str.split(";");
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
@@ -240,12 +237,4 @@ public class IOFunctions {
 	    	return false;
 	    }
 	}
-
-
-
-
-
-
-
-
 }

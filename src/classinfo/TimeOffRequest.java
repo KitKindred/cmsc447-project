@@ -20,7 +20,6 @@ public class TimeOffRequest {
     	return this.s.getData().replace("T", " ")+";"+this.priority;
     }
     public String toString() {
-    	//System.out.println("TEST");
     	return this.s+"\tPriority: "+this.priority;
     	
     }

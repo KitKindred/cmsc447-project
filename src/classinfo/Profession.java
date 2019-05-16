@@ -3,15 +3,35 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Profession {
-    protected int id, type, hoursWorked, weekendDay,weekendNight,weekDay,weekNight,weekEvening;
+	
+	// id is the id of the employee used in the hashmap.
+	// type is the type of employee, 0 = Doctor, 1 = Moonlighter, 2 = Intern.
+    protected int id, type; 
+    
+    // these store information about how much of specific types of shifts the employee has worked
+    protected int hoursWorked, weekendDay, weekendNight, weekDay, weekNight, weekEvening;
+    
+    // active is the state of the worker, 0 = active, 1 = inactive, 2 = on maternity leave
     protected int active;
+    
+    // standard employee information 
     protected String name;
     protected String email;
+    
+    // personalShifts is the shifts assigned to an employee over the time period, is populated
+    // when schedule is generated
     protected ArrayList<Shift> personalShifts;
+    
+    // tor is the time off requests that the employee has submitted that are in the system
     protected ArrayList<TimeOffRequest> tor;
 
+    // ldtInactive is the date that the employee went to an inactive state, if applicable
     protected LocalDateTime ldtInactive=null;
     
+    
+    /**
+     * Default Constructor
+     */
     protected Profession() {
         this.id = 0;
         this.type = 0;
@@ -22,58 +42,106 @@ public class Profession {
         this.weekendNight=0;
         this.weekDay=0;
         this.weekEvening=0;
-        this.weekNight=0;
-      
+        this.weekNight=0;  
     }
 
+    /**
+     * Regular Constructor
+     * @param id = id of employee used in the hashmap
+     * @param type = type of employee, doctor, moonlighter, or intern
+     * @param name = name of employee
+     */
     protected Profession(int id, int type, String name) {
         this.id = id;
         this.type = type;
         this.name = name;
+        
+        // set the active state to active and clear hours worked, these will be manually set later
         this.active = 0;
         this.hoursWorked = 0;
+        
         personalShifts = new ArrayList<Shift>();
         tor = new ArrayList<TimeOffRequest>();
     }
-
+    
+    /** 
+     * Adds the number of hours worked to the employees current hour count.
+     * @param numHours = number of hours worked to be added
+     */
     public void addHours(int numHours) {
         this.hoursWorked += numHours;
     }
 
+    /**
+     * Directly sets the number of hours worked by the employee
+     * @param numHours = number of hours the employee has worked
+     */
     public void setHoursWorked(int numHours) {
         this.hoursWorked = numHours;
     }
 
-    public void setName(String n) {
-        this.name = n;
+    
+    /**
+     * Directly sets the employees name
+     * @param name = name of the employee
+     */
+    public void setName(String name) {
+        this.name = name;
     }
-    public void setEmail(String n) {
-    	this.email=n;
+    
+    /**
+     * Directly sets the employees email
+     * @param email = email of the employee
+     */
+    public void setEmail(String email) {
+    	this.email=email;
     }
 
-    public void setType(int t) {
-        this.type = t;
+    /**
+     * Directly sets the type of the employee
+     * @param type = type of the employee, 0 = doctor, 1 = moonlighter, 2 = intern
+     */
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public void setActive(int a) {
-        this.active = a;
+    /**
+     * Directly sets the active state of the employee
+     * @param active = active state of the employee, 0 = active, 1 = inactive, 2 = maternity leave
+     */
+    public void setActive(int active) {
+        this.active = active;
     }
 
+    
+    /**
+     * Sets when the employee started being inactive
+     * @param a = the time the employee started being inactive
+     */
     public void setInactiveDate(LocalDateTime a) {
         this.ldtInactive = a;
     }
     
-    public LocalDateTime getInactiveDate() {
-    	return this.ldtInactive;
-    }
-    
+    /**
+     * Adds a shift to the employees list of shifts
+     * @param sft = the shift to be added
+     */
     public void addShift(Shift sft) {
         personalShifts.add(sft);
     }
 
+    /**
+     * Adds a time off request to the employees list of time off requests
+     * @param t = the time off request to be added
+     */
     public void addTimeOff(TimeOffRequest t) {
         tor.add(t);
     }
+    
+    /**
+     * Clears the employees time off requests, replacing them with ones sent in in a list
+     * @param t = the array list of time off requests to replace the current ones
+     */
     public void setTimeOff(ArrayList<TimeOffRequest> t) {
     	tor.clear();
     	for(TimeOffRequest r:t) {
@@ -81,41 +149,74 @@ public class Profession {
     	}
     }
     
+    /**
+     * @return the time the employee started being inactive
+     */
+    public LocalDateTime getInactiveDate() {
+    	return this.ldtInactive;
+    }
+    
+    /**
+     * @return the internal ID of the employee 
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * @return the type of the employee, 0 = doctor, 1 = moonlighter, 2 = intern
+     */
     public int getType() {
         return this.type;
     }
 
+    /**
+     * @return the number of hours the employee has worked
+     */
     public int getHoursWorked() {
         return this.hoursWorked;
     }
 
+    /**
+     * @return the active state of the employee, 0 = active, 1 = inactive, 2 = maternity
+     */
     public int getActive() {
         return active;
     }
 
+    /**
+     * @return the employees name
+     */
     public String getName() {
         return this.name;
     }
+    
+    /**
+     * @return the employees email
+     */
     public String getEmail() {
         return this.email;
     }
-    public String toString() {
-    	String str=getId()+" "+getType()+" "+getHoursWorked()+" "+getName()+" "+getActive()+" "+personalShifts.size()+" "+tor.size();
-    	if(ldtInactive!=null) {
-    		str+=" "+ldtInactive.toString();
-    		
-    	}
-    	return str;
-    }
     
+    /**
+     * @return the list of shifts that the employee has
+     */
     public ArrayList<Shift> getShifts(){
     	return this.personalShifts;
     }
+    
+    /**
+     * @return the list of time off requests the employee has
+     */
     public ArrayList<TimeOffRequest> getTimeOffRequests(){
     	return this.tor;
+    }
+    
+    public String toString() {
+    	String str=getId()+" "+getType()+" "+getHoursWorked()+" "+getName()+" "+getActive()+" "+personalShifts.size()+" "+tor.size();
+    	if(ldtInactive!=null) {
+    		str+=" "+ldtInactive.toString();	
+    	}
+    	return str;
     }
 }

@@ -46,8 +46,6 @@ public class TimeOffRequestModifier {
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
-		//FromDay.setDisable(true);
-		//ToDay.setDisable(true);
 
 		fmm=0;
 		tmm=0;
@@ -71,11 +69,8 @@ public class TimeOffRequestModifier {
 		disable.add(saveButton);
 		disable.add(FromMonth);
 		disable.add(FromDay);
-		//disable.add(FromYear);
-		//disable.add(ToYear);
 		disable.add(ToMonth);
 		disable.add(ToDay);
-		//disable.add(prioritySlider);
 
 		System.out.println("test2");
 		for(Node n:disable) {
@@ -240,7 +235,6 @@ public class TimeOffRequestModifier {
 				}
 			}
 		}
-		//ToMonth.setDisable(false);
 	}
 	public void actionSelectToMonth(ActionEvent event) {
 		ToDay.getItems().clear();
@@ -309,8 +303,6 @@ public class TimeOffRequestModifier {
 	}
 
 	private int convertDateToInt(LocalDateTime ldt1 , LocalDateTime ldt2){
-
-		//oh.
 		
 		System.out.println("year: "+ldt1.minusYears(ldt2.getYear()));
 		System.out.println("month: "+ldt1.minusMonths(ldt2.getMonthValue()));
@@ -347,9 +339,6 @@ public class TimeOffRequestModifier {
 		System.out.println("cancel pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
 	    stage.close();
-	    
-		
-		
 		
 	}
 	public void quit(ActionEvent event) {actionCancel(event);
