@@ -55,7 +55,7 @@ public class controller {
 	Button genSchedExpoButton;
 
 	@FXML 
-	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1,attendingWeekButton;
+	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1,attendingWeekButton, deleteButton;
 
 
 	@FXML
@@ -124,6 +124,7 @@ public class controller {
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
+		deleteButton.setVisible(false);
 
 		
 		
@@ -303,6 +304,7 @@ st.setResizable(false);
 
 		s.createSchedule(ProgramDriver.getActiveID(), ProgramDriver.getEmployees());
 		s.printShifts();
+		IOFunctions.exportCalendar(s.export());
 	}
 
 	//the currently selected employee
@@ -337,6 +339,7 @@ st.setResizable(false);
 		for(Node a: invisSelectEmployee) {
 			a.setVisible(true);
 		}
+		deleteButton.setVisible(true);
 
 		manageEmployeeNameText.setText(name);//setText to be whatever the employee's name is
 		manageEmployeeIDField.setText("ID: "+currentID);//setText to be whatever the employee's id is
@@ -467,6 +470,11 @@ st.setResizable(false);
 		//		manageSelectEmployee.setValue(newName);
 		manageSelectEmployee.getItems().add(id, newName);
 		manageSelectEmployee.getSelectionModel().select(id);
+	}
+	
+	// TODO: implement
+	public void deleteEmployee(ActionEvent event) {
+		System.out.println("delete pressed");
 	}
 
 	//currently unused?

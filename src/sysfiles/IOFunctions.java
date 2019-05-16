@@ -213,8 +213,28 @@ public class IOFunctions {
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
 	}
-
-
+	
+	public static boolean exportCalendar(String iCal) {
+		StringBuilder builder = new StringBuilder(); // This creates the ics file after the gui window is closed.
+	    File file = new File("cal.ics");
+	    builder.append("cal");
+	    builder.append(".ics");
+	
+	    try {
+	        if (!file.exists()) {
+	        	file.createNewFile();
+	        }
+	
+	    	FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	    	BufferedWriter bw = new BufferedWriter(fw);
+	    	bw.write(iCal);
+	    	bw.close();
+	    	return true;
+	    } catch (IOException e) {
+	    	System.out.println("Error saving files");
+	    	return false;
+	    }
+	}
 
 
 

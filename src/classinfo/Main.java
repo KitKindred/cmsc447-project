@@ -61,7 +61,7 @@ public class Main {
         //s.printShifts();
 
         guiStarter.go(args);
-        
+	    
     }
 
     public static HashMap<Integer,Profession> getP()
