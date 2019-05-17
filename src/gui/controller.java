@@ -1,5 +1,6 @@
 package gui;
 import java.awt.Event;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -44,6 +45,135 @@ import classinfo.*;
 
 public class controller {
 
+	private static LocalDateTime currentSelectedDate=null;
+	@FXML
+	Button quarterDateButton;
+
+	@FXML
+	ComboBox quarterDateSelect;
+
+	@FXML
+	TextField quarterDateTextField;
+
+	@FXML
+	MenuItem fileNewEmployee;
+
+	private static ArrayList<LocalDateTime> ldts;
+	private boolean newfile=false;
+	public static LocalDateTime getCurrentDate() {return currentSelectedDate;}
+	public static String getFormattedCurrentDate() {
+		DateTimeFormatter format=DateTimeFormatter.ofPattern("MM-dd-yyyy");
+		return currentSelectedDate.format(format);
+	}
+
+	public static String getFileCurrentDate() {
+		DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
+		return currentSelectedDate.format(format);
+	}
+
+	private void loadDates() {
+		String fp="./src/sysfiles/profiles";
+		File f=new File(fp);
+
+		LocalDateTime ldt;
+
+		for(File file: f.listFiles()) {
+			System.out.println(file.getName());
+			for(String s:file.getName().split(".")) {
+				System.out.println(s);
+			}
+			String name=file.getName().substring(0, file.getName().indexOf("."));
+
+			System.out.println();
+			//String name=file.getName().split(".")[0];
+
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
+			ldt=LocalDateTime.parse(name,format);
+			System.out.println(ldt);
+
+			currentSelectedDate=ldt;
+
+			ldts.add(ldt);
+			quarterDateSelect.getItems().add(getFormattedCurrentDate());//.split(".")[0]);
+			currentSelectedDate=null;
+
+		}
+		System.out.println(f+" "+f.listFiles());
+
+	}
+
+	private HashMap<String, String> dateConversion=new HashMap<String, String>();
+	public void quarterAction(ActionEvent event) {
+		LocalDateTime ldtAtt;
+		try {
+			String path="/gui/dateStart.fxml";
+			Parent root = FXMLLoader.load(getClass().getResource(path));
+			Stage st = new Stage();
+			Scene scene = new Scene(root);
+			st.setScene(scene);
+			st.initModality(Modality.APPLICATION_MODAL);
+			st.setTitle("Set Calendar Quarter Start Date");
+
+			st.setResizable(false);
+			st.showAndWait();
+
+			if(dateStart.saveDate) {
+				if(dateStart.req!=null) {
+					actionChanged(event);
+					ldtAtt=dateStart.req;
+					dateStart.req=null;
+
+					System.out.println("BEFORE FORMAT: "+ldtAtt);
+					DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+					String formatted=ldtAtt.format(format);
+
+					quarterDateTextField.setText(formatted);
+					currentSelectedDate=ldtAtt;
+					ldts.add(ldtAtt);
+					System.out.println(formatted+" "+ldts);
+					quarterDateSelect.getItems().add(formatted);
+
+					dateConversion.put(ldtAtt.toString(),formatted);
+					newfile=true;
+					quarterDateSelect.getSelectionModel().select(ldts.size()-1);
+				}
+			}
+
+			//quarterSelect(null);
+		}catch(Exception e) {System.out.println("error?"+e.toString());}
+	}
+	public static void setCurrentDate(LocalDateTime l) {
+		currentSelectedDate=l;
+	}
+	public void quarterSelect(ActionEvent event) {
+		if(quarterDateSelect.getSelectionModel().getSelectedIndex()==-1) {return;}
+		currentSelectedDate=ldts.get(quarterDateSelect.getSelectionModel().getSelectedIndex());
+		enableAfterDate();
+
+		try {
+			clearAll();
+			if(newfile) {
+				IOFunctions.saveEmployees();
+				newfile=false;
+			}
+
+			IOFunctions.loadEmployees();
+
+
+			System.out.println(ProgramDriver.getEmployees());
+			populate();
+			System.out.println(ProgramDriver.getEmployees());
+
+		} catch (IOException e) {
+			System.out.println("error loading files");
+
+			e.printStackTrace();
+		}
+
+	}
+
+	/***~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~***/
+
 	private static boolean editedWithoutSave = false; 
 	private static boolean isSwitchingEmps = false;
 
@@ -63,10 +193,15 @@ public class controller {
 	@FXML
 	Text manageEmployeeIDField,manageEmployeeProfession,activityText,attendText,maternityText,emailText;
 
+	@FXML
+	Tab meTab;
+
 	static int currentID=-1;
 	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor,disableUntilLoad;
+	private ArrayList disableBeforeDate;
 
 	private int oldindex=-1;
+<<<<<<< HEAD
 	
 	private Profession getLastEmployee() {
 		
@@ -74,8 +209,34 @@ public class controller {
 		
 	}
 	
+=======
+
+	private Profession getLastEmployee() {
+		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];}
+	private void disableBeforeDate() {
+		meTab.setDisable(true);
+		fileNewEmployee.setDisable(true);}
+
+	private void enableAfterDate() {
+		meTab.setDisable(false);
+		fileNewEmployee.setDisable(false);
+	}
+
+	private void blankSpots() {
+		for(Node a: invisDateRange) {a.setVisible(false);}
+		for(Node a: invisSelectEmployee) {a.setVisible(false);}
+		System.out.println("a"+invisDoctor);
+		for(Node a: invisDoctor) {a.setVisible(false);}
+	}
+
+>>>>>>> pthomp1-date-integration
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
+		ldts=new ArrayList<LocalDateTime>();
+
+		loadDates();
+		disableBeforeDate();
+
 		invisSelectEmployee = new ArrayList<Node>();
 		invisDateRange = new ArrayList<Node>();
 		invisDoctor= new ArrayList<Node>();
@@ -90,6 +251,8 @@ public class controller {
 		invisSelectEmployee.add(GetTimeOffButton);
 		invisSelectEmployee.add(emailText);
 		invisSelectEmployee.add(activityText);
+
+		invisSelectEmployee.add(deleteButton);
 
 		disableUntilLoad.add(manageSaveButton);
 		disableUntilLoad.add(createEmployeeButton);
@@ -125,6 +288,7 @@ public class controller {
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
+<<<<<<< HEAD
 		deleteButton.setVisible(false);
 
 
@@ -133,6 +297,9 @@ public class controller {
 		populate();
 
 
+=======
+		//deleteButton.setVisible(false);
+>>>>>>> pthomp1-date-integration
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -191,7 +358,11 @@ public class controller {
 
 
 		for(Node a: disableUntilLoad) {a.setDisable(false);}
+<<<<<<< HEAD
 		manageSaveButton.setDisable(false);
+=======
+
+>>>>>>> pthomp1-date-integration
 	}
 
 	/*GUI ACTION FUNCTIONS*/
@@ -203,6 +374,18 @@ public class controller {
 		}
 	}
 
+	private void clearAll() {
+		//ProgramDriver.getActiveID().clear();
+		//ProgramDriver.getEmployees().clear();
+		//ProgramDriver.getNameID().clear();
+
+		manageSelectEmployee.getSelectionModel().clearSelection();
+		manageSelectEmployee.getItems().clear();
+		blankSpots();
+		oldindex=-1;
+		currentID=-1;
+
+	}
 
 	public void actionLaunchDateRangeWindow(ActionEvent event) {
 		LocalDateTime ldtInactive;
@@ -337,10 +520,10 @@ public class controller {
 		String email="Example Email";
 		int active = 0;
 
-		if (manageSelectEmployee.getValue() == null) {
-			return;
-		}
+		if(manageSelectEmployee.getSelectionModel().getSelectedIndex()==-1) {return;}
+		if (manageSelectEmployee.getValue() == null) {return;}
 
+		System.out.println("oldindex: "+oldindex);
 		isSwitchingEmps = true;
 		System.out.println("test");
 
@@ -375,8 +558,8 @@ public class controller {
 			manageDateStart.setText(emp.getInactiveDate().format(format));
 		}
 
-		oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
-
+		//oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
+		oldindex=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 		if(emp.getType()==0) {
 
 			/*for(Node a: invisDoctor) {
@@ -429,6 +612,7 @@ public class controller {
 
 	public void saveEmployee(ActionEvent event) {
 
+<<<<<<< HEAD
 		if(currentID==-1) {
 			try {
 				IOFunctions.saveEmployees();
@@ -440,6 +624,9 @@ public class controller {
 				return;
 			}
 		}
+=======
+		if(currentID==-1) {return;}
+>>>>>>> pthomp1-date-integration
 
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText();
@@ -481,16 +668,19 @@ public class controller {
 			editedWithoutSave=false;
 
 
+			System.out.println(active);
+			System.out.println("id: "+id);
+			manageActivityField.getSelectionModel().select(active);
+			manageSelectEmployee.getSelectionModel().clearSelection();
+			manageSelectEmployee.getItems().remove(id);
+			manageSelectEmployee.getItems().add(id, newName);
+			manageSelectEmployee.getSelectionModel().select(id);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}		
-		System.out.println(active);
-		manageActivityField.getSelectionModel().select(active);
-		manageSelectEmployee.getSelectionModel().clearSelection();
-		manageSelectEmployee.getItems().remove(id);
-		manageSelectEmployee.getItems().add(id, newName);
-		manageSelectEmployee.getSelectionModel().select(id);
+
 	}
 
 	// TODO: implement
@@ -528,11 +718,19 @@ public class controller {
 		System.out.println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		int index=manageActivityField.getSelectionModel().getSelectedIndex();
+<<<<<<< HEAD
 		
 		Profession prof=ProgramDriver.getEmployees().get(currentID);
 		
 		if(currentID!=-1) {
 			
+=======
+		//System.out.println("new index");
+		Profession prof=ProgramDriver.getEmployees().get(currentID);
+
+		if(currentID!=-1) {
+
+>>>>>>> pthomp1-date-integration
 			prof.setActive(manageActivityField.getSelectionModel().getSelectedIndex());
 		}
 		switch(op) {
@@ -582,12 +780,13 @@ public class controller {
 		}
 		actionChanged(event);
 
-		oldindex=index; 
+		//oldindex=index; 
 		System.out.println(oldindex);
 	}
 
 	//populate the employee selection box with employees read from files 
 	public void populate() {
+		System.out.println("populate: "+ProgramDriver.getEmployees());
 		manageSelectEmployee.getItems().clear();
 		String name = "Sample Employee";
 		HashMap<Integer, Profession> hp=ProgramDriver.getEmployees();
@@ -674,10 +873,16 @@ public class controller {
 
 		oldindex=ProgramDriver.getEmployees().size()-1;
 		manageSelectEmployee.getSelectionModel().select(oldindex);
+<<<<<<< HEAD
+=======
+
+		System.out.println("email: "+emp.getEmail());
+>>>>>>> pthomp1-date-integration
 
 		System.out.println("email: "+emp.getEmail());
 		
 		manageEmployeeEmail.setText(emp.getEmail());
+<<<<<<< HEAD
 //		manageActivityField.getSelectionModel().select(emp.getActive());
 
 		
@@ -690,6 +895,20 @@ public class controller {
 		
 		showDateRange(null);
 		
+=======
+		//		manageActivityField.getSelectionModel().select(emp.getActive());
+
+
+		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
+		currentID=emp.getId();
+
+		if(emp.getActive()==2) {
+			manageDateStart.setText(emp.getInactiveDate().toString());
+		}
+
+		showDateRange(null);
+
+>>>>>>> pthomp1-date-integration
 	}
 
 	public void quit(ActionEvent event) {

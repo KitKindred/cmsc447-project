@@ -9,9 +9,9 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="372.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller">
+<VBox prefHeight="394.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar prefHeight="25.0" prefWidth="640.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
@@ -22,37 +22,56 @@
         </Menu>
       </menus>
     </MenuBar>
-      <TabPane tabClosingPolicy="UNAVAILABLE" />
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="640.0">
-         <children>
-            <ComboBox fx:id="manageSelectEmployee" layoutX="228.0" layoutY="6.0" onAction="#checkID" prefWidth="150.0" promptText="SELECT EMPLOYEE">
-               <opaqueInsets>
-                  <Insets top="50.0" />
-               </opaqueInsets></ComboBox>
-            <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="71.0" onAction="#actionChanged" prefHeight="25.0" prefWidth="200.0" promptText="Employee Name" />
-            <TextField fx:id="manageEmployeeEmail" layoutX="227.0" layoutY="71.0" onInputMethodTextChanged="#actionChanged" prefHeight="25.0" prefWidth="250.0" promptText="Employee Email" />
-            <ComboBox fx:id="manageActivityField" layoutX="14.0" layoutY="133.0" onAction="#showDateRange" prefWidth="150.0" promptText="is employee active" />
-            <Button fx:id="manageDateRange1" layoutX="328.0" layoutY="133.0" mnemonicParsing="false" onAction="#actionLaunchDateRangeWindow" text="Set Inactivity Date" />
-            <TextField fx:id="manageDateStart" editable="false" layoutX="171.0" layoutY="133.0" onInputMethodTextChanged="#actionChanged" promptText="Date Start" />
-            <Text fx:id="manageEmployeeIDField" layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID: -1" />
-            <Text fx:id="manageEmployeeProfession" layoutX="74.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profession: null" wrappingWidth="178.46875" />
-            <Button fx:id="GetTimeOffButton" layoutX="14.0" layoutY="232.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" prefHeight="35.0" text="Employee Time Off Requests" />
-            <Button fx:id="attendingWeekButton" layoutX="170.0" layoutY="183.0" mnemonicParsing="false" onAction="#actionLaunchAttendingWindow" text="Set Attending Week Date" />
-            <TextField fx:id="attendingWeekText" editable="false" layoutX="15.0" layoutY="183.0" onInputMethodTextChanged="#actionChanged" promptText="Date Start" />
-            <Button fx:id="manageSaveButton" layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#saveEmployee" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: lime;" text="Save Employees" />
-            <Button fx:id="createEmployeeButton" layoutX="18.0" layoutY="306.0" mnemonicParsing="false" onAction="#actionLaunchEmployeeCreationWindow" prefHeight="35.0" prefWidth="142.0" text="Create a New Employee" />
-            <Button fx:id="genSchedExpoButton" layoutX="446.0" layoutY="306.0" mnemonicParsing="false" onAction="#generate" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: black;" text="Generate Schedule and Export" textFill="WHITE" />
-            <Separator layoutX="-4.0" layoutY="103.0" prefHeight="3.0" prefWidth="658.0" />
-            <Separator layoutX="-1.0" layoutY="283.0" prefHeight="3.0" prefWidth="658.0" />
-            <Separator layoutX="-9.0" layoutY="217.0" prefHeight="3.0" prefWidth="658.0" />
-            <Separator layoutX="-18.0" layoutY="41.0" prefHeight="3.0" prefWidth="658.0" />
-            <Separator layoutX="422.0" layoutY="283.0" orientation="VERTICAL" prefHeight="105.0" prefWidth="6.0" />
-            <Text fx:id="activityText" fill="#9d9d9d" layoutX="17.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Activity Status" />
-            <Text fx:id="attendText" fill="#9d9d9d" layoutX="17.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Attending Week Date" />
-            <Text fx:id="maternityText" fill="#9d9d9d" layoutX="171.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maternity Leave Start Date" />
-            <Text fx:id="emailText" fill="#9d9d9d" layoutX="228.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee Email" />
-            <Button fx:id="deleteButton" layoutX="520.0" layoutY="6.0" mnemonicParsing="false" onAction="#deleteEmployee" style="-fx-background-color: red;" text="Delete Employee" />
-         </children>
-      </AnchorPane>
+      <TabPane prefHeight="382.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Start Date">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="quarterDateButton" layoutX="180.0" layoutY="31.0" mnemonicParsing="false" onAction="#quarterAction" text="Set Quarter Date" />
+                        <TextField fx:id="quarterDateTextField" editable="false" layoutX="296.0" layoutY="31.0" />
+                        <Text layoutX="180.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter Start Date" />
+                        <ComboBox fx:id="quarterDateSelect" layoutX="14.0" layoutY="32.0" onAction="#quarterSelect" prefWidth="150.0" promptText="Select Quarter Date" />
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Previously Used Quarters" />
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Manage Employees" fx:id="meTab">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="640.0">
+                     <children>
+                        <ComboBox fx:id="manageSelectEmployee" layoutX="228.0" layoutY="6.0" onAction="#checkID" prefWidth="150.0" promptText="SELECT EMPLOYEE">
+                           <opaqueInsets>
+                              <Insets top="50.0" />
+                           </opaqueInsets>
+                        </ComboBox>
+                        <TextField fx:id="manageEmployeeNameText" layoutX="14.0" layoutY="71.0" onAction="#actionChanged" prefHeight="25.0" prefWidth="200.0" promptText="Employee Name" />
+                        <TextField fx:id="manageEmployeeEmail" layoutX="227.0" layoutY="71.0" onInputMethodTextChanged="#actionChanged" prefHeight="25.0" prefWidth="250.0" promptText="Employee Email" />
+                        <ComboBox fx:id="manageActivityField" layoutX="14.0" layoutY="133.0" onAction="#showDateRange" prefWidth="150.0" promptText="is employee active" />
+                        <Button fx:id="manageDateRange1" layoutX="328.0" layoutY="133.0" mnemonicParsing="false" onAction="#actionLaunchDateRangeWindow" text="Set Inactivity Date" />
+                        <TextField fx:id="manageDateStart" editable="false" layoutX="171.0" layoutY="133.0" onInputMethodTextChanged="#actionChanged" promptText="Date Start" />
+                        <Text fx:id="manageEmployeeIDField" layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID: -1" />
+                        <Text fx:id="manageEmployeeProfession" layoutX="74.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profession: null" wrappingWidth="178.46875" />
+                        <Button fx:id="GetTimeOffButton" layoutX="14.0" layoutY="232.0" mnemonicParsing="false" onAction="#actionSelectTimeOff" prefHeight="35.0" text="Employee Time Off Requests" />
+                        <Button fx:id="attendingWeekButton" layoutX="170.0" layoutY="183.0" mnemonicParsing="false" onAction="#actionLaunchAttendingWindow" text="Set Attending Week Date" />
+                        <TextField fx:id="attendingWeekText" editable="false" layoutX="15.0" layoutY="183.0" onInputMethodTextChanged="#actionChanged" promptText="Date Start" />
+                        <Button fx:id="manageSaveButton" layoutX="234.0" layoutY="295.0" mnemonicParsing="false" onAction="#saveEmployee" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: lime;" text="Save Employees" />
+                        <Button fx:id="createEmployeeButton" layoutX="18.0" layoutY="295.0" mnemonicParsing="false" onAction="#actionLaunchEmployeeCreationWindow" prefHeight="35.0" prefWidth="142.0" text="Create a New Employee" />
+                        <Button fx:id="genSchedExpoButton" layoutX="446.0" layoutY="295.0" mnemonicParsing="false" onAction="#generate" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: black;" text="Generate Schedule and Export" textFill="WHITE" />
+                        <Separator layoutX="-4.0" layoutY="103.0" prefHeight="3.0" prefWidth="658.0" />
+                        <Separator layoutX="-1.0" layoutY="283.0" prefHeight="3.0" prefWidth="658.0" />
+                        <Separator layoutX="-9.0" layoutY="217.0" prefHeight="3.0" prefWidth="658.0" />
+                        <Separator layoutX="-18.0" layoutY="41.0" prefHeight="3.0" prefWidth="658.0" />
+                        <Separator layoutX="422.0" layoutY="283.0" orientation="VERTICAL" prefHeight="105.0" prefWidth="6.0" />
+                        <Text fx:id="activityText" fill="#9d9d9d" layoutX="17.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Activity Status" />
+                        <Text fx:id="attendText" fill="#9d9d9d" layoutX="17.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Attending Week Date" />
+                        <Text fx:id="maternityText" fill="#9d9d9d" layoutX="171.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maternity Leave Start Date" />
+                        <Text fx:id="emailText" fill="#9d9d9d" layoutX="228.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee Email" />
+                        <Button fx:id="deleteButton" layoutX="520.0" layoutY="6.0" mnemonicParsing="false" onAction="#deleteEmployee" style="-fx-background-color: red;" text="Delete Employee" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs></TabPane>
   </children>
 </VBox>
