@@ -191,7 +191,7 @@ public class controller {
 
 
 		for(Node a: disableUntilLoad) {a.setDisable(false);}
-
+		manageSaveButton.setDisable(false);
 	}
 
 	/*GUI ACTION FUNCTIONS*/
@@ -429,7 +429,17 @@ public class controller {
 
 	public void saveEmployee(ActionEvent event) {
 
-		if(currentID==-1) {return;}
+		if(currentID==-1) {
+			try {
+				IOFunctions.saveEmployees();
+				editedWithoutSave = false;
+				System.out.println("\nSaving when no one is shown on screen");
+				return;
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				return;
+			}
+		}
 
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText();
