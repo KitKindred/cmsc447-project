@@ -47,7 +47,7 @@ public class controller {
 
 	private static LocalDateTime currentSelectedDate=null;
 	@FXML
-	Button quarterDateButton;
+	Button quarterDateButton,quarterDeleteButton;
 
 	@FXML
 	ComboBox quarterDateSelect;
@@ -71,6 +71,36 @@ public class controller {
 		return currentSelectedDate.format(format);
 	}
 
+	public void quarterDelete(ActionEvent event){
+		int index=quarterDateSelect.getSelectionModel().getSelectedIndex();
+		
+		System.out.println(dateConversion.keySet());
+		
+		String fp="./src/sysfiles/profiles/";//+dateConversion.keySet().toArray()[index]+".txt";
+		fp+=getFileCurrentDate()+".txt";
+		
+		try {
+			if(IOFunctions.killFile(fp)<0) {return;}
+			
+			
+			editedWithoutSave=false;
+			disableBeforeDate();
+			
+			dateConversion.remove(dateConversion.keySet().toArray()[index]);
+			quarterDateTextField.setText("");
+			quarterDeleteButton.setDisable(true);
+			
+			quarterDateSelect.getSelectionModel().clearSelection();
+			quarterDateSelect.getItems().remove(index);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		
+	}
+	
 	private void loadDates() {
 		String fp="./src/sysfiles/profiles";
 		File f=new File(fp);
@@ -94,6 +124,7 @@ public class controller {
 			currentSelectedDate=ldt;
 
 			ldts.add(ldt);
+			dateConversion.put(ldt.toString(), getFormattedCurrentDate());
 			quarterDateSelect.getItems().add(getFormattedCurrentDate());//.split(".")[0]);
 			currentSelectedDate=null;
 
@@ -104,6 +135,12 @@ public class controller {
 
 	private HashMap<String, String> dateConversion=new HashMap<String, String>();
 	public void quarterAction(ActionEvent event) {
+		if(editedWithoutSave) {
+			if(changeBox()) {
+				saveEmployee(event);
+			}
+		}
+		
 		LocalDateTime ldtAtt;
 		try {
 			String path="/gui/dateStart.fxml";
@@ -146,10 +183,15 @@ public class controller {
 		currentSelectedDate=l;
 	}
 	public void quarterSelect(ActionEvent event) {
+		if(editedWithoutSave) {
+			if(changeBox()) {
+				saveEmployee(event);
+			}
+		}
 		if(quarterDateSelect.getSelectionModel().getSelectedIndex()==-1) {return;}
 		currentSelectedDate=ldts.get(quarterDateSelect.getSelectionModel().getSelectedIndex());
 		enableAfterDate();
-
+		quarterDeleteButton.setDisable(false);
 		try {
 			clearAll();
 			if(newfile) {
@@ -201,18 +243,16 @@ public class controller {
 	private ArrayList disableBeforeDate;
 
 	private int oldindex=-1;
-<<<<<<< HEAD
-	
-	private Profession getLastEmployee() {
-		
-		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];
-		
-	}
-	
-=======
+
 
 	private Profession getLastEmployee() {
+		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];
+	}
+	/*
+	private Profession getLastEmployee() {
 		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];}
+	 */
+
 	private void disableBeforeDate() {
 		meTab.setDisable(true);
 		fileNewEmployee.setDisable(true);}
@@ -229,7 +269,6 @@ public class controller {
 		for(Node a: invisDoctor) {a.setVisible(false);}
 	}
 
->>>>>>> pthomp1-date-integration
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		ldts=new ArrayList<LocalDateTime>();
@@ -242,6 +281,8 @@ public class controller {
 		invisDoctor= new ArrayList<Node>();
 		disableUntilLoad=new ArrayList<Node>();
 
+		quarterDeleteButton.setDisable(true);
+		
 		invisSelectEmployee.add(manageEmployeeIDField);
 		invisSelectEmployee.add(manageEmployeeNameText);
 		invisSelectEmployee.add(manageEmployeeEmail);
@@ -288,18 +329,11 @@ public class controller {
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
-<<<<<<< HEAD
+
 		deleteButton.setVisible(false);
 
 
-
-
 		populate();
-
-
-=======
-		//deleteButton.setVisible(false);
->>>>>>> pthomp1-date-integration
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -358,11 +392,8 @@ public class controller {
 
 
 		for(Node a: disableUntilLoad) {a.setDisable(false);}
-<<<<<<< HEAD
 		manageSaveButton.setDisable(false);
-=======
 
->>>>>>> pthomp1-date-integration
 	}
 
 	/*GUI ACTION FUNCTIONS*/
@@ -611,8 +642,6 @@ public class controller {
 
 
 	public void saveEmployee(ActionEvent event) {
-
-<<<<<<< HEAD
 		if(currentID==-1) {
 			try {
 				IOFunctions.saveEmployees();
@@ -624,9 +653,9 @@ public class controller {
 				return;
 			}
 		}
-=======
+
 		if(currentID==-1) {return;}
->>>>>>> pthomp1-date-integration
+
 
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText();
@@ -718,19 +747,19 @@ public class controller {
 		System.out.println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		int index=manageActivityField.getSelectionModel().getSelectedIndex();
-<<<<<<< HEAD
-		
-		Profession prof=ProgramDriver.getEmployees().get(currentID);
-		
-		if(currentID!=-1) {
-			
-=======
-		//System.out.println("new index");
-		Profession prof=ProgramDriver.getEmployees().get(currentID);
+
+
+		Profession prof=null;//=ProgramDriver.getEmployees().get(currentID);
 
 		if(currentID!=-1) {
 
->>>>>>> pthomp1-date-integration
+
+			//System.out.println("new index");
+			prof=ProgramDriver.getEmployees().get(currentID);
+
+			//if(currentID!=-1) {
+
+
 			prof.setActive(manageActivityField.getSelectionModel().getSelectedIndex());
 		}
 		switch(op) {
@@ -738,9 +767,11 @@ public class controller {
 			for(Node a: invisDateRange) {
 				a.setVisible(false);
 			}
-			if(prof.getType()==0) {
-				for(Node a:invisDoctor) {
-					a.setVisible(true);
+			if(currentID!=-1) {
+				if(prof.getType()==0) {
+					for(Node a:invisDoctor) {
+						a.setVisible(true);
+					}
 				}
 			}
 			System.out.println("CURRENT ID: "+currentID);
@@ -762,9 +793,11 @@ public class controller {
 			for(Node a: invisDateRange) {
 				a.setVisible(true);
 			}
-			if(prof.getType()==0) {
-				for(Node a:invisDoctor) {
-					a.setVisible(true);
+			if(currentID!=-1) {
+				if(prof.getType()==0) {
+					for(Node a:invisDoctor) {
+						a.setVisible(true);
+					}
 				}
 			}
 			System.out.println("maternity check");
@@ -873,29 +906,12 @@ public class controller {
 
 		oldindex=ProgramDriver.getEmployees().size()-1;
 		manageSelectEmployee.getSelectionModel().select(oldindex);
-<<<<<<< HEAD
-=======
+
+
 
 		System.out.println("email: "+emp.getEmail());
->>>>>>> pthomp1-date-integration
-
-		System.out.println("email: "+emp.getEmail());
-		
 		manageEmployeeEmail.setText(emp.getEmail());
-<<<<<<< HEAD
-//		manageActivityField.getSelectionModel().select(emp.getActive());
 
-		
-		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
-		currentID=emp.getId();
-		
-		if(emp.getActive()==2) {
-			manageDateStart.setText(emp.getInactiveDate().toString());
-		}
-		
-		showDateRange(null);
-		
-=======
 		//		manageActivityField.getSelectionModel().select(emp.getActive());
 
 
@@ -908,7 +924,20 @@ public class controller {
 
 		showDateRange(null);
 
->>>>>>> pthomp1-date-integration
+
+		//		manageActivityField.getSelectionModel().select(emp.getActive());
+
+
+		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
+		currentID=emp.getId();
+
+		if(emp.getActive()==2) {
+			manageDateStart.setText(emp.getInactiveDate().toString());
+		}
+
+		showDateRange(null);
+
+
 	}
 
 	public void quit(ActionEvent event) {
