@@ -185,7 +185,17 @@ public static boolean getClose() {return returnEmployee;}
 			}
 			
 			ProgramDriver.addDoctor(type, name,ProgramDriver.getID(),email);
-			emp = ProgramDriver.getEmployees().get(ProgramDriver.getEmployees().size()-1);
+			System.out.println(ProgramDriver.getEmployees());
+			System.out.println(ProgramDriver.getEmployees().size());
+			HashMap<Integer, Profession> hmap=ProgramDriver.getEmployees();
+			
+			emp=(Profession)hmap.values().toArray()[hmap.size()-1];
+			
+			
+			//emp = hmap.get(hmap.get(hmap.size()-1).getId());//ProgramDriver.getEmployees().get((ProgramDriver.getEmployees().size()-1));
+			
+			System.out.println(sel);
+			System.out.println(emp.toString());
 			
 			emp.setActive(sel);
 			if(inactive!=null && true)
