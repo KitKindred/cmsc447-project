@@ -1,4 +1,0 @@
-3
-{0~Robert Smith~0~2~0~robbie@yahoo.com~[]~<>~2019-05-15T00:00~false~2018-04-03T00:00}
-{1~Steven Jenkins~0~0~0~steve@gmail.com~[]~<>~~false~2018-01-01T00:00}
-{2~India Swarez~0~0~0~Ind.Swa@company.co~[]~<>~~false~2019-06-04T00:00}
