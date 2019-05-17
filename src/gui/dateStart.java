@@ -33,6 +33,11 @@ public class dateStart {
 
 	private int fromMonthMax=0;
 	private int fmm;
+	
+	public final static int y=Year.now().getValue();
+	public static int plus=y+2;//=y+1;
+	public static int minus=y-1;
+	
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
@@ -44,9 +49,11 @@ public class dateStart {
 
 		FromMonth.getItems().addAll(months);
 
-		int y=Year.now().getValue();
-		int plus=y+1;
-		int minus=y-1;
+		System.out.println(plus+" "+minus);
+		
+		//int y=Year.now().getValue();
+		//int plus=y+1;
+		//int minus=y-1;
 
 		for(int i=minus;i<plus;i++) {
 			FromYear.getItems().add(i);

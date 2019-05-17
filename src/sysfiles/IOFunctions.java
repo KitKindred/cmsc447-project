@@ -3,6 +3,8 @@ package sysfiles;
 import java.io.*;
 import java.util.*;
 import classinfo.*;
+import gui.controller;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -18,15 +20,19 @@ public class IOFunctions {
 
 	public static int saveEmployees() throws IOException{
 		System.out.println("ENTERING SAVEEMPLOYEES");
-
+		System.out.println("gCD: "+controller.getCurrentDate().toString());
 		HashMap<Integer, Profession> e=ProgramDriver.getEmployees();
-		File f=new File(path+"employees.txt");
+		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		//File f=new File(path+"employees.txt");
 		out = new PrintWriter(f);
 
 		String storeLine="";
+		String currentDate=controller.getCurrentDate().toString();
 		int i=0;
 
+		storeLine+=(currentDate+"\r\n");
 		storeLine+=(e.size()+"\r\n");
+
 		System.out.println("e.size:"+e.size());
 		System.out.println(""+e.values());
 		for(Profession p: e.values()) {
@@ -74,33 +80,49 @@ public class IOFunctions {
 
 		return i;
 	}
-
-
+	
 	public static int loadEmployees() throws IOException{
-		File f=new File(path+"employees.txt");
+		if(controller.getCurrentDate()==null) {return -1;}
+		
+		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		//File f=new File(path+"employees.txt");
 		if(!f.exists()) {
 			out=new PrintWriter(f);
-			out.write("0");
-			out.write("\r\n");
+			
+			System.out.println("gCD: "+controller.getCurrentDate().toString());
+			out.write(controller.getCurrentDate().toString()+"\r\n");
+			out.write("0\r\n");
 			out.close();
 			System.out.println("Created employees.txt");
 		}
-
-
+		//ProgramDriver.getID();
+		ProgramDriver.getEmployees().clear();
+		ProgramDriver.getActiveID().clear();
+		ProgramDriver.getNameID().clear();
+		
+		
 		int i=0;
 		int count=0;
+		String currentDate="";
 		is= new Scanner(f);
 
 		String line="";
 		if (is.hasNextLine()) {
+			
+			currentDate=is.nextLine().trim();
 			line=is.nextLine();
-			System.out.println(line);
+			System.out.println(line+" "+currentDate);
 			count=Integer.parseInt(line);
+			
+			DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+			controller.setCurrentDate(LocalDateTime.parse(currentDate, format));
 		}
 		else {
 			out=new PrintWriter(f);
-			out.write("0");
-			out.write("\r\n");
+			out.write(controller.getCurrentDate().toString()+"\r\n");
+			out.write("0\r\n");
+			
+			//out.write("\r\n");
 			out.close();
 
 			is= new Scanner(f);
@@ -191,6 +213,9 @@ public class IOFunctions {
 		}
 		if(is!=null)
 			is.close();
+		
+		System.out.println("IOLoad: "+ProgramDriver.getEmployees());
+		
 		return i;
 	} 
 
