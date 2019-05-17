@@ -201,6 +201,15 @@ public class controller {
 	private ArrayList disableBeforeDate;
 
 	private int oldindex=-1;
+<<<<<<< HEAD
+	
+	private Profession getLastEmployee() {
+		
+		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];
+		
+	}
+	
+=======
 
 	private Profession getLastEmployee() {
 		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];}
@@ -220,6 +229,7 @@ public class controller {
 		for(Node a: invisDoctor) {a.setVisible(false);}
 	}
 
+>>>>>>> pthomp1-date-integration
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		ldts=new ArrayList<LocalDateTime>();
@@ -278,7 +288,18 @@ public class controller {
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
+<<<<<<< HEAD
+		deleteButton.setVisible(false);
+
+
+
+
+		populate();
+
+
+=======
 		//deleteButton.setVisible(false);
+>>>>>>> pthomp1-date-integration
 
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -337,7 +358,11 @@ public class controller {
 
 
 		for(Node a: disableUntilLoad) {a.setDisable(false);}
+<<<<<<< HEAD
+		manageSaveButton.setDisable(false);
+=======
 
+>>>>>>> pthomp1-date-integration
 	}
 
 	/*GUI ACTION FUNCTIONS*/
@@ -587,7 +612,21 @@ public class controller {
 
 	public void saveEmployee(ActionEvent event) {
 
+<<<<<<< HEAD
+		if(currentID==-1) {
+			try {
+				IOFunctions.saveEmployees();
+				editedWithoutSave = false;
+				System.out.println("\nSaving when no one is shown on screen");
+				return;
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				return;
+			}
+		}
+=======
 		if(currentID==-1) {return;}
+>>>>>>> pthomp1-date-integration
 
 		String name = manageSelectEmployee.getValue().toString();
 		String newName = manageEmployeeNameText.getText();
@@ -679,11 +718,19 @@ public class controller {
 		System.out.println(manageActivityField.getValue().toString());
 		manageDateRange1.setText("Set "+op+" Date");
 		int index=manageActivityField.getSelectionModel().getSelectedIndex();
+<<<<<<< HEAD
+		
+		Profession prof=ProgramDriver.getEmployees().get(currentID);
+		
+		if(currentID!=-1) {
+			
+=======
 		//System.out.println("new index");
 		Profession prof=ProgramDriver.getEmployees().get(currentID);
 
 		if(currentID!=-1) {
 
+>>>>>>> pthomp1-date-integration
 			prof.setActive(manageActivityField.getSelectionModel().getSelectedIndex());
 		}
 		switch(op) {
@@ -826,10 +873,29 @@ public class controller {
 
 		oldindex=ProgramDriver.getEmployees().size()-1;
 		manageSelectEmployee.getSelectionModel().select(oldindex);
+<<<<<<< HEAD
+=======
 
 		System.out.println("email: "+emp.getEmail());
+>>>>>>> pthomp1-date-integration
 
+		System.out.println("email: "+emp.getEmail());
+		
 		manageEmployeeEmail.setText(emp.getEmail());
+<<<<<<< HEAD
+//		manageActivityField.getSelectionModel().select(emp.getActive());
+
+		
+		manageDateRange1.setText("Set "+getAct(emp.getType())+" Date");
+		currentID=emp.getId();
+		
+		if(emp.getActive()==2) {
+			manageDateStart.setText(emp.getInactiveDate().toString());
+		}
+		
+		showDateRange(null);
+		
+=======
 		//		manageActivityField.getSelectionModel().select(emp.getActive());
 
 
@@ -842,6 +908,7 @@ public class controller {
 
 		showDateRange(null);
 
+>>>>>>> pthomp1-date-integration
 	}
 
 	public void quit(ActionEvent event) {
