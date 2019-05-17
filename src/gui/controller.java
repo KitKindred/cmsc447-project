@@ -59,7 +59,7 @@ public class controller {
 	MenuItem fileNewEmployee;
 
 	private static ArrayList<LocalDateTime> ldts;
-
+	private boolean newfile=false;
 	public static LocalDateTime getCurrentDate() {return currentSelectedDate;}
 	public static String getFormattedCurrentDate() {
 		DateTimeFormatter format=DateTimeFormatter.ofPattern("MM-dd-yyyy");
@@ -70,35 +70,33 @@ public class controller {
 		DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 		return currentSelectedDate.format(format);
 	}
-	
-	private void loadDates() {
 
-		
+	private void loadDates() {
 		String fp="./src/sysfiles/profiles";
 		File f=new File(fp);
-		
+
 		LocalDateTime ldt;
-		
+
 		for(File file: f.listFiles()) {
 			System.out.println(file.getName());
 			for(String s:file.getName().split(".")) {
 				System.out.println(s);
 			}
 			String name=file.getName().substring(0, file.getName().indexOf("."));
-			
+
 			System.out.println();
 			//String name=file.getName().split(".")[0];
-			
+
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 			ldt=LocalDateTime.parse(name,format);
 			System.out.println(ldt);
-			
+
 			currentSelectedDate=ldt;
-			
+
 			ldts.add(ldt);
 			quarterDateSelect.getItems().add(getFormattedCurrentDate());//.split(".")[0]);
 			currentSelectedDate=null;
-			
+
 		}
 		System.out.println(f+" "+f.listFiles());
 
@@ -136,11 +134,11 @@ public class controller {
 					quarterDateSelect.getItems().add(formatted);
 
 					dateConversion.put(ldtAtt.toString(),formatted);
-					
+					newfile=true;
 					quarterDateSelect.getSelectionModel().select(ldts.size()-1);
 				}
 			}
-			
+
 			//quarterSelect(null);
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
 	}
@@ -154,18 +152,24 @@ public class controller {
 
 		try {
 			clearAll();
+			if(newfile) {
+				IOFunctions.saveEmployees();
+				newfile=false;
+			}
+
 			IOFunctions.loadEmployees();
-			
-			
+
+
 			System.out.println(ProgramDriver.getEmployees());
 			populate();
 			System.out.println(ProgramDriver.getEmployees());
+
 		} catch (IOException e) {
 			System.out.println("error loading files");
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
-	
+
 	}
 
 	/***~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~***/
@@ -215,7 +219,7 @@ public class controller {
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
 	}
-	
+
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		ldts=new ArrayList<LocalDateTime>();
@@ -239,7 +243,7 @@ public class controller {
 		invisSelectEmployee.add(activityText);
 
 		invisSelectEmployee.add(deleteButton);
-		
+
 		disableUntilLoad.add(manageSaveButton);
 		disableUntilLoad.add(createEmployeeButton);
 		disableUntilLoad.add(genSchedExpoButton);
@@ -275,7 +279,7 @@ public class controller {
 		System.out.println("a"+invisDoctor);
 		for(Node a: invisDoctor) {a.setVisible(false);}
 		//deleteButton.setVisible(false);
-		
+
 		manageEmployeeNameText.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
@@ -493,7 +497,7 @@ public class controller {
 
 		if(manageSelectEmployee.getSelectionModel().getSelectedIndex()==-1) {return;}
 		if (manageSelectEmployee.getValue() == null) {return;}
-		
+
 		System.out.println("oldindex: "+oldindex);
 		isSwitchingEmps = true;
 		System.out.println("test");
@@ -624,7 +628,7 @@ public class controller {
 			IOFunctions.saveEmployees();
 			editedWithoutSave=false;
 
-			
+
 			System.out.println(active);
 			System.out.println("id: "+id);
 			manageActivityField.getSelectionModel().select(active);
@@ -637,7 +641,7 @@ public class controller {
 			e.printStackTrace();
 			System.exit(1);
 		}		
-		
+
 	}
 
 	// TODO: implement

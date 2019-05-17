@@ -80,8 +80,7 @@ public class IOFunctions {
 
 		return i;
 	}
-
-
+	
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
 		
