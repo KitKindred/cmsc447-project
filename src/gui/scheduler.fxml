@@ -32,7 +32,7 @@
                         <Button fx:id="quarterDateButton" layoutX="180.0" layoutY="31.0" mnemonicParsing="false" onAction="#quarterAction" text="Set Quarter Date" />
                         <Button fx:id="quarterDeleteButton" layoutX="14.0" layoutY="75.0" mnemonicParsing="false" onAction="#quarterDelete" style="-fx-background-color: red;" text="Delete Date" />
                         <TextField fx:id="quarterDateTextField" editable="false" layoutX="296.0" layoutY="31.0" />
-                        <Text layoutX="180.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter Start Date" />
+                        <Text layoutX="296.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter Start Date" />
                         
                         <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Previously Used Quarters" />
                         
