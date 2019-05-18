@@ -1,6 +1,0 @@
-2020-10-21T00:00
-4
-{1~sarah whitley~0~0~0~whirley.whit@gmail.com~[]~<>~~false~2020-01-04T00:00}
-{9~named guy~0~2~0~guysname@gov.c~[]~<>~2020-01-02T00:00~false~null}
-{10~man guya~0~0~0~man@guyma.n~[]~<>~~false~null}
-{11~bruh oha~1~1~0~bro@dude.com~[]~<>~~false~null}
