@@ -2,18 +2,34 @@ package classinfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ProgramDriver.
+ */
 public class ProgramDriver {
+	
+	/** The employees. */
 	private static HashMap<Integer, Profession> employees;
+	
+	/** The emp ID. */
 	//private static HashMap<String, Integer> empID;
 	private static ArrayList<Integer> empID;
 	
+	/** The id. */
 	private static int id;
 
+	/**
+	 * Instantiates a new program driver.
+	 */
 	public ProgramDriver() {
 		employees = new HashMap<Integer, Profession>();
 		empID = new ArrayList<Integer>();//HashMap<String, Integer>();
 		id = 0;
 	}
+	
+	/**
+	 * Reset.
+	 */
 	public static void reset() {
 		
 		empID.clear();
@@ -23,7 +39,7 @@ public class ProgramDriver {
 	}
 
 	/**
-	 * Add a doctor to the system
+	 * Add a doctor to the system.
 	 *
 	 * @param t The type of employee
 	 * @param n The name of the employee
@@ -48,6 +64,13 @@ public class ProgramDriver {
 		System.out.println("adding as "+ id);
 	}
 
+	/**
+	 * Adds the doctor.
+	 *
+	 * @param type the type
+	 * @param name the name
+	 * @param i_d the i d
+	 */
 	public static void addDoctor(int type, String name, int i_d) {
 		switch (type) {
 		case 0:
@@ -69,6 +92,14 @@ public class ProgramDriver {
 
 	}
 
+	/**
+	 * Adds the doctor.
+	 *
+	 * @param type the type
+	 * @param name the name
+	 * @param i_d the i d
+	 * @param em the em
+	 */
 	public static void addDoctor(int type, String name, int i_d, String em) {
 		switch (type) {
 		case 0:
@@ -97,7 +128,7 @@ public class ProgramDriver {
 	}
 	
 	/**
-	 * Gets the IDs of all of the currently active employees
+	 * Gets the IDs of all of the currently active employees.
 	 *
 	 * @return A list of all active IDs
 	 */
@@ -111,11 +142,25 @@ public class ProgramDriver {
 		return ids;
 	}
 
+	/**
+	 * Gets the employees.
+	 *
+	 * @return the employees
+	 */
 	public static HashMap<Integer, Profession> getEmployees() {
 		return employees;
 	}
+	
+	/**
+	 * Gets the name ID.
+	 *
+	 * @return the name ID
+	 */
 	public static ArrayList<Integer> getNameID(){return empID;}
 
+	/**
+	 * Prints the employees.
+	 */
 	public void printEmployees() {
 		
 		for (Integer name: employees.keySet()){
@@ -125,5 +170,11 @@ public class ProgramDriver {
 			System.out.println(key + ": " + value);
 		}
 	}
+	
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
 	public static int getID() {return id;}
 }

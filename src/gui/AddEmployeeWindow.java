@@ -26,19 +26,39 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import classinfo.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AddEmployeeWindow.
+ */
 public class AddEmployeeWindow {
+	
+	/** The manage date range 1. */
 	@FXML
 	Button addButton,cancelButton,manageDateRange1;
+	
+	/** The profession box. */
 	@FXML
 	ComboBox activeBox, professionBox;
+	
+	/** The manage date start. */
 	@FXML
 	TextField nameBox,emailBox,manageDateStart;
 	
+	/** The invis date range. */
 	ArrayList<Node> invisDateRange;
 	
+	/** The emp. */
 	private static Profession emp=null;
+	
+	/** The return employee. */
 	private static boolean returnEmployee=false;//=true;
+	
+	/** The inactive. */
 	private LocalDateTime inactive;
+	
+	/**
+	 * Initialize.
+	 */
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		invisDateRange = new ArrayList<Node>();
@@ -86,6 +106,11 @@ public class AddEmployeeWindow {
 		
 	}
 
+	/**
+	 * Action launch date range window.
+	 *
+	 * @param event the event
+	 */
 	public void actionLaunchDateRangeWindow(ActionEvent event) {
 		LocalDateTime ldtInactive;
 		try {
@@ -113,16 +138,44 @@ public class AddEmployeeWindow {
 
 	}	
 	
+/**
+ * Gets the close.
+ *
+ * @return the close
+ */
 public static boolean getClose() {return returnEmployee;}
+	
+	/**
+	 * Action add employee.
+	 *
+	 * @param event the event
+	 */
 	public void actionAddEmployee(ActionEvent event) {
 		System.out.println("save employee?");
 		returnEmployee=true;
 		quit(event);
 	}
+	
+	/**
+	 * Action enter name.
+	 *
+	 * @param event the event
+	 */
 	public void actionEnterName(ActionEvent event) {}
+	
+	/**
+	 * Action select profession.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectProfession(ActionEvent event) {}
 	
 	
+	/**
+	 * Action select activity.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectActivity(ActionEvent event) {
 		String op = activeBox.getValue().toString();
 		manageDateRange1.setText("Set "+op+" Date");
@@ -142,11 +195,28 @@ public static boolean getClose() {return returnEmployee;}
 		}		
 	}
 	
+	/**
+	 * Action quit.
+	 *
+	 * @param event the event
+	 */
 	public void actionQuit(ActionEvent event) {	quit(event);}
+	
+	/**
+	 * Action cancel.
+	 *
+	 * @param event the event
+	 */
 	public void actionCancel(ActionEvent event) {
 		returnEmployee=false;
 		quit(event);
 	}
+	
+	/**
+	 * Quit.
+	 *
+	 * @param event the event
+	 */
 	public void quit(ActionEvent event) {
 		Stage st=(Stage)cancelButton.getScene().getWindow();
 		if(returnEmployee==false) {

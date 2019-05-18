@@ -8,12 +8,26 @@ import java.util.HashMap;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Schedule.
+ */
 public class Schedule {
+    
+    /** The start. */
     private LocalDate start;
+    
+    /** The end. */
     private LocalDate end;
+    
+    /** The other shifts. */
     //private ArrayList<Shift> shifts;
     private HashMap<Integer, Shift> otherShifts; // Not sure if list or hash is better yet
+    
+    /** The weekend shifts. */
     private int weekdayShifts, weekendShifts; // Number of shifts on weekdays and weekends
+    
+    /** The is valid schedule. */
     private boolean isValidSchedule = false;
     
 
@@ -34,7 +48,7 @@ public class Schedule {
     }
 
     /**
-     * Constructor for using different numbers of shifts
+     * Constructor for using different numbers of shifts.
      *
      * @param s The first day to be scheduled
      * @param e The last day to be scheduled
@@ -51,7 +65,7 @@ public class Schedule {
     }
 
     /**
-     * Start date accessor
+     * Start date accessor.
      *
      * @return The first day to be scheduled
      */
@@ -60,7 +74,7 @@ public class Schedule {
     }
 
     /**
-     * End date accessor
+     * End date accessor.
      *
      * @return The last day to be scheduled
      */
@@ -102,6 +116,13 @@ public class Schedule {
     	}
     }
 
+    /**
+     * Adds the to shifts.
+     *
+     * @param varMap the var map
+     * @param varMapWeekend the var map weekend
+     * @param docs the docs
+     */
     public void addToShifts(HashMap<Integer, IntVar> varMap, HashMap<Integer, IntVar> varMapWeekend, HashMap<Integer, Profession> docs) {
         for (Integer shift: varMap.keySet()) {
             Shift s = otherShifts.get(shift);
@@ -285,6 +306,11 @@ public class Schedule {
         }
     }
     
+    /**
+     * Export.
+     *
+     * @return the string
+     */
     public String export() {
         
     	

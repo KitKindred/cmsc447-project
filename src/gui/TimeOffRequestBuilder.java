@@ -18,25 +18,46 @@ import classinfo.*;
 
 import java.time.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TimeOffRequestBuilder.
+ */
 public class TimeOffRequestBuilder {
 
+	/** The priority slider. */
 	@FXML
 	Slider prioritySlider;
 
+	/** The cancel button. */
 	@FXML
 	Button saveButton, cancelButton;
+	
+	/** The To year. */
 	@FXML
 	ComboBox FromMonth,FromDay,ToMonth,ToDay,FromYear,ToYear;
 
+	/** The req. */
 	public static TimeOffRequest req=null;
 
 
+	/** The disable. */
 	private ArrayList<Node> disable;
 
+	/** The from month max. */
 	private int fromMonthMax=0;
+	
+	/** The to month max. */
 	private int toMonthMax=0;
+	
+	/** The fmm. */
 	private int fmm;
+	
+	/** The tmm. */
 	private int tmm;
+	
+	/**
+	 * Initialize.
+	 */
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
@@ -76,6 +97,13 @@ public class TimeOffRequestBuilder {
 		System.out.println("test3");
 
 	}
+	
+	/**
+	 * Update day.
+	 *
+	 * @param box the box
+	 * @param days the days
+	 */
 	private void updateDay(ComboBox box,int days) {
 		box.getItems().clear();
 		for(int i=1;i<=days;i++) {
@@ -83,6 +111,11 @@ public class TimeOffRequestBuilder {
 		}
 	}
 
+	/**
+	 * Action select from month.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromMonth(ActionEvent event) {
 		FromDay.getItems().clear();
 		switch(FromMonth.getValue().toString()) {
@@ -154,6 +187,12 @@ public class TimeOffRequestBuilder {
 		else
 			saveButton.setDisable(true);
 	}
+	
+	/**
+	 * Action select from day.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromDay(ActionEvent event) {
 
 		ComboBox b = (ComboBox) event.getSource();
@@ -168,6 +207,12 @@ public class TimeOffRequestBuilder {
 		else
 			saveButton.setDisable(true);
 	}
+	
+	/**
+	 * Action select to day.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToDay(ActionEvent event) {
 
 		ComboBox b = (ComboBox) event.getSource();
@@ -184,6 +229,11 @@ public class TimeOffRequestBuilder {
 	}
 
 
+	/**
+	 * Date check.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean dateCheck() {
 		if(FromYear.getSelectionModel().getSelectedIndex()==-1
 			||FromMonth.getSelectionModel().getSelectedIndex()==-1
@@ -207,6 +257,11 @@ public class TimeOffRequestBuilder {
 		return duration.toDays()>0;
 	}
 
+	/**
+	 * Action select from year.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromYear(ActionEvent event) {
 		System.out.println("\t"+FromDay.getItems().size());
 		FromMonth.setDisable(false);
@@ -235,6 +290,12 @@ public class TimeOffRequestBuilder {
 		else
 			saveButton.setDisable(true);
 	}
+	
+	/**
+	 * Action select to year.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToYear(ActionEvent event) {
 		System.out.println("\t"+ToDay.getItems().size());
 		ToMonth.setDisable(false);
@@ -263,6 +324,12 @@ public class TimeOffRequestBuilder {
 		else
 			saveButton.setDisable(true);
 	}
+	
+	/**
+	 * Action select to month.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToMonth(ActionEvent event) {
 		ToDay.getItems().clear();
 
@@ -332,6 +399,11 @@ public class TimeOffRequestBuilder {
 			saveButton.setDisable(true);
 	}
 
+	/**
+	 * Action save.
+	 *
+	 * @param event the event
+	 */
 	public void actionSave(ActionEvent event) {
 		int fy=Integer.parseInt(FromYear.getValue().toString());
 		int fd=Integer.parseInt(FromDay.getValue().toString());
@@ -355,6 +427,12 @@ public class TimeOffRequestBuilder {
 		stage.close();
 
 	}
+	
+	/**
+	 * Action cancel.
+	 *
+	 * @param event the event
+	 */
 	public void actionCancel(ActionEvent event) {
 		req=null;
 
@@ -366,9 +444,21 @@ public class TimeOffRequestBuilder {
 
 
 	}
+	
+	/**
+	 * Quit.
+	 *
+	 * @param event the event
+	 */
 	public void quit(ActionEvent event) {actionCancel(event);
 
 	}
+	
+	/**
+	 * Close.
+	 *
+	 * @param event the event
+	 */
 	public void close(ActionEvent event) {
 		System.out.println("close pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();

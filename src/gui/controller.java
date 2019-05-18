@@ -45,34 +45,68 @@ import javafx.stage.Stage;
 import sysfiles.IOFunctions;
 import classinfo.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class controller.
+ */
 public class controller {
 
+	/** The current selected date. */
 	private static LocalDateTime currentSelectedDate=null;
+	
+	/** The quarter delete button. */
 	@FXML
 	Button quarterDateButton,quarterDeleteButton;
 
+	/** The quarter date select. */
 	@FXML
 	ComboBox quarterDateSelect;
 
 	//@FXML
 	//TextField quarterDateTextField;
 
+	/** The file new employee. */
 	@FXML
 	MenuItem fileNewEmployee;
 
+	/** The ldts. */
 	private static ArrayList<LocalDateTime> ldts;
+	
+	/** The newfile. */
 	private boolean newfile=false;
+	
+	/**
+	 * Gets the current date.
+	 *
+	 * @return the current date
+	 */
 	public static LocalDateTime getCurrentDate() {return currentSelectedDate;}
+	
+	/**
+	 * Gets the formatted current date.
+	 *
+	 * @return the formatted current date
+	 */
 	public static String getFormattedCurrentDate() {
-		DateTimeFormatter format=DateTimeFormatter.ofPattern("MM-dd-yyyy");
+		DateTimeFormatter format=DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		return currentSelectedDate.format(format);
 	}
 
+	/**
+	 * Gets the file current date.
+	 *
+	 * @return the file current date
+	 */
 	public static String getFileCurrentDate() {
 		DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 		return currentSelectedDate.format(format);
 	}
 
+	/**
+	 * Quarter delete.
+	 *
+	 * @param event the event
+	 */
 	public void quarterDelete(ActionEvent event){
 		int index=quarterDateSelect.getSelectionModel().getSelectedIndex();
 
@@ -102,6 +136,9 @@ public class controller {
 		ProgramDriver.reset();
 	}
 
+	/**
+	 * Load dates.
+	 */
 	private void loadDates() {
 		
 		String fp=IOFunctions.path;//"./profiles";
@@ -141,7 +178,14 @@ public class controller {
 	}
 	
 
+	/** The date conversion. */
 	private HashMap<String, String> dateConversion=new HashMap<String, String>();
+	
+	/**
+	 * Quarter action.
+	 *
+	 * @param event the event
+	 */
 	public void quarterAction(ActionEvent event) {
 		if(editedWithoutSave) {
 			if(changeBox()) {
@@ -205,9 +249,21 @@ public class controller {
 			//quarterSelect(null);
 		}catch(Exception e) {System.out.println("error?"+e.toString());}
 	}
+	
+	/**
+	 * Sets the current date.
+	 *
+	 * @param l the new current date
+	 */
 	public static void setCurrentDate(LocalDateTime l) {
 		currentSelectedDate=l;
 	}
+	
+	/**
+	 * Quarter select.
+	 *
+	 * @param event the event
+	 */
 	public void quarterSelect(ActionEvent event) {
 		if(editedWithoutSave) {
 			if(changeBox()) {
@@ -240,37 +296,57 @@ public class controller {
 
 	}
 
-	/***~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~***/
+	/** *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~**. */
 
 	private static boolean editedWithoutSave = false; 
+	
+	/** The is switching emps. */
 	private static boolean isSwitchingEmps = false;
 
+	/** The gen sched expo button. */
 	//GENERATE SCHEDULE TAB SECTION VARIABLES 
 	@FXML
 	Button genSchedExpoButton;
 
+	/** The delete button. */
 	@FXML 
 	Button manageSaveButton,createEmployeeButton,GetTimeOffButton,manageDateRange1,attendingWeekButton, deleteButton;
 
 
+	/** The attending week text. */
 	@FXML
 	TextField manageEmployeeNameText,manageEmployeeEmail,manageDateStart,attendingWeekText;
+	
+	/** The manage select employee. */
 	@FXML
 	ComboBox manageActivityField, manageSelectEmployee;
 
+	/** The email text. */
 	@FXML
 	Text manageEmployeeIDField,manageEmployeeProfession,activityText,attendText,maternityText,emailText;
 
+	/** The me tab. */
 	@FXML
 	Tab meTab;
 
+	/** The current ID. */
 	static int currentID=-1;
+	
+	/** The disable until load. */
 	private ArrayList<Node> invisSelectEmployee, invisDateRange, invisDoctor,disableUntilLoad;
+	
+	/** The disable before date. */
 	private ArrayList disableBeforeDate;
 
+	/** The oldindex. */
 	private int oldindex=-1;
 
 
+	/**
+	 * Gets the last employee.
+	 *
+	 * @return the last employee
+	 */
 	private Profession getLastEmployee() {
 		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];
 	}
@@ -279,15 +355,24 @@ public class controller {
 		return (Profession)ProgramDriver.getEmployees().values().toArray()[ProgramDriver.getEmployees().size()-1];}
 	 */
 
+	/**
+	 * Disable before date.
+	 */
 	private void disableBeforeDate() {
 		meTab.setDisable(true);
 		fileNewEmployee.setDisable(true);}
 
+	/**
+	 * Enable after date.
+	 */
 	private void enableAfterDate() {
 		meTab.setDisable(false);
 		fileNewEmployee.setDisable(false);
 	}
 
+	/**
+	 * Blank spots.
+	 */
 	private void blankSpots() {
 		for(Node a: invisDateRange) {a.setVisible(false);}
 		for(Node a: invisSelectEmployee) {a.setVisible(false);}
@@ -295,6 +380,9 @@ public class controller {
 		for(Node a: invisDoctor) {a.setVisible(false);}
 	}
 
+	/**
+	 * Initialize.
+	 */
 	@FXML
 	public void initialize() {//when starts gui starts up, initializes all the needed variables
 		ldts=new ArrayList<LocalDateTime>();
@@ -429,6 +517,11 @@ public class controller {
 
 	/*GUI ACTION FUNCTIONS*/
 
+	/**
+	 * Action changed.
+	 *
+	 * @param event the event
+	 */
 	public void actionChanged(ActionEvent event) {
 		if (!isSwitchingEmps) {
 			System.out.println("Changed is now true");
@@ -436,6 +529,9 @@ public class controller {
 		}
 	}
 
+	/**
+	 * Clear all.
+	 */
 	private void clearAll() {
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().clear();
@@ -445,6 +541,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Action launch date range window.
+	 *
+	 * @param event the event
+	 */
 	public void actionLaunchDateRangeWindow(ActionEvent event) {
 		LocalDateTime ldtInactive;
 		try {
@@ -471,6 +572,11 @@ public class controller {
 	}
 
 
+	/**
+	 * Action launch attending window.
+	 *
+	 * @param event the event
+	 */
 	public void actionLaunchAttendingWindow(ActionEvent event) {
 		if(ProgramDriver.getEmployees().get(currentID).getType()!=0) {System.out.println("not a doctor");return;}
 		LocalDateTime ldtAtt;
@@ -506,6 +612,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Change box.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean changeBox() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Unsaved Changes to Employee");
@@ -530,6 +641,11 @@ public class controller {
 	}
 
 
+	/**
+	 * Generate.
+	 *
+	 * @param event the event
+	 */
 	//will generate schedule
 	public void generate(ActionEvent event) {
 		System.out.println("ATTEMPTING TO GEN SCHEDULE");
@@ -540,9 +656,8 @@ public class controller {
 			}	
 		}
 
-		LocalDate d1 = LocalDate.of(2018, 7, 1);
-		LocalDate d2 = LocalDate.of(2018, 10, 1);
-
+		LocalDate d1 = currentSelectedDate.toLocalDate();
+		LocalDate d2 = d1.plusMonths(3);
 		Schedule s = new Schedule(d1, d2);
 
 
@@ -570,6 +685,11 @@ public class controller {
 		}
 	}
 
+	/**
+	 * Check ID.
+	 *
+	 * @param event the event
+	 */
 	//the currently selected employee
 	public void checkID(ActionEvent event) {
 
@@ -643,6 +763,12 @@ public class controller {
 		isSwitchingEmps = false;
 	}
 
+	/**
+	 * Gets the act.
+	 *
+	 * @param act the act
+	 * @return the act
+	 */
 	private String getAct(int act) {
 		switch(act) {
 		case 0:
@@ -656,6 +782,13 @@ public class controller {
 
 		}
 	}
+	
+	/**
+	 * Gets the prof.
+	 *
+	 * @param type the type
+	 * @return the prof
+	 */
 	private String getProf(int type) {
 		switch(type) {
 		case 0:
@@ -670,6 +803,11 @@ public class controller {
 	}
 
 
+	/**
+	 * Save employee.
+	 *
+	 * @param event the event
+	 */
 	public void saveEmployee(ActionEvent event) {
 		if(currentID==-1) {
 			try {
@@ -742,6 +880,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Delete employee.
+	 *
+	 * @param event the event
+	 */
 	// TODO: implement
 	public void deleteEmployee(ActionEvent event) {
 		System.out.println("delete pressed");
@@ -772,6 +915,11 @@ public class controller {
 	}
 
 
+	/**
+	 * Show date range.
+	 *
+	 * @param event the event
+	 */
 	//when certain Active combobox option is selected, either enables or disables view of the daterange that would be used beside it
 	public void showDateRange(ActionEvent event) {
 		String op = manageActivityField.getValue().toString();
@@ -843,6 +991,9 @@ public class controller {
 		System.out.println(oldindex);
 	}
 
+	/**
+	 * Populate.
+	 */
 	//populate the employee selection box with employees read from files 
 	public void populate() {
 		System.out.println("populate: "+ProgramDriver.getEmployees());
@@ -859,12 +1010,22 @@ public class controller {
 		}
 	}
 
+	/**
+	 * Gets the selected ID.
+	 *
+	 * @return the selected ID
+	 */
 	public static int getSelectedID() {
 		System.out.println("Selected ID may be: "+currentID);
 		return currentID;}
 
 
 
+	/**
+	 * Action select time off.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectTimeOff(ActionEvent event) {
 		try {
 			String path="/gui/TimeOffRequests.fxml";
@@ -893,6 +1054,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Action launch employee creation window.
+	 *
+	 * @param event the event
+	 */
 	public void actionLaunchEmployeeCreationWindow(ActionEvent event) {
 
 		try {
@@ -922,6 +1088,11 @@ public class controller {
 		}
 	}
 
+	/**
+	 * Adds the employee.
+	 *
+	 * @param emp the emp
+	 */
 	public void addEmployee(Profession emp) {
 		if (emp == null) {
 			System.out.println("empwindow closed without saving");
@@ -966,6 +1137,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Quit.
+	 *
+	 * @param event the event
+	 */
 	public void quit(ActionEvent event) {
 
 		if(editedWithoutSave) {
@@ -978,6 +1154,11 @@ public class controller {
 
 	}
 
+	/**
+	 * Gets the edits the without save.
+	 *
+	 * @return the edits the without save
+	 */
 	public static boolean getEditWithoutSave() {
 		return editedWithoutSave;
 	}

@@ -11,8 +11,16 @@ import java.io.IOException;
 
 import classinfo.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class guiStarter.
+ */
 public class guiStarter extends Application {
-	  @Override
+	  
+  	/* (non-Javadoc)
+  	 * @see javafx.application.Application#start(javafx.stage.Stage)
+  	 */
+  	@Override
 	    public void start(Stage primaryStage) {
 	        try {
 	        	
@@ -29,7 +37,10 @@ public class guiStarter extends Application {
 	     }
 	 }
 	  
-	 @Override
+	 /* (non-Javadoc)
+ 	 * @see javafx.application.Application#stop()
+ 	 */
+ 	@Override
 	 public void stop() {
 		 if(controller.getEditWithoutSave()){
 			 if(controller.changeBox()) {
@@ -45,7 +56,12 @@ public class guiStarter extends Application {
 		 System.out.println("stopping");
 	 }
 	 
-	 public static void go(String[] args) {
+	 /**
+ 	 * Go.
+ 	 *
+ 	 * @param args the args
+ 	 */
+ 	public static void go(String[] args) {
 		 launch(args);
 	 }
 

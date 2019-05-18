@@ -12,15 +12,27 @@ import javafx.stage.Modality;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IOFunctions.
+ */
 public class IOFunctions {
 
+	/** The is. */
 	private static Scanner is;
+	
+	/** The out. */
 	private static PrintWriter out;
 
+	/** The Constant path. */
 	public static final String path = "./profiles/";
 
+	/** The Constant debug. */
 	private static final boolean debug=false;
 	
+	/**
+	 * Make profile folder.
+	 */
 	private static void makeProfileFolder() {
 		File pa=new File(path);
 		if(!pa.exists()) {
@@ -31,11 +43,24 @@ public class IOFunctions {
 		}
 	}
 	
+	/**
+	 * Save employees.
+	 *
+	 * @return the int
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static int saveEmployees() throws IOException{
 		return saveEmployees(path+controller.getFileCurrentDate()+".txt");
 		
 	}
 
+	/**
+	 * Save employees.
+	 *
+	 * @param fpath the fpath
+	 * @return the int
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static int saveEmployees(String fpath) throws IOException{
 		
 		makeProfileFolder();
@@ -116,11 +141,24 @@ public class IOFunctions {
 
 	
 	
+	/**
+	 * Load employees.
+	 *
+	 * @return the int
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
 		return loadEmployees(path+controller.getFileCurrentDate()+".txt");
 	}
 	
+	/**
+	 * Load employees.
+	 *
+	 * @param filepath the filepath
+	 * @return the int
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static int loadEmployees(String filepath) throws IOException{
 		makeProfileFolder();
 		
@@ -269,6 +307,13 @@ public class IOFunctions {
 		return i;
 	} 
 
+	/**
+	 * Kill file.
+	 *
+	 * @param filePath the file path
+	 * @return the int
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static int killFile(String filePath)throws IOException {
 		System.out.println("\nIO: "+filePath);
 		File f=new File(filePath);
@@ -304,6 +349,12 @@ public class IOFunctions {
 		return -1;
 	}
 
+	/**
+	 * Gets the sh.
+	 *
+	 * @param str the str
+	 * @return the sh
+	 */
 	private static Shift getsh(String str) {
 
 		String[] s=str.split(",");
@@ -315,12 +366,25 @@ public class IOFunctions {
 
 		return sh;
 	}
+	
+	/**
+	 * Gets the tor.
+	 *
+	 * @param str the str
+	 * @return the tor
+	 */
 	private static TimeOffRequest gettor(String str) {
 		String[] s=str.split(";");
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
 	}
 
+	/**
+	 * Export calendar.
+	 *
+	 * @param iCal the i cal
+	 * @return true, if successful
+	 */
 	public static boolean exportCalendar(String iCal) {
 		if (iCal == null) {
 			return false;

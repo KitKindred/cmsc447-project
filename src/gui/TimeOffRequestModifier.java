@@ -20,29 +20,49 @@ import classinfo.*;
 import classinfo.Schedule;
 import java.time.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TimeOffRequestModifier.
+ */
 public class TimeOffRequestModifier {
 
+	/** The priority slider. */
 	@FXML
 	Slider prioritySlider;
 
+	/** The cancel button. */
 	@FXML
 	Button saveButton, cancelButton;
+	
+	/** The To year. */
 	@FXML
 	ComboBox FromMonth,FromDay,ToMonth,ToDay,FromYear,ToYear;
 
+	/** The req. */
 	public static TimeOffRequest req=null;
 
 
+	/** The disable. */
 	private ArrayList<Node> disable;
 
+	/** The from month max. */
 	private int fromMonthMax=0;
+	
+	/** The to month max. */
 	private int toMonthMax=0;
+	
+	/** The fmm. */
 	private int fmm;
+	
+	/** The tmm. */
 	private int tmm;
 	
 	
 	
 	
+	/**
+	 * Initialize.
+	 */
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
@@ -90,6 +110,13 @@ public class TimeOffRequestModifier {
 		
 
 	}
+	
+	/**
+	 * Update day.
+	 *
+	 * @param box the box
+	 * @param days the days
+	 */
 	private void updateDay(ComboBox box,int days) {
 		box.getItems().clear();
 		for(int i=1;i<=days;i++) {
@@ -97,6 +124,11 @@ public class TimeOffRequestModifier {
 		}
 	}
 
+	/**
+	 * Action select from month.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromMonth(ActionEvent event) {
 		FromDay.getItems().clear();
 		switch(FromMonth.getValue().toString()) {
@@ -165,6 +197,12 @@ public class TimeOffRequestModifier {
 		FromDay.setDisable(false);
 
 	}
+	
+	/**
+	 * Action select from day.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromDay(ActionEvent event) {
 
 		ComboBox b = (ComboBox) event.getSource();
@@ -175,6 +213,12 @@ public class TimeOffRequestModifier {
 		}
 		else {System.out.println("date ok");}
 	}
+	
+	/**
+	 * Action select to day.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToDay(ActionEvent event) {
 
 		ComboBox b = (ComboBox) event.getSource();
@@ -187,6 +231,12 @@ public class TimeOffRequestModifier {
 		
 		saveButton.setDisable(false);
 	}
+	
+	/**
+	 * Action select from year.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromYear(ActionEvent event) {
 		System.out.println("\t"+FromDay.getItems().size());
 		FromMonth.setDisable(false);
@@ -212,6 +262,12 @@ public class TimeOffRequestModifier {
 		}
 		
 	}
+	
+	/**
+	 * Action select to year.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToYear(ActionEvent event) {
 		System.out.println("\t"+ToDay.getItems().size());
 		ToMonth.setDisable(false);
@@ -236,6 +292,12 @@ public class TimeOffRequestModifier {
 			}
 		}
 	}
+	
+	/**
+	 * Action select to month.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectToMonth(ActionEvent event) {
 		ToDay.getItems().clear();
 
@@ -302,6 +364,13 @@ public class TimeOffRequestModifier {
 
 	}
 
+	/**
+	 * Convert date to int.
+	 *
+	 * @param ldt1 the ldt 1
+	 * @param ldt2 the ldt 2
+	 * @return the int
+	 */
 	private int convertDateToInt(LocalDateTime ldt1 , LocalDateTime ldt2){
 		
 		System.out.println("year: "+ldt1.minusYears(ldt2.getYear()));
@@ -311,6 +380,11 @@ public class TimeOffRequestModifier {
 		return -1;
 	}
 	
+	/**
+	 * Action save.
+	 *
+	 * @param event the event
+	 */
 	public void actionSave(ActionEvent event) {
 		int fy=Integer.parseInt(FromYear.getValue().toString());
 		int fd=Integer.parseInt(FromDay.getValue().toString());
@@ -333,6 +407,12 @@ public class TimeOffRequestModifier {
 	    stage.close();
 
 	}
+	
+	/**
+	 * Action cancel.
+	 *
+	 * @param event the event
+	 */
 	public void actionCancel(ActionEvent event) {
 		req=null;
 
@@ -341,9 +421,21 @@ public class TimeOffRequestModifier {
 	    stage.close();
 		
 	}
+	
+	/**
+	 * Quit.
+	 *
+	 * @param event the event
+	 */
 	public void quit(ActionEvent event) {actionCancel(event);
 		
 	}
+	
+	/**
+	 * Close.
+	 *
+	 * @param event the event
+	 */
 	public void close(ActionEvent event) {
 		System.out.println("close pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();

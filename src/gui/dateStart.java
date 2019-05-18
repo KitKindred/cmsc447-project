@@ -18,26 +18,48 @@ import classinfo.*;
 
 import java.time.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dateStart.
+ */
 public class dateStart {
 
+	/** The cancel button. */
 	@FXML
 	Button saveButton, cancelButton;
+	
+	/** The From year. */
 	@FXML
 	ComboBox FromMonth,FromDay,FromYear;
 
+	/** The save date. */
 	public static boolean saveDate=false;
+	
+	/** The req. */
 	public static LocalDateTime req=null;
 
 
+	/** The disable. */
 	private ArrayList<Node> disable;
 
+	/** The from month max. */
 	private int fromMonthMax=0;
+	
+	/** The fmm. */
 	private int fmm;
 	
+	/** The Constant y. */
 	public final static int y=Year.now().getValue();
+	
+	/** The plus. */
 	public static int plus=y+2;//=y+1;
+	
+	/** The minus. */
 	public static int minus=y-1;
 	
+	/**
+	 * Initialize.
+	 */
 	public void initialize() {
 		disable=new ArrayList<Node>();
 		System.out.println("initializing");
@@ -70,6 +92,13 @@ public class dateStart {
 		}
 
 	}
+	
+	/**
+	 * Update day.
+	 *
+	 * @param box the box
+	 * @param days the days
+	 */
 	private void updateDay(ComboBox box,int days) {
 		box.getItems().clear();
 		for(int i=1;i<=days;i++) {
@@ -77,6 +106,11 @@ public class dateStart {
 		}
 	}
 
+	/**
+	 * Action select from month.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromMonth(ActionEvent event) {
 		FromDay.getItems().clear();
 		switch(FromMonth.getValue().toString()) {
@@ -145,6 +179,12 @@ public class dateStart {
 		FromDay.setDisable(false);
 
 	}
+	
+	/**
+	 * Action select from day.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromDay(ActionEvent event) {
 
 		ComboBox b = (ComboBox) event.getSource();
@@ -157,6 +197,11 @@ public class dateStart {
 		saveButton.setDisable(false);
 	}
 
+	/**
+	 * Action select from year.
+	 *
+	 * @param event the event
+	 */
 	public void actionSelectFromYear(ActionEvent event) {
 		System.out.println("\t"+FromDay.getItems().size());
 		FromMonth.setDisable(false);
@@ -183,6 +228,11 @@ public class dateStart {
 		
 	}
 
+	/**
+	 * Action save.
+	 *
+	 * @param event the event
+	 */
 	public void actionSave(ActionEvent event) {
 		int fy=Integer.parseInt(FromYear.getValue().toString());
 		int fd=Integer.parseInt(FromDay.getValue().toString());
@@ -197,6 +247,12 @@ public class dateStart {
 	    stage.close();
 
 	}
+	
+	/**
+	 * Action cancel.
+	 *
+	 * @param event the event
+	 */
 	public void actionCancel(ActionEvent event) {
 		req=null;
 		saveDate=false;
@@ -208,9 +264,21 @@ public class dateStart {
 		
 		
 	}
+	
+	/**
+	 * Quit.
+	 *
+	 * @param event the event
+	 */
 	public void quit(ActionEvent event) {
 		actionCancel(event);
 	}
+	
+	/**
+	 * Close.
+	 *
+	 * @param event the event
+	 */
 	public void close(ActionEvent event) {
 		System.out.println("close pressed");
 		Stage stage = (Stage) cancelButton.getScene().getWindow();

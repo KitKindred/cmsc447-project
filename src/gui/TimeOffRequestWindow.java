@@ -23,23 +23,42 @@ import classinfo.*;
 import classinfo.Schedule;
 import java.time.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TimeOffRequestWindow.
+ */
 public class TimeOffRequestWindow {
 
+	/** The close button. */
 	@FXML
 	Button addTORButton, removeSelectButton,editSelectButton,closeButton;
+	
+	/** The To year. */
 	@FXML
 	ComboBox FromMonth,FromDay,ToMonth,ToDay,FromYear,ToYear;
 
+	/** The Request box. */
 	@FXML
 	ListView RequestBox;
 
+	/** The tor. */
 	static ArrayList<TimeOffRequest> tor;
 	
+	/** The from month max. */
 	private int fromMonthMax=0;
+	
+	/** The to month max. */
 	private int toMonthMax=0;
 
+	/** The changed. */
 	static boolean changed=false;
+	
+	/** The selected. */
 	private static int selected=-1;
+	
+	/**
+	 * Initialize.
+	 */
 	public void initialize() {
 		tor=new ArrayList<TimeOffRequest>();
 		Profession p=ProgramDriver.getEmployees().get(controller.getSelectedID());
@@ -52,6 +71,11 @@ public class TimeOffRequestWindow {
 		selected=-1;
 	}
 
+	/**
+	 * Action close time off window.
+	 *
+	 * @param event the event
+	 */
 	public void actionCloseTimeOffWindow(ActionEvent event) {
 		
 		System.out.println("close pressed");
@@ -59,6 +83,11 @@ public class TimeOffRequestWindow {
 	    stage.close();
 	}
 	
+	/**
+	 * Action add request.
+	 *
+	 * @param event the event
+	 */
 	public void actionAddRequest(ActionEvent event) {
 		System.out.println("add req");
 		try {
@@ -85,6 +114,12 @@ public class TimeOffRequestWindow {
 			System.out.println("ERROR SHOWING "+e.toString());
 		}
 	}
+	
+	/**
+	 * Action remove selected request.
+	 *
+	 * @param event the event
+	 */
 	public void actionRemoveSelectedRequest(ActionEvent event) {
 		int index=0;
 		
@@ -103,8 +138,19 @@ public class TimeOffRequestWindow {
 		changed=true;
 		
 	}
+	
+	/**
+	 * Gets the selection.
+	 *
+	 * @return the selection
+	 */
 	public static int getSelection() {return selected;}
 	
+	/**
+	 * Action edit selected request.
+	 *
+	 * @param event the event
+	 */
 	public void actionEditSelectedRequest(ActionEvent event) {	
 		selected=RequestBox.getSelectionModel().getSelectedIndex();
 		if(selected==-1) {

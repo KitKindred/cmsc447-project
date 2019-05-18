@@ -8,8 +8,17 @@ import org.chocosolver.solver.*;
 import sysfiles.IOFunctions;
 import gui.guiStarter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Main.
+ */
 public class Main {
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         
         // the main driver of most of the non-gui sections of the employees
