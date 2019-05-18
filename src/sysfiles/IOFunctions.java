@@ -37,6 +37,12 @@ public class IOFunctions {
 		storeLine+=(currentDate+"\r\n");
 		storeLine+=(e.size()+"\r\n");
 
+		if(e.size()<=0) {
+			out.close();
+			return 0;
+		}
+		
+		
 		System.out.println("e.size:"+e.size());
 		System.out.println(""+e.values());
 		for(Profession p: e.values()) {
@@ -135,12 +141,14 @@ public class IOFunctions {
 
 			is= new Scanner(f);
 			is.nextLine();
-
+			is.nextLine();
 			System.out.println("fixed empty file");
 		}
 
 		String ar[];
 		while(is.hasNextLine()) {
+			line=is.nextLine();
+
 			int id = -1,type = -1, worked;
 			int active = -1;
 			boolean attend;
@@ -148,7 +156,7 @@ public class IOFunctions {
 			String email="";
 			String inactiveDate="";
 			String attDate="";
-			line=is.nextLine();
+			
 			line=line.substring(1, line.length()-1);/*{id~name~type~active~worked~[SHIFTS]~<TORS>~ATTEND}*/
 			System.out.println(line);
 
