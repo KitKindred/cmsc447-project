@@ -20,7 +20,17 @@ public class IOFunctions {
 	public static final String path = "./profiles/";
 
 	private static final boolean debug=false;
+	
+	private static void makeProfileFolder() {
+		File pa=new File(path);
+		if(!pa.exists()) {
+			System.out.println("make dir save");
+			pa.mkdirs();
+			System.out.println(pa.isDirectory());
 
+		}
+	}
+	
 	public static int saveEmployees() throws IOException{
 		return saveEmployees(path+controller.getFileCurrentDate()+".txt");
 		
@@ -28,15 +38,7 @@ public class IOFunctions {
 
 	public static int saveEmployees(String fpath) throws IOException{
 		
-		File pa=new File(path);
-		if(!pa.exists()) {
-			System.out.println("make dir save");
-			//out=new PrintWriter(pa);
-			pa.mkdirs();
-			System.out.println(pa.isDirectory());
-			//out.close();
-		}
-		
+		makeProfileFolder();
 		
 		System.out.println("ENTERING SAVEEMPLOYEES");
 		System.out.println("gCD: "+controller.getCurrentDate().toString());
@@ -120,13 +122,7 @@ public class IOFunctions {
 	}
 	
 	public static int loadEmployees(String filepath) throws IOException{
-		File pa=new File(path);
-		if(!pa.exists()) {
-			System.out.println("make dir save");
-			out=new PrintWriter(pa);
-			pa.mkdirs();
-			out.close();
-		}
+		makeProfileFolder();
 		
 		File f=new File(filepath);
 		//File f=new File(path+"employees.txt");
@@ -137,7 +133,7 @@ public class IOFunctions {
 			out.write(controller.getCurrentDate().toString()+"\r\n");
 			out.write("0\r\n");
 			out.close();
-			System.out.println("Created employees.txt");
+			System.out.println("Created new calendar");
 		}
 		ProgramDriver.reset();
 /*		//ProgramDriver.getID();
