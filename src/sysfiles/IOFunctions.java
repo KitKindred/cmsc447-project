@@ -17,16 +17,26 @@ public class IOFunctions {
 	private static Scanner is;
 	private static PrintWriter out;
 
-	private static final String path = "src/sysfiles/profiles/";
+	public static final String path = "src/sysfiles/profiles/";
 
 	private static final boolean debug=false;
 
-
 	public static int saveEmployees() throws IOException{
+		return saveEmployees(path+controller.getFileCurrentDate()+".txt");
+		
+	}
+
+	public static int saveEmployees(String fpath) throws IOException{
+		
+		
+		
+		
 		System.out.println("ENTERING SAVEEMPLOYEES");
 		System.out.println("gCD: "+controller.getCurrentDate().toString());
 		HashMap<Integer, Profession> e=ProgramDriver.getEmployees();
-		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		
+		File f=new File(fpath);
+
 		//File f=new File(path+"employees.txt");
 		out = new PrintWriter(f);
 
@@ -37,6 +47,12 @@ public class IOFunctions {
 		storeLine+=(currentDate+"\r\n");
 		storeLine+=(e.size()+"\r\n");
 
+		if(e.size()<=0) {
+			out.close();
+			return 0;
+		}
+		
+		
 		System.out.println("e.size:"+e.size());
 		System.out.println(""+e.values());
 		for(Profession p: e.values()) {
@@ -70,6 +86,10 @@ public class IOFunctions {
 						storeLine+=("~"+((Doctor) p).getAttending());
 						storeLine+=("~"+((Doctor)p).getAttendingDate());
 					}
+					else {
+						storeLine+="~false~null";
+
+					}
 
 					storeLine+=("}\r\n");
 
@@ -84,27 +104,32 @@ public class IOFunctions {
 
 		return i;
 	}
-	
+
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
+		return loadEmployees(path+controller.getFileCurrentDate()+".txt");
+	}
+	
+	public static int loadEmployees(String filepath) throws IOException{
 		
-		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		File f=new File(filepath);
 		//File f=new File(path+"employees.txt");
 		if(!f.exists()) {
 			out=new PrintWriter(f);
-			
+
 			System.out.println("gCD: "+controller.getCurrentDate().toString());
 			out.write(controller.getCurrentDate().toString()+"\r\n");
 			out.write("0\r\n");
 			out.close();
 			System.out.println("Created employees.txt");
 		}
-		//ProgramDriver.getID();
+		ProgramDriver.reset();
+/*		//ProgramDriver.getID();
 		ProgramDriver.getEmployees().clear();
 		ProgramDriver.getActiveID().clear();
-		ProgramDriver.getNameID().clear();
-		
-		
+		ProgramDriver.getNameID().clear();*/
+
+
 		int i=0;
 		int count=0;
 		String currentDate="";
@@ -112,12 +137,12 @@ public class IOFunctions {
 
 		String line="";
 		if (is.hasNextLine()) {
-			
+
 			currentDate=is.nextLine().trim();
 			line=is.nextLine();
 			System.out.println(line+" "+currentDate);
 			count=Integer.parseInt(line);
-			
+
 			DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 			controller.setCurrentDate(LocalDateTime.parse(currentDate, format));
 		}
@@ -125,18 +150,20 @@ public class IOFunctions {
 			out=new PrintWriter(f);
 			out.write(controller.getCurrentDate().toString()+"\r\n");
 			out.write("0\r\n");
-			
+
 			//out.write("\r\n");
 			out.close();
 
 			is= new Scanner(f);
 			is.nextLine();
-
+			is.nextLine();
 			System.out.println("fixed empty file");
 		}
 
 		String ar[];
 		while(is.hasNextLine()) {
+			line=is.nextLine();
+
 			int id = -1,type = -1, worked;
 			int active = -1;
 			boolean attend;
@@ -144,7 +171,7 @@ public class IOFunctions {
 			String email="";
 			String inactiveDate="";
 			String attDate="";
-			line=is.nextLine();
+			
 			line=line.substring(1, line.length()-1);/*{id~name~type~active~worked~[SHIFTS]~<TORS>~ATTEND}*/
 			System.out.println(line);
 
@@ -167,7 +194,12 @@ public class IOFunctions {
 			}
 			ProgramDriver.addDoctor(type, name, id,email);
 
+			System.out.println(id);
+			System.out.println(ProgramDriver.getEmployees());
+
 			Profession p=ProgramDriver.getEmployees().get(id);
+			System.out.println(p);
+
 			p.setActive(active);
 			System.out.println("pemail: "+p.getEmail());
 			System.out.println(""+ar[6]);
@@ -200,26 +232,28 @@ public class IOFunctions {
 				System.out.println("p. "+p.getInactiveDate());
 			}
 
-			if(ar.length>9) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
+			if(p.getType()==0) {
+				if(ar.length>9) {((Doctor) p).setAttending(Boolean.parseBoolean(ar[8]));}
 
-			attDate=ar[10];
-			if(ar.length>10) {
-				if(attDate.equals("null")) {
-					((Doctor)p).setAttendingDate(null);
-					break;
-				}
-				else{
-					ldtInactive=LocalDateTime.parse(attDate, format);
-					((Doctor)p).setAttendingDate(ldtInactive);
-					System.out.println(((Doctor)p).getAttendingDate());
+				attDate=ar[10];
+				if(ar.length>10) {
+					if(attDate.equals("null")) {
+						((Doctor)p).setAttendingDate(null);
+						//break;
+					}
+					else{
+						ldtInactive=LocalDateTime.parse(attDate, format);
+						((Doctor)p).setAttendingDate(ldtInactive);
+						System.out.println(((Doctor)p).getAttendingDate());
+					}
 				}
 			}
 		}
 		if(is!=null)
 			is.close();
-		
+
 		System.out.println("IOLoad: "+ProgramDriver.getEmployees());
-		
+
 		return i;
 	} 
 
@@ -251,13 +285,13 @@ public class IOFunctions {
 				f.delete();
 				return 0;
 			}
-			
-			
+
+
 		}
-		
+
 		return -1;
 	}
-	
+
 	private static Shift getsh(String str) {
 
 		String[] s=str.split(",");
@@ -274,31 +308,31 @@ public class IOFunctions {
 		TimeOffRequest tor= new TimeOffRequest(getsh(s[0]), Integer.parseInt(s[1]));		
 		return tor;
 	}
-	
+
 	public static boolean exportCalendar(String iCal) {
 		if (iCal == null) {
 			return false;
 		}
-		
+
 		StringBuilder builder = new StringBuilder(); 
 		File file = new File("cal.ics");
-	    builder.append("cal");
-	    builder.append(".ics");
-	
-	    try {
-	        if (!file.exists()) {
-	        	file.createNewFile();
-	        }
-	
-	    	FileWriter fw = new FileWriter(file.getAbsoluteFile());
-	    	BufferedWriter bw = new BufferedWriter(fw);
-	    	bw.write(iCal);
-	    	bw.close();
-	    	
-	    	return true;
-	    } catch (IOException e) {
-	    	System.out.println("Error saving calendar:" + e.getMessage());
-	    	return false;
-	    }
+		builder.append("cal");
+		builder.append(".ics");
+
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(iCal);
+			bw.close();
+
+			return true;
+		} catch (IOException e) {
+			System.out.println("Error saving calendar:" + e.getMessage());
+			return false;
+		}
 	}
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="145.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.calendarDateStart">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="150.0" prefWidth="351.0" VBox.vgrow="ALWAYS">
+      <children>
+            <ComboBox fx:id="FromYear" layoutX="41.0" layoutY="22.0" onAction="#actionSelectFromYear" prefHeight="25.0" prefWidth="90.0" promptText="Year" />
+            <ComboBox fx:id="FromDay" layoutX="258.0" layoutY="22.0" onAction="#actionSelectFromDay" prefHeight="25.0" prefWidth="72.0" promptText="Day" />
+            <ComboBox fx:id="FromMonth" layoutX="145.0" layoutY="22.0" onAction="#actionSelectFromMonth" prefHeight="25.0" prefWidth="101.0" promptText="Month" />
+            <Text layoutX="7.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
+            <Button fx:id="saveButton" layoutX="296.0" layoutY="115.0" mnemonicParsing="false" onAction="#actionSave" text="Save" />
+            <Button fx:id="cancelButton" layoutX="12.0" layoutY="115.0" mnemonicParsing="false" onAction="#actionCancel" text="Cancel" />
+            <CheckBox fx:id="importCheckBox" layoutX="42.0" layoutY="73.0" mnemonicParsing="false" text="Import Employees?" />
+            <ComboBox fx:id="quarterImportSelect" layoutX="174.0" layoutY="69.0" onAction="#setImportQuarter" prefHeight="25.0" prefWidth="157.0" promptText="Quarter to Import" />
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
