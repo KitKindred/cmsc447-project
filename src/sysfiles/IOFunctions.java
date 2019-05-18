@@ -216,7 +216,7 @@ public class IOFunctions {
 				if(ar.length>10) {
 					if(attDate.equals("null")) {
 						((Doctor)p).setAttendingDate(null);
-						break;
+						//break;
 					}
 					else{
 						ldtInactive=LocalDateTime.parse(attDate, format);
