@@ -76,30 +76,17 @@ public class calendarDateStart {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	quarterImportSelect.setDisable(!newValue);
-		    	
-		    	
-		    	if(newValue && quarterImportSelect.getSelectionModel().getSelectedIndex()==-1) {
-		    		saveButton.setDisable(true);		    		
-		    	}
-		    	else {
-		    		saveButton.setDisable(false);
-		    	}
-		    	
+		    	checkAll();	
 		    }
 
 		});
-
+/*
 		quarterImportSelect.onActionProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> obs, String old, String newf) {
-				if(quarterImportSelect.getSelectionModel().getSelectedIndex()==-1) {
-					saveButton.setDisable(true);
-				}
-				else {
-					saveButton.setDisable(false);
-				}
+				checkAll();
 			}
 			
-		});
+		});*/
 
 		
 		for(String l:ldts) {
@@ -115,10 +102,29 @@ public class calendarDateStart {
 
 	}
 	
-	
+	private void checkAll() {
+		if(FromDay.getSelectionModel().getSelectedIndex()!=-1) {
+			System.out.println("day unselected");
+			if(importCheckBox.isSelected()) {
+				if(quarterImportSelect.getSelectionModel().getSelectedIndex()!=-1) {
+					saveButton.setDisable(false);
+				}
+				else {
+					saveButton.setDisable(true);
+				}	
+			}
+			else {
+				saveButton.setDisable(false);
+			}
+		}
+		else {
+			saveButton.setDisable(true);
+		}
+		
+	}
 	
 	public void setImportQuarter(ActionEvent event) {
-		
+		checkAll();
 		return;
 		
 	}
