@@ -97,8 +97,8 @@ public class controller {
 			e.printStackTrace();
 		}
 		
-
-		
+		clearAll();
+		ProgramDriver.reset();
 	}
 	
 	private void loadDates() {
@@ -156,7 +156,7 @@ public class controller {
 
 			if(dateStart.saveDate) {
 				if(dateStart.req!=null) {
-					actionChanged(event);
+					//actionChanged(event);
 					ldtAtt=dateStart.req;
 					dateStart.req=null;
 
@@ -173,6 +173,7 @@ public class controller {
 					dateConversion.put(ldtAtt.toString(),formatted);
 					newfile=true;
 					quarterDateSelect.getSelectionModel().select(ldts.size()-1);
+					IOFunctions.saveEmployees();
 				}
 			}
 
@@ -198,9 +199,9 @@ public class controller {
 				IOFunctions.saveEmployees();
 				newfile=false;
 			}
-
-			IOFunctions.loadEmployees();
-
+			else {
+				IOFunctions.loadEmployees();
+			}
 
 			System.out.println(ProgramDriver.getEmployees());
 			populate();
@@ -650,7 +651,7 @@ public class controller {
 			}
 		}
 
-		if(currentID==-1) {return;}
+		//if(currentID==-1) {return;}
 
 
 		String name = manageSelectEmployee.getValue().toString();
@@ -751,14 +752,9 @@ public class controller {
 
 		if(currentID!=-1) {
 
-
-			//System.out.println("new index");
 			prof=ProgramDriver.getEmployees().get(currentID);
-
-			//if(currentID!=-1) {
-
-
 			prof.setActive(manageActivityField.getSelectionModel().getSelectedIndex());
+			
 		}
 		switch(op) {
 		case "Active":
