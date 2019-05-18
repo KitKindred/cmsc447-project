@@ -17,10 +17,20 @@ public class IOFunctions {
 	private static Scanner is;
 	private static PrintWriter out;
 
-	public static final String path = "src/sysfiles/profiles/";
+	public static final String path = "./profiles/";
 
 	private static final boolean debug=false;
+	
+	private static void makeProfileFolder() {
+		File pa=new File(path);
+		if(!pa.exists()) {
+			System.out.println("make dir save");
+			pa.mkdirs();
+			System.out.println(pa.isDirectory());
 
+		}
+	}
+	
 	public static int saveEmployees() throws IOException{
 		return saveEmployees(path+controller.getFileCurrentDate()+".txt");
 		
@@ -28,8 +38,7 @@ public class IOFunctions {
 
 	public static int saveEmployees(String fpath) throws IOException{
 		
-		
-		
+		makeProfileFolder();
 		
 		System.out.println("ENTERING SAVEEMPLOYEES");
 		System.out.println("gCD: "+controller.getCurrentDate().toString());
@@ -105,12 +114,15 @@ public class IOFunctions {
 		return i;
 	}
 
+	
+	
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
 		return loadEmployees(path+controller.getFileCurrentDate()+".txt");
 	}
 	
 	public static int loadEmployees(String filepath) throws IOException{
+		makeProfileFolder();
 		
 		File f=new File(filepath);
 		//File f=new File(path+"employees.txt");
@@ -121,7 +133,7 @@ public class IOFunctions {
 			out.write(controller.getCurrentDate().toString()+"\r\n");
 			out.write("0\r\n");
 			out.close();
-			System.out.println("Created employees.txt");
+			System.out.println("Created new calendar");
 		}
 		ProgramDriver.reset();
 /*		//ProgramDriver.getID();

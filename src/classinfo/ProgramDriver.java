@@ -14,6 +14,13 @@ public class ProgramDriver {
 		empID = new ArrayList<Integer>();//HashMap<String, Integer>();
 		id = 0;
 	}
+	public static void reset() {
+		
+		empID.clear();
+		employees.clear();
+		id=0;
+		
+	}
 
 	/**
 	 * Add a doctor to the system

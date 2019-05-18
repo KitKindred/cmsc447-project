@@ -103,9 +103,15 @@ public class controller {
 	}
 
 	private void loadDates() {
-		String fp="./src/sysfiles/profiles";
+		
+		String fp=IOFunctions.path;//"./profiles";
+		
+		
 		File f=new File(fp);
-
+		if(!f.exists()) {
+			f.mkdirs();
+		}
+		
 		LocalDateTime ldt;
 
 		for(File file: f.listFiles()) {
