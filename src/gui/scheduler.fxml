@@ -28,15 +28,18 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
+	                    <ComboBox fx:id="quarterDateSelect" layoutX="14.0" layoutY="32.0" onAction="#quarterSelect" prefWidth="150.0" promptText="Select Quarter Date" />
                         <Button fx:id="quarterDateButton" layoutX="180.0" layoutY="31.0" mnemonicParsing="false" onAction="#quarterAction" text="Set Quarter Date" />
+                        <Button fx:id="quarterDeleteButton" layoutX="14.0" layoutY="75.0" mnemonicParsing="false" onAction="#quarterDelete" style="-fx-background-color: red;" text="Delete Date" />
                         <TextField fx:id="quarterDateTextField" editable="false" layoutX="296.0" layoutY="31.0" />
-                        <Text layoutX="180.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter Start Date" />
-                        <ComboBox fx:id="quarterDateSelect" layoutX="14.0" layoutY="32.0" onAction="#quarterSelect" prefWidth="150.0" promptText="Select Quarter Date" />
+                        <Text layoutX="296.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter Start Date" />
+                        
                         <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Previously Used Quarters" />
+                        
                      </children></AnchorPane>
               </content>
             </Tab>
-            <Tab text="Manage Employees" fx:id="meTab">
+            <Tab fx:id="meTab" text="Manage Employees">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="640.0">
                      <children>

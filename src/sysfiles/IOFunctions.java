@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.*;
 import classinfo.*;
 import gui.controller;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -219,6 +223,41 @@ public class IOFunctions {
 		return i;
 	} 
 
+	public static int killFile(String filePath)throws IOException {
+		System.out.println("\nIO: "+filePath);
+		File f=new File(filePath);
+		System.out.println(f.getParent());
+		System.out.println(f.getPath());
+		System.out.println(f.list());
+		System.out.println(f.getParentFile().listFiles());
+		if(f.exists()) {
+			System.out.println("exists");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Delete Calendar Employee Data");
+			alert.setHeaderText("Warning");
+			alert.setContentText("This action is irreversible.  Are you sure you want to delete this file?");// to "+ProgramDriver.getEmployees().get(currentID).getName());
+
+			alert.initModality(Modality.APPLICATION_MODAL);
+
+			ButtonType yesB= new ButtonType("Yes");
+			ButtonType noB= new ButtonType("No");
+
+			alert.getButtonTypes().setAll(yesB,noB);
+			alert.setResizable(false);
+			Optional<ButtonType> result=alert.showAndWait();
+
+			if(result.get()==yesB) {
+				System.out.println("Deleting "+filePath);
+				f.delete();
+				return 0;
+			}
+			
+			
+		}
+		
+		return -1;
+	}
+	
 	private static Shift getsh(String str) {
 
 		String[] s=str.split(",");
