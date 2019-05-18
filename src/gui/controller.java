@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.sun.prism.paint.Color;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,8 +54,8 @@ public class controller {
 	@FXML
 	ComboBox quarterDateSelect;
 
-	@FXML
-	TextField quarterDateTextField;
+	//@FXML
+	//TextField quarterDateTextField;
 
 	@FXML
 	MenuItem fileNewEmployee;
@@ -73,34 +75,33 @@ public class controller {
 
 	public void quarterDelete(ActionEvent event){
 		int index=quarterDateSelect.getSelectionModel().getSelectedIndex();
-		
+
 		System.out.println(dateConversion.keySet());
-		
+
 		String fp="./src/sysfiles/profiles/";//+dateConversion.keySet().toArray()[index]+".txt";
 		fp+=getFileCurrentDate()+".txt";
-		
+
 		try {
 			if(IOFunctions.killFile(fp)<0) {return;}
-			
-			
+			ldts.remove(index);
+
 			editedWithoutSave=false;
 			disableBeforeDate();
-			
+
 			dateConversion.remove(dateConversion.keySet().toArray()[index]);
-			quarterDateTextField.setText("");
 			quarterDeleteButton.setDisable(true);
-			
+
 			quarterDateSelect.getSelectionModel().clearSelection();
 			quarterDateSelect.getItems().remove(index);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		clearAll();
 		ProgramDriver.reset();
 	}
-	
+
 	private void loadDates() {
 		String fp="./src/sysfiles/profiles";
 		File f=new File(fp);
@@ -132,6 +133,7 @@ public class controller {
 		System.out.println(f+" "+f.listFiles());
 
 	}
+	
 
 	private HashMap<String, String> dateConversion=new HashMap<String, String>();
 	public void quarterAction(ActionEvent event) {
@@ -140,35 +142,52 @@ public class controller {
 				saveEmployee(event);
 			}
 		}
-		
+
 		LocalDateTime ldtAtt;
-		try {
-			String path="/gui/dateStart.fxml";
+		try {			
+			calendarDateStart.sendQuarters(dateConversion);
+			
+			String path="/gui/calendarDateStart.fxml";
 			Parent root = FXMLLoader.load(getClass().getResource(path));
 			Stage st = new Stage();
 			Scene scene = new Scene(root);
 			st.setScene(scene);
 			st.initModality(Modality.APPLICATION_MODAL);
 			st.setTitle("Set Calendar Quarter Start Date");
-
+			
 			st.setResizable(false);
 			st.showAndWait();
 
-			if(dateStart.saveDate) {
-				if(dateStart.req!=null) {
-					//actionChanged(event);
-					ldtAtt=dateStart.req;
-					dateStart.req=null;
+
+
+
+
+			if(calendarDateStart.saveDate) {
+
+				if(calendarDateStart.req!=null) {
+					ldtAtt=calendarDateStart.req;
+
+					for(LocalDateTime local: ldts) {
+						if(local.equals(ldtAtt)) {
+							System.out.println("TEST: CALENDAR ALREADY MADE");
+							return;
+						}
+
+					}
+
+					calendarDateStart.req=null;
 
 					System.out.println("BEFORE FORMAT: "+ldtAtt);
 					DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 					String formatted=ldtAtt.format(format);
 
-					quarterDateTextField.setText(formatted);
 					currentSelectedDate=ldtAtt;
+
 					ldts.add(ldtAtt);
 					System.out.println(formatted+" "+ldts);
+
 					quarterDateSelect.getItems().add(formatted);
+
 
 					dateConversion.put(ldtAtt.toString(),formatted);
 					newfile=true;
@@ -283,7 +302,7 @@ public class controller {
 		disableUntilLoad=new ArrayList<Node>();
 
 		quarterDeleteButton.setDisable(true);
-		
+
 		invisSelectEmployee.add(manageEmployeeIDField);
 		invisSelectEmployee.add(manageEmployeeNameText);
 		invisSelectEmployee.add(manageEmployeeEmail);
@@ -347,7 +366,7 @@ public class controller {
 					String old=ProgramDriver.getEmployees().get(currentID).getName();
 					String name=manageEmployeeNameText.getText();
 					ProgramDriver.getEmployees().get(currentID).setName(name);
-					
+
 					actionChanged(null);
 				}
 			}
@@ -359,7 +378,7 @@ public class controller {
 						String old=ProgramDriver.getEmployees().get(currentID).getName();
 						String name=manageEmployeeNameText.getText();
 						ProgramDriver.getEmployees().get(currentID).setName(name);
-						
+
 					}
 				}
 			}
@@ -371,6 +390,13 @@ public class controller {
 					if(newValue.indexOf("~")!=-1) {
 						manageEmployeeEmail.setText(manageEmployeeEmail.getText().replace("~",""));
 						return;
+					}
+					if(newValue.indexOf("@")==-1) {
+
+						manageEmployeeEmail.setStyle("-fx-control-inner-background: tomato");
+					}
+					else {
+						manageEmployeeEmail.setStyle("-fx-control-inner-background: white;");
 					}
 					String mail=manageEmployeeEmail.getText();
 					ProgramDriver.getEmployees().get(currentID).setEmail(mail);
@@ -556,7 +582,7 @@ public class controller {
 
 		Profession Pro=ProgramDriver.getEmployees().get(ProgramDriver.getNameID().get(index));
 		System.out.println(Pro);
-		
+
 		name = manageSelectEmployee.getValue().toString();
 
 		ArrayList<Integer> nameID=ProgramDriver.getNameID();
@@ -673,7 +699,7 @@ public class controller {
 
 		int id=oldindex;
 
-		
+
 		ProgramDriver.getNameID().get(oldindex);//.put(newName,id);
 		System.out.println("saving current employee "+name);
 
@@ -719,7 +745,7 @@ public class controller {
 		String name=manageSelectEmployee.getSelectionModel().getSelectedItem().toString();
 		//HashMap<String, Integer> nameID=ProgramDriver.getNameID();
 		ArrayList<Integer> nameID=ProgramDriver.getNameID();
-		
+
 		index=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 		id=nameID.get(index);
 
@@ -754,7 +780,7 @@ public class controller {
 
 			prof=ProgramDriver.getEmployees().get(currentID);
 			prof.setActive(manageActivityField.getSelectionModel().getSelectedIndex());
-			
+
 		}
 		switch(op) {
 		case "Active":
@@ -768,7 +794,7 @@ public class controller {
 					}
 				}
 			}
-//			System.out.println("CURRENT ID: "+currentID);
+			//			System.out.println("CURRENT ID: "+currentID);
 			ProgramDriver.getEmployees().get(currentID).setActive(index);
 			ProgramDriver.getEmployees().get(currentID).setInactiveDate(null);
 			break;
@@ -779,7 +805,7 @@ public class controller {
 			for(Node a: invisDoctor) {
 				a.setVisible(false);
 			}
-		//	System.out.println("CURRENT ID: "+currentID);
+			//	System.out.println("CURRENT ID: "+currentID);
 			ProgramDriver.getEmployees().get(currentID).setActive(index);
 			ProgramDriver.getEmployees().get(currentID).setInactiveDate(null);
 			break;

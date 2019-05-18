@@ -17,16 +17,26 @@ public class IOFunctions {
 	private static Scanner is;
 	private static PrintWriter out;
 
-	private static final String path = "src/sysfiles/profiles/";
+	public static final String path = "src/sysfiles/profiles/";
 
 	private static final boolean debug=false;
 
-
 	public static int saveEmployees() throws IOException{
+		return saveEmployees(path+controller.getFileCurrentDate()+".txt");
+		
+	}
+
+	public static int saveEmployees(String fpath) throws IOException{
+		
+		
+		
+		
 		System.out.println("ENTERING SAVEEMPLOYEES");
 		System.out.println("gCD: "+controller.getCurrentDate().toString());
 		HashMap<Integer, Profession> e=ProgramDriver.getEmployees();
-		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		
+		File f=new File(fpath);
+
 		//File f=new File(path+"employees.txt");
 		out = new PrintWriter(f);
 
@@ -97,8 +107,12 @@ public class IOFunctions {
 
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
-
-		File f=new File(path+controller.getFileCurrentDate()+".txt");
+		return loadEmployees(path+controller.getFileCurrentDate()+".txt");
+	}
+	
+	public static int loadEmployees(String filepath) throws IOException{
+		
+		File f=new File(filepath);
 		//File f=new File(path+"employees.txt");
 		if(!f.exists()) {
 			out=new PrintWriter(f);
@@ -109,10 +123,11 @@ public class IOFunctions {
 			out.close();
 			System.out.println("Created employees.txt");
 		}
-		//ProgramDriver.getID();
+		ProgramDriver.reset();
+/*		//ProgramDriver.getID();
 		ProgramDriver.getEmployees().clear();
 		ProgramDriver.getActiveID().clear();
-		ProgramDriver.getNameID().clear();
+		ProgramDriver.getNameID().clear();*/
 
 
 		int i=0;

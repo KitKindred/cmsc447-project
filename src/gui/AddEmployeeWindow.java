@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,6 +57,32 @@ public class AddEmployeeWindow {
 			n.setVisible(false);
 			
 		}
+		
+		nameBox.textProperty().addListener(new ChangeListener<String>() {
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(newValue.indexOf('~')!=-1) {
+					nameBox.setText(nameBox.getText().replace("~",""));
+					return;
+				}
+	
+			}
+		});
+		
+		emailBox.textProperty().addListener(new ChangeListener<String>() {
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(newValue.indexOf('~')!=-1) {
+					emailBox.setText(emailBox.getText().replace("~",""));
+					return;
+				}
+				if(newValue.indexOf("@")==-1) {
+					
+					emailBox.setStyle("-fx-control-inner-background: tomato");
+				}
+				else {
+					emailBox.setStyle("-fx-control-inner-background: white;");
+				}				
+			}
+		});
 		
 	}
 
