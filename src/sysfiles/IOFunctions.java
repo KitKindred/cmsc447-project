@@ -17,7 +17,7 @@ public class IOFunctions {
 	private static Scanner is;
 	private static PrintWriter out;
 
-	public static final String path = "src/sysfiles/profiles/";
+	public static final String path = "./profiles/";
 
 	private static final boolean debug=false;
 
@@ -28,7 +28,14 @@ public class IOFunctions {
 
 	public static int saveEmployees(String fpath) throws IOException{
 		
-		
+		File pa=new File(path);
+		if(!pa.exists()) {
+			System.out.println("make dir save");
+			//out=new PrintWriter(pa);
+			pa.mkdirs();
+			System.out.println(pa.isDirectory());
+			//out.close();
+		}
 		
 		
 		System.out.println("ENTERING SAVEEMPLOYEES");
@@ -105,12 +112,21 @@ public class IOFunctions {
 		return i;
 	}
 
+	
+	
 	public static int loadEmployees() throws IOException{
 		if(controller.getCurrentDate()==null) {return -1;}
 		return loadEmployees(path+controller.getFileCurrentDate()+".txt");
 	}
 	
 	public static int loadEmployees(String filepath) throws IOException{
+		File pa=new File(path);
+		if(!pa.exists()) {
+			System.out.println("make dir save");
+			out=new PrintWriter(pa);
+			pa.mkdirs();
+			out.close();
+		}
 		
 		File f=new File(filepath);
 		//File f=new File(path+"employees.txt");
