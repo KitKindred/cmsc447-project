@@ -58,7 +58,6 @@ public class AddEmployeeWindow {
 		
 	}
 
-
 	public void actionLaunchDateRangeWindow(ActionEvent event) {
 		LocalDateTime ldtInactive;
 		try {

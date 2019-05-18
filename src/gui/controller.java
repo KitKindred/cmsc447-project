@@ -346,8 +346,7 @@ public class controller {
 					String old=ProgramDriver.getEmployees().get(currentID).getName();
 					String name=manageEmployeeNameText.getText();
 					ProgramDriver.getEmployees().get(currentID).setName(name);
-					ProgramDriver.getNameID().remove(old);
-					ProgramDriver.getNameID().put(name, currentID);
+					
 					actionChanged(null);
 				}
 			}
@@ -359,8 +358,7 @@ public class controller {
 						String old=ProgramDriver.getEmployees().get(currentID).getName();
 						String name=manageEmployeeNameText.getText();
 						ProgramDriver.getEmployees().get(currentID).setName(name);
-						ProgramDriver.getNameID().remove(old);
-						ProgramDriver.getNameID().put(name, currentID);
+						
 					}
 				}
 			}
@@ -406,10 +404,6 @@ public class controller {
 	}
 
 	private void clearAll() {
-		//ProgramDriver.getActiveID().clear();
-		//ProgramDriver.getEmployees().clear();
-		//ProgramDriver.getNameID().clear();
-
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().clear();
 		blankSpots();
@@ -550,8 +544,8 @@ public class controller {
 		String name="Example Name";
 		String email="Example Email";
 		int active = 0;
-
-		if(manageSelectEmployee.getSelectionModel().getSelectedIndex()==-1) {return;}
+		int index=manageSelectEmployee.getSelectionModel().getSelectedIndex();
+		if(index==-1) {return;}
 		if (manageSelectEmployee.getValue() == null) {return;}
 
 		System.out.println("oldindex: "+oldindex);
@@ -559,11 +553,14 @@ public class controller {
 		System.out.println("test");
 
 
+		Profession Pro=ProgramDriver.getEmployees().get(ProgramDriver.getNameID().get(index));
+		System.out.println(Pro);
+		
 		name = manageSelectEmployee.getValue().toString();
 
-		HashMap<String, Integer> nameID=ProgramDriver.getNameID();
+		ArrayList<Integer> nameID=ProgramDriver.getNameID();
 		//currentID=manageSelectEmployee.getSelectionModel().getSelectedIndex();
-		currentID=nameID.get(manageSelectEmployee.getSelectionModel().getSelectedItem());
+		currentID=nameID.get(manageSelectEmployee.getSelectionModel().getSelectedIndex());
 		System.out.println("currentID: "+currentID);
 		Profession emp=ProgramDriver.getEmployees().get(currentID);
 
@@ -589,7 +586,6 @@ public class controller {
 			manageDateStart.setText(emp.getInactiveDate().format(format));
 		}
 
-		//oldindex=manageActivityField.getSelectionModel().getSelectedIndex();
 		oldindex=manageSelectEmployee.getSelectionModel().getSelectedIndex();
 		if(emp.getType()==0) {
 
@@ -675,7 +671,9 @@ public class controller {
 		int active=manageActivityField.getSelectionModel().getSelectedIndex();
 
 		int id=oldindex;
-		ProgramDriver.getNameID().put(newName, ProgramDriver.getNameID().remove(name));
+
+		
+		ProgramDriver.getNameID().get(oldindex);//.put(newName,id);
 		System.out.println("saving current employee "+name);
 
 		Profession worker=ProgramDriver.getEmployees().get(currentID);
@@ -696,13 +694,12 @@ public class controller {
 			IOFunctions.saveEmployees();
 			editedWithoutSave=false;
 
-
 			System.out.println(active);
 			System.out.println("id: "+id);
 			manageActivityField.getSelectionModel().select(active);
 			manageSelectEmployee.getSelectionModel().clearSelection();
 			manageSelectEmployee.getItems().remove(id);
-			manageSelectEmployee.getItems().add(id, newName);
+			manageSelectEmployee.getItems().add(id, worker.getId()+": "+newName);
 			manageSelectEmployee.getSelectionModel().select(id);
 
 		}catch(Exception e) {
@@ -719,16 +716,17 @@ public class controller {
 		int id;
 		int index;
 		String name=manageSelectEmployee.getSelectionModel().getSelectedItem().toString();
-		HashMap<String, Integer> nameID=ProgramDriver.getNameID();
-
+		//HashMap<String, Integer> nameID=ProgramDriver.getNameID();
+		ArrayList<Integer> nameID=ProgramDriver.getNameID();
+		
 		index=manageSelectEmployee.getSelectionModel().getSelectedIndex();
-		id=nameID.get(name);
+		id=nameID.get(index);
 
 		manageSelectEmployee.getSelectionModel().clearSelection();
 		manageSelectEmployee.getItems().remove(index);
 
 		ProgramDriver.getEmployees().remove(id);
-		ProgramDriver.getNameID().remove(name);
+		ProgramDriver.getNameID().remove(index);
 		if(ProgramDriver.getActiveID().contains(id)) {ProgramDriver.getActiveID().remove(id);}
 
 		editedWithoutSave=true;
@@ -774,7 +772,7 @@ public class controller {
 					}
 				}
 			}
-			System.out.println("CURRENT ID: "+currentID);
+//			System.out.println("CURRENT ID: "+currentID);
 			ProgramDriver.getEmployees().get(currentID).setActive(index);
 			ProgramDriver.getEmployees().get(currentID).setInactiveDate(null);
 			break;
@@ -785,7 +783,7 @@ public class controller {
 			for(Node a: invisDoctor) {
 				a.setVisible(false);
 			}
-			System.out.println("CURRENT ID: "+currentID);
+		//	System.out.println("CURRENT ID: "+currentID);
 			ProgramDriver.getEmployees().get(currentID).setActive(index);
 			ProgramDriver.getEmployees().get(currentID).setInactiveDate(null);
 			break;
@@ -829,7 +827,7 @@ public class controller {
 			System.out.println(entry.getValue().getName().toString());
 			name=entry.getValue().getName();
 			System.out.println(name);
-			manageSelectEmployee.getItems().add(name);
+			manageSelectEmployee.getItems().add(entry.getValue().getId()+": "+name);
 		}
 	}
 
@@ -902,7 +900,7 @@ public class controller {
 			return;
 		}
 		System.out.println("\tid: "+emp.getId()+" "+emp.getActive());
-		manageSelectEmployee.getItems().add(emp.getName());
+		manageSelectEmployee.getItems().add(emp.getId()+": "+emp.getName());
 
 		oldindex=ProgramDriver.getEmployees().size()-1;
 		manageSelectEmployee.getSelectionModel().select(oldindex);

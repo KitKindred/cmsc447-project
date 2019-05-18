@@ -4,12 +4,14 @@ import java.util.HashMap;
 
 public class ProgramDriver {
 	private static HashMap<Integer, Profession> employees;
-	private static HashMap<String, Integer> empID;
+	//private static HashMap<String, Integer> empID;
+	private static ArrayList<Integer> empID;
+	
 	private static int id;
 
 	public ProgramDriver() {
 		employees = new HashMap<Integer, Profession>();
-		empID = new HashMap<String, Integer>();
+		empID = new ArrayList<Integer>();//HashMap<String, Integer>();
 		id = 0;
 	}
 
@@ -34,7 +36,7 @@ public class ProgramDriver {
 		default:
 			throw new IllegalArgumentException();
 		}
-		empID.put(n, id);
+		empID.add(id);//empID.put(n, id);
 		id++;
 		System.out.println("adding as "+ id);
 	}
@@ -53,7 +55,8 @@ public class ProgramDriver {
 		default:
 			throw new IllegalArgumentException();
 		}
-		empID.put(name, i_d);
+		empID.add(i_d);
+//		empID.put(name, i_d);
 		id=Math.max(i_d+=1, id+=1);
 		System.out.println("adding "+ id);
 
@@ -69,17 +72,18 @@ public class ProgramDriver {
 		case 1:
 			Moonlighter moon=new Moonlighter(i_d,type,name);
 			moon.setEmail(em);
-			employees.put(id, moon);
+			employees.put(i_d, moon);
 			break;
 		case 2:
 			Intern in=new Intern(i_d, type, name);
 			in.setEmail(em);
-			employees.put(id, in);
+			employees.put(i_d, in);
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
-		empID.put(name, i_d);
+		empID.add(i_d);
+		//empID.put(name, i_d);
 		id=Math.max(i_d+=1, id+=1);
 		System.out.println("adding "+ id);
 
@@ -103,7 +107,7 @@ public class ProgramDriver {
 	public static HashMap<Integer, Profession> getEmployees() {
 		return employees;
 	}
-	public static HashMap<String, Integer> getNameID(){return empID;}
+	public static ArrayList<Integer> getNameID(){return empID;}
 
 	public void printEmployees() {
 		
