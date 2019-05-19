@@ -112,7 +112,7 @@ public class controller {
 
 		System.out.println(dateConversion.keySet());
 
-		String fp="./src/sysfiles/profiles/";//+dateConversion.keySet().toArray()[index]+".txt";
+		String fp=IOFunctions.path;
 		fp+=getFileCurrentDate()+".txt";
 
 		try {
@@ -151,6 +151,7 @@ public class controller {
 		
 		LocalDateTime ldt;
 
+		/*lists directories */
 		for(File file: f.listFiles()) {
 			System.out.println(file.getName());
 			for(String s:file.getName().split(".")) {
@@ -672,7 +673,7 @@ public class controller {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Calendar Exported");
 			alert.setHeaderText("Calendar Exported Successfully");
-			alert.setContentText("Calendar saved to cal.ics!");
+			alert.setContentText("Calendar saved to "+controller.getFileCurrentDate()+".ics");
 
 			alert.showAndWait();
 		} else {

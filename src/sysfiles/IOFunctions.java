@@ -205,12 +205,18 @@ public class IOFunctions {
 			out.close();
 
 			is= new Scanner(f);
+			
+			/*two nextlines because otherwise the reader doesn't start at the proper place in the file.*/
 			is.nextLine();
 			is.nextLine();
 			System.out.println("fixed empty file");
 		}
 
 		String ar[];
+		/*parses the entries in the file*/
+		/*{ID~Name~Type (int)~Active Status (int)~Hours Worked(int)~List of Shifts[]~List of Time Off Requests<>~Inactive Date(Maternity)~Had Attending Week (if doctor) (boolean)~Attending Week Date}*/
+		
+		/*{0~a~0~0~0~a@~[]~<>~~false~null}*/
 		while(is.hasNextLine()) {
 			line=is.nextLine();
 
@@ -289,7 +295,6 @@ public class IOFunctions {
 				if(ar.length>10) {
 					if(attDate.equals("null")) {
 						((Doctor)p).setAttendingDate(null);
-						//break;
 					}
 					else{
 						ldtInactive=LocalDateTime.parse(attDate, format);
@@ -340,20 +345,20 @@ public class IOFunctions {
 			if(result.get()==yesB) {
 				System.out.println("Deleting "+filePath);
 				f.delete();
-				return 0;
+				return 0;//successful delete
 			}
 
 
 		}
 
-		return -1;
+		return -1;//unsuccessful delete
 	}
 
 	/**
-	 * Gets the sh.
+	 * Gets the shift.
 	 *
 	 * @param str the str
-	 * @return the sh
+	 * @return the shift crafted from a parsed string
 	 */
 	private static Shift getsh(String str) {
 
@@ -391,8 +396,9 @@ public class IOFunctions {
 		}
 
 		StringBuilder builder = new StringBuilder(); 
-		File file = new File("cal.ics");
-		builder.append("cal");
+		String date=controller.getFileCurrentDate();
+		File file = new File(date+".ics");
+		builder.append(date);
 		builder.append(".ics");
 
 		try {
