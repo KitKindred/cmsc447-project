@@ -8,6 +8,8 @@ import java.util.HashMap;
 import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.*;
 
+import javax.print.Doc;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Schedule.
@@ -166,6 +168,11 @@ public class Schedule {
         }
     }
 
+    /**
+     * Creates a list of shifts from a time off request
+     *
+     * @param tor the time off request to be converted
+     * */
     private ArrayList<Integer> torToShifts(TimeOffRequest tor) {
         System.out.println("torToShifts");
         ArrayList<Integer> shiftList = new ArrayList<Integer>();
@@ -186,6 +193,12 @@ public class Schedule {
         return shiftList;
     }
 
+    /**
+     * Converts tors from being a list of dates connected to a doctor to being a hashmap indexed by shift with
+     * lists of doctors that cannot work that shift
+     *
+     * @param docs Hashmap of doctors for tor source
+     * */
     private HashMap<Integer, ArrayList<Integer>> offShifts(HashMap<Integer, Profession> docs) {
         System.out.println("Off Shifts");
         HashMap<Integer, ArrayList<Integer>> timeOffByShift = new HashMap<Integer, ArrayList<Integer>>();
@@ -223,6 +236,29 @@ public class Schedule {
     }
 
     /**
+     * Puts the start of every doctor's attending week in the <shift, doc> form used elsewhere
+     *
+     * @param docs Hashmap of doctors
+     * */
+    HashMap<Integer, Integer> attends(HashMap<Integer, Profession> docs) {
+        HashMap<Integer, Integer> dates = new HashMap<Integer, Integer>();
+        for (Integer id: docs.keySet()) {
+            Profession employee = docs.get(id);
+            if (employee instanceof Doctor) {
+                System.out.println("IS DOC");
+                if (((Doctor) employee).getAttendingDate() != null) {
+                    System.out.println("HAS ATTENDING");
+                    LocalDateTime start = ((Doctor) employee).getAttendingDate();
+                    int shift = start.getDayOfYear()*3;
+                    dates.put(shift, employee.getId());
+                }
+            }
+        }
+
+        return dates;
+    }
+
+    /**
      Uses the list of active doctors to create a valid schedule, then adds the correct ids to the HashMap of shifts.
 
      @param ids An ArrayList of the ids of active doctors
@@ -235,6 +271,7 @@ public class Schedule {
         ArrayList<Integer> fte = new ArrayList<Integer>();
 
         HashMap<Integer, ArrayList<Integer>> timeOffByShift = this.offShifts(docs);
+        HashMap<Integer, Integer> attendingWeeks = this.attends(docs);
 
         for (int z = 0; z < ids.size(); z++) {
             Integer i = ids.get(z);
@@ -287,6 +324,51 @@ public class Schedule {
             }
         }
 
+        for (Integer shift: attendingWeeks.keySet()) {
+            //IntVar v = model.intVar(shift.toString(), new int[] {attendingWeeks.get(shift)});
+            //varMap.put(shift, v);
+            System.out.println("Shift: " + shift + " Doc: " + attendingWeeks.get(shift));
+            model.arithm(varMap.get(shift), "=", attendingWeeks.get(shift)).post(); // Monday
+            if (varMap.containsKey(shift+3)) {
+                System.out.println("Shift: " + shift+3 + " Doc: " + attendingWeeks.get(shift));
+                model.arithm(varMap.get(shift+3), "=",attendingWeeks.get(shift)).post(); // Tuesday
+            }
+            if (varMap.containsKey(shift+6)) {
+                model.arithm(varMap.get(shift+6), "=",attendingWeeks.get(shift)).post(); // Wednesday
+            }
+            if (varMap.containsKey(shift+9)) {
+                model.arithm(varMap.get(shift+9), "=",attendingWeeks.get(shift)).post(); // Thursday
+            }
+            if (varMap.containsKey(shift+12)) {
+                model.arithm(varMap.get(shift+12), "=",attendingWeeks.get(shift)).post(); // Friday
+            }
+
+            if (varMapWeekend.containsKey(shift+15)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+15)).post(); // Sat morn
+            }
+            if (varMapWeekend.containsKey(shift+16)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+16)).post(); // Sat even
+            }
+            if (varMapWeekend.containsKey(shift+18)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+18)).post(); // Sun morn
+            }
+            if (varMapWeekend.containsKey(shift+19)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+19)).post(); // Sun even
+            }
+            if (varMapWeekend.containsKey(shift-2)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-2)).post(); // Prev Sun even
+            }
+            if (varMapWeekend.containsKey(shift-3)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-3)).post(); // Prev Sun morn
+            }
+            if (varMapWeekend.containsKey(shift-5)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-5)).post(); // Prev Sat even
+            }
+            if (varMapWeekend.containsKey(shift-6)) {
+                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-6)).post(); // Prev Sat morn
+            }
+        }
+
         // Makes sure that a doctor doesn't work a shift that starts less than 24 hours
         // after the start of their last shift. Because of the way shifts are created, the keys on each day are
         // consecutive. There are gaps on days with fewer schedules though. Ex: If there are three shifts on Friday, and
@@ -297,24 +379,7 @@ public class Schedule {
         //
         // This is currently hardcoded to work based on three weekday shifts, but could be upgraded later.
         for (Integer shift: otherShifts.keySet()) {
-            /*if (varMap.containsKey(shift+1)) {
-                model.arithm(varMap.get(shift), "!=",varMap.get(shift+1)).post();
-            }
-            else if (varMapWeekend.containsKey(shift+1)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+1)).post();
-            }
-            else { // If this is true, then this is a weekend evening shift
-                if (varMap.containsKey(shift+4)) { // This is a sunday evening shift. That means the first two Monday
-                    // shifts can not be worked.
-                    model.arithm(varMap.get(shift), "!=",varMap.get(shift+3)).post();
-                }
-            }
-            if (varMap.containsKey(shift+2)) { // If this is not true, then this is a weekend morning shift.
-                model.arithm(varMap.get(shift), "!=",varMap.get(shift+2)).post();
-            }
-            else if (varMapWeekend.containsKey(shift+2)) {
-                model.arithm(varMap.get(shift), "!=",varMap.get(shift+2)).post();
-            }*/
+
             if (varMap.containsKey(shift)) { // This is a weekday shift
                 if (varMap.containsKey(shift+1)) { // Normal weekday shift
                     model.arithm(varMap.get(shift), "!=",varMap.get(shift+1)).post();
@@ -387,6 +452,7 @@ public class Schedule {
             System.out.println(solution.toString());
             this.addToShifts(varMap, varMapWeekend, docs);
             isValidSchedule = true;
+            //this.printShifts();
             //for (Integer val: varMap.keySet()) {
             //    System.out.println(varMap.get(val).getValue());
             //}
