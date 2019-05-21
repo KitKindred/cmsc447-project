@@ -16,20 +16,19 @@ import javax.print.Doc;
  */
 public class Schedule {
 
-    /** The start. */
+    /** The first day of the schedule. */
     private LocalDate start;
 
-    /** The end. */
+    /** The last day of the schedul. */
     private LocalDate end;
 
-    /** The other shifts. */
-    //private ArrayList<Shift> shifts;
-    private HashMap<Integer, Shift> otherShifts; // Not sure if list or hash is better yet
+    /** Hash map of all shifts in the date range. */
+    private HashMap<Integer, Shift> otherShifts; 
 
     /** The weekend shifts. */
     private int weekdayShifts, weekendShifts; // Number of shifts on weekdays and weekends
 
-    /** The is valid schedule. */
+    /** Flag for whether or not this schedule has been successfully generated. */
     private boolean isValidSchedule = false;
 
     /**
