@@ -322,52 +322,56 @@ public class Schedule {
                 varMap.put(shift, v); // Add an IntVar for every weekday shift
             }
         }
-
-        for (Integer shift: attendingWeeks.keySet()) {
-            //IntVar v = model.intVar(shift.toString(), new int[] {attendingWeeks.get(shift)});
-            //varMap.put(shift, v);
-            System.out.println("Shift: " + shift + " Doc: " + attendingWeeks.get(shift));
-            model.arithm(varMap.get(shift), "=", attendingWeeks.get(shift)).post(); // Monday
-            if (varMap.containsKey(shift+3)) {
-                System.out.println("Shift: " + shift+3 + " Doc: " + attendingWeeks.get(shift));
-                model.arithm(varMap.get(shift+3), "=",attendingWeeks.get(shift)).post(); // Tuesday
-            }
-            if (varMap.containsKey(shift+6)) {
-                model.arithm(varMap.get(shift+6), "=",attendingWeeks.get(shift)).post(); // Wednesday
-            }
-            if (varMap.containsKey(shift+9)) {
-                model.arithm(varMap.get(shift+9), "=",attendingWeeks.get(shift)).post(); // Thursday
-            }
-            if (varMap.containsKey(shift+12)) {
-                model.arithm(varMap.get(shift+12), "=",attendingWeeks.get(shift)).post(); // Friday
-            }
-
-            if (varMapWeekend.containsKey(shift+15)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+15)).post(); // Sat morn
-            }
-            if (varMapWeekend.containsKey(shift+16)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+16)).post(); // Sat even
-            }
-            if (varMapWeekend.containsKey(shift+18)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+18)).post(); // Sun morn
-            }
-            if (varMapWeekend.containsKey(shift+19)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+19)).post(); // Sun even
-            }
-            if (varMapWeekend.containsKey(shift-2)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-2)).post(); // Prev Sun even
-            }
-            if (varMapWeekend.containsKey(shift-3)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-3)).post(); // Prev Sun morn
-            }
-            if (varMapWeekend.containsKey(shift-5)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-5)).post(); // Prev Sat even
-            }
-            if (varMapWeekend.containsKey(shift-6)) {
-                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-6)).post(); // Prev Sat morn
-            }
+        try {
+	        for (Integer shift: attendingWeeks.keySet()) {
+	            //IntVar v = model.intVar(shift.toString(), new int[] {attendingWeeks.get(shift)});
+	            //varMap.put(shift, v);
+	            System.out.println("Shift: " + shift + " Doc: " + attendingWeeks.get(shift));
+	            model.arithm(varMap.get(shift), "=", attendingWeeks.get(shift)).post(); // Monday
+	            if (varMap.containsKey(shift+3)) {
+	                System.out.println("Shift: " + (shift+3) + " Doc: " + attendingWeeks.get(shift));
+	                model.arithm(varMap.get(shift+3), "=",attendingWeeks.get(shift)).post(); // Tuesday
+	            }
+	            if (varMap.containsKey(shift+6)) {
+	                model.arithm(varMap.get(shift+6), "=",attendingWeeks.get(shift)).post(); // Wednesday
+	            }
+	            if (varMap.containsKey(shift+9)) {
+	                model.arithm(varMap.get(shift+9), "=",attendingWeeks.get(shift)).post(); // Thursday
+	            }
+	            if (varMap.containsKey(shift+12)) {
+	                model.arithm(varMap.get(shift+12), "=",attendingWeeks.get(shift)).post(); // Friday
+	            }
+	
+	            if (varMapWeekend.containsKey(shift+15)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+15)).post(); // Sat morn
+	            }
+	            if (varMapWeekend.containsKey(shift+16)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+16)).post(); // Sat even
+	            }
+	            if (varMapWeekend.containsKey(shift+18)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+18)).post(); // Sun morn
+	            }
+	            if (varMapWeekend.containsKey(shift+19)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift+19)).post(); // Sun even
+	            }
+	            if (varMapWeekend.containsKey(shift-2)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-2)).post(); // Prev Sun even
+	            }
+	            if (varMapWeekend.containsKey(shift-3)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-3)).post(); // Prev Sun morn
+	            }
+	            if (varMapWeekend.containsKey(shift-5)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-5)).post(); // Prev Sat even
+	            }
+	            if (varMapWeekend.containsKey(shift-6)) {
+	                model.arithm(varMap.get(shift), "!=",varMapWeekend.get(shift-6)).post(); // Prev Sat morn
+	            }
+	        }
+        } catch (NullPointerException npe) {
+        	isValidSchedule = false;
+        	System.out.println("Could not generate Schedule!");
+        	return;
         }
-
         // Makes sure that a doctor doesn't work a shift that starts less than 24 hours
         // after the start of their last shift. Because of the way shifts are created, the keys on each day are
         // consecutive. There are gaps on days with fewer schedules though. Ex: If there are three shifts on Friday, and
